@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <setting name="useGeneratedKeys" value="true"/>
+    </settings>
+    <typeAliases>
+      <typeAlias alias="User" type="cn.com.open.openpaas.userservice.app.user.model.User"/>
+        <typeAlias alias="Privilege" type="cn.com.open.openpaas.userservice.app.user.model.Privilege"/>
+        <typeAlias alias="OauthClientDetails" type="cn.com.open.openpaas.userservice.app.oauth.model.OauthClientDetails"/>
+		<typeAlias alias="AppUser" type="cn.com.open.openpaas.userservice.app.appuser.model.AppUser"/> 
+	<typeAlias alias="App" type="cn.com.open.openpaas.userservice.app.app.model.App"/>
+	<typeAlias alias="LogMonitor" type="cn.com.open.openpaas.userservice.app.log.model.LogMonitor"/> 
+	<typeAlias alias="UserCache" type="cn.com.open.openpaas.userservice.app.user.model.UserCache"/> 
+		
+		
+    </typeAliases>
+
+    <mappers>
+        <mapper resource="cc/wdcy/infrastructure/mybatis/UserMapper.xml"/>
+       <mapper resource="cc/wdcy/infrastructure/mybatis/OauthMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/AppUserMapper.xml"/> 
+		<mapper resource="cc/wdcy/infrastructure/mybatis/AppMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/LogMonitorMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserCacheMapper.xml"/>
+		<!-- <mapper resource="cc/wdcy/infrastructure/mybatis/IndexImagesMapper.xml"/>
+		
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserStatisticsMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserContectMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserDetailMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserEducationMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserFamilyMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserSocialMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserWorkMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserActivatedMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserProblemMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserActivatedHisMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserDictMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserLoadDetailMapper.xml"/>
+		
+		 -->
+    </mappers>
+
+</configuration>

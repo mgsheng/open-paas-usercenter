@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.open.openpaas.userservice.app.infrastructure.mybatis.AppUserRepositoryMyBatis">
+
+    <resultMap type="AppUser" id="appUserMap">
+        <id property="appUid" column="app_uid"/>
+        <result property="appId" column="app_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="isCache" column="is_cache"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="lastloginTime" column="lastlogin_time"/>
+        <result property="loginTimes" column="login_times"/>
+        
+        <collection property="privileges" column="appUid" select="findPrivilegesByUserId" ofType="Privilege"/>
+        
+    </resultMap>
+
+    <select id="countByAppId" parameterType="Integer" resultType="java.lang.Integer">
+         select count(*) from app_user
+         where  app_id = #{appId, jdbcType=INTEGER}
+	</select>
+	
+	<!-- <select id="findByCidSid" resultMap="appUserMap" parameterType="map">
+         select * from app_user
+         where  app_id = #{appId, jdbcType=INTEGER} and source_id = #{sourceId, jdbcType=VARCHAR}
+	</select> -->
+	
+	<select id="findByCidSid" resultMap="appUserMap" parameterType="map">
+         select * from app_user
+         where  app_id = #{appId, jdbcType=INTEGER} and source_id = #{sourceId, jdbcType=VARCHAR}
+	</select>
+	
+	<!-- <select id="findByCidUid" resultMap="appUserMap" parameterType="map">
+         select * from app_user
+         where  app_id = #{appId, jdbcType=INTEGER} and user_id = #{userId, jdbcType=INTEGER}
+	</select> -->
+	<select id="findByCidAUid" resultMap="appUserMap" parameterType="map">
+         select * from app_user
+         where  app_id = #{appId, jdbcType=INTEGER} and user_id = #{userId, jdbcType=INTEGER}
+	</select>
+	<select id="findByCidUid" resultMap="appUserMap" parameterType="map">
+         select * from app_user
+         where  app_id = #{appId, jdbcType=INTEGER} and user_id = #{userId, jdbcType=INTEGER}
+	</select>
+	
+	<!-- <select id="findByUserId" resultMap="appUserMap" parameterType="java.lang.Integer">
+         select * from app_user
+         where  user_id = #{userId, jdbcType=INTEGER}
+	</select> -->
+	
+	<select id="findByUserId" resultMap="appUserMap" parameterType="java.lang.Integer">
+         select * from app_user
+         where  user_id = #{userId, jdbcType=INTEGER}
+	</select>
+	
+	<select id="pageByParameters" resultMap="appUserMap">
+         select * from app_user
+         where app_id = #{appId, jdbcType=INTEGER}
+         order by #{sortBy, jdbcType=VARCHAR} #{dir, jdbcType=VARCHAR}
+         limit #{start, jdbcType=INTEGER},#{limit, jdbcType=INTEGER}
+	</select>
+	
+	<select id="findAuthoritiesAppsByUserId" resultMap="appUserMap" parameterType="map">
+         select * from app_user
+         where  user_id = #{userId, jdbcType=INTEGER} and 
+         (app_id in 
+         <foreach item="item" index="index" collection="appAuthorities" open="(" separator="," close=")">  
+	    	 #{item}  
+	     </foreach>
+         or app_id=#{appId, jdbcType=INTEGER}) 
+         and is_cache = #{isCache, jdbcType=INTEGER}    
+	</select>
+	
+	<insert id="saveAppUser" parameterType="AppUser" useGeneratedKeys="true" keyProperty="appUid">
+        insert into app_user(app_uid,app_id,user_id,source_id,create_time,lastlogin_time,login_times)
+        values
+        (#{appUid},#{appId},#{userId},#{sourceId},#{createTime},#{lastloginTime},#{loginTimes})
+    </insert>
+    
+    <update id="updateAppUser" parameterType="AppUser" flushCache="true">
+        update app_user set
+        lastlogin_time = #{lastloginTime},
+        login_times = #{loginTimes}
+        where app_uid = #{appUid}
+    </update>
+      <delete id="deleteAppUser" parameterType="Integer">
+        delete from app_user where app_uid=#{appUid}
+     </delete>
+</mapper>

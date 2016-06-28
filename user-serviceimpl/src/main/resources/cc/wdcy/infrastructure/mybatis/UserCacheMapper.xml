@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.open.openpaas.userservice.app.infrastructure.mybatis.UserCacheRepositoryMyBatis">
+
+    <resultMap type="UserCache" id="userCacheMap">
+        <id property="id" column="id"/>
+        <result property="appId" column="app_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="pid" column="pid"/>
+        <result property="guid" column="guid"/>
+        <result property="archived" column="archived"/>
+        <result property="createTime" column="create_time"/>
+
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="defaultUser" column="default_user"/>
+        
+        <result property="nickName" column="nickname"/>
+        <result property="realName" column="real_name"/>
+        <result property="headPicture" column="head_picture"/>
+        <result property="identifyType" column="identify_type"/>
+        <result property="identifyNo" column="identify_no"/>
+        
+        <result property="userType" column="user_type"/>
+        <result property="userSercure" column="user_sercure"/>
+        <result property="username" column="user_name"/>
+        <result property="lastLoginTime" column="last_login_time"/>
+        <result property="userState" column="user_state" />
+        <result property="emailActivation" column="email_activation" />
+        <result property="aesPassword" column="aes_password"/>
+		<result property="sha1Password" column="sha1_password"/>
+		<result property="md5Password" column="md5_password"/>
+		<result property="md5Salt" column="md5_salt"/>
+
+    </resultMap>
+    
+    <sql id="Column_List">
+    	id,
+    	app_id,
+    	user_id,
+    	pid,
+    	guid,
+    	user_name,
+    	nickname,
+    	real_name,
+    	head_picture,
+    	identify_type,
+    	identify_no,
+    	phone,
+    	email,
+    	card_no,
+    	user_type,
+    	user_state,
+    	user_sercure,
+    	create_time,
+    	archived,
+    	default_user,
+    	last_login_time,
+    	email_activation,
+    	aes_password,
+    	sha1_password,
+    	md5_password,
+    	md5_salt
+    </sql>
+
+	<select id="findByUsername" resultMap="userCacheMap">
+         select 
+         <include refid="Column_List" />
+         from user_cache
+         where user_name = #{username, jdbcType=VARCHAR}
+         and archived = 0 limit 1
+	</select>
+	<select id="findByUserInfo" resultMap="userCacheMap">
+         select 
+         <include refid="Column_List" />
+         from user_cache
+         where user_name = #{username, jdbcType=VARCHAR}
+         and app_id=#{appid}
+         and archived = 0 limit 1
+	</select>
+	
+	<select id="findByEmail" resultMap="userCacheMap">
+         select 
+         <include refid="Column_List" />
+         from user_cache
+         where email = #{email, jdbcType=VARCHAR}
+         and archived = 0
+	</select>
+		<select id="findByEmailAndAppid" resultMap="userCacheMap">
+         select 
+         <include refid="Column_List" />
+         from user_cache
+         where email = #{email, jdbcType=VARCHAR}
+          and app_id=#{appid}
+         and archived = 0
+	</select>
+	
+	<select id="findByPhone" resultMap="userCacheMap">
+         select 
+         <include refid="Column_List" />
+         from user_cache
+         where phone = #{phone, jdbcType=VARCHAR}
+         and archived = 0 
+	</select>
+	<select id="findByPhoneAndAppid" resultMap="userCacheMap">
+         select 
+         <include refid="Column_List" />
+         from user_cache
+         where phone = #{phone, jdbcType=VARCHAR}
+          and app_id=#{appid}
+         and archived = 0 
+	</select>
+	
+	<select id="findByCardNo" resultMap="userCacheMap">
+		select
+		<include refid="Column_List" />
+		from user_cache
+		where card_no=#{cardNo, jdbcType=VARCHAR}
+	</select>
+	<select id="findByCardNoAndAppid" resultMap="userCacheMap">
+		select
+		<include refid="Column_List" />
+		from user_cache
+		where card_no=#{cardNo, jdbcType=VARCHAR}
+		 and app_id=#{appid}
+		 and archived = 0 
+	</select>
+	
+	<update id="updateUserCache" parameterType="UserCache">
+        update user_cache set
+        <if test="pid != null" >
+        pid = #{pid},
+        </if>
+        <if test="guid != null and guid !=''" >
+        guid = #{guid},
+        </if>
+        <if test="cardNo != null and cardNo !=''" >
+        card_no = #{cardNo},
+        </if>
+        <if test="username != null and username !=''" >
+        user_name = #{username},
+        </if>
+        <if test="nickName != null and nickName !=''" >
+        nickname = #{nickName},
+        </if>
+        <if test="realName != null and realName !=''" >
+        real_name = #{realName},
+        </if>
+        <if test="headPicture != null and headPicture !=''" >
+        head_picture = #{headPicture},
+        </if>
+        <if test="identifyType != null and identifyType>-1">
+        identify_type = #{identifyType},
+        </if>
+        <if test="phone != null and phone !=''" >
+        phone = #{phone},
+        </if>
+        <if test="email != null and email !=''" >
+        email = #{email},
+        </if>
+        <if test="userType != null and userType>-1" >
+        user_type = #{userType},
+        </if>
+        <if test="userState != null and userState !=''" >
+        user_state = #{userState},
+        </if>
+        <if test="userSercure != null" >
+        user_sercure = #{userSercure},
+        </if>
+        <if test="lastLoginTime != null" >
+        last_login_time = #{lastLoginTime},
+        </if>
+        <if test="identifyNo != null and identifyNo !=''" >
+        identify_no = #{identifyNo},
+        </if>
+        <if test="aesPassword != null" >
+        aes_password = #{aesPassword},
+        </if>
+        <if test="md5Password != null" >
+        md5_password = #{md5Password},
+        </if>
+         <if test="md5Salt != null" >
+        md5_salt = #{md5Salt},
+        </if>
+        archived = #{archived},
+        default_user = #{defaultUser},
+        email_activation = #{emailActivation}
+        
+        where id = #{id}
+    </update>
+    
+    <select id="findAll" resultMap="userCacheMap">
+		select
+		<include refid="Column_List" />
+		from user_cache
+	</select>
+	<select id="findUserById" parameterType="Integer" resultMap="userCacheMap">
+         select <include refid="Column_List" /> from user_cache where id = #{id}
+	</select>
+</mapper>

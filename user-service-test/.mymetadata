@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="user-service-test"
+  id="myeclipse.1432777839616"
+  context-root="/spring-oauth-client"
+  j2ee-spec="1.7"
+  archive="user-service-test.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+

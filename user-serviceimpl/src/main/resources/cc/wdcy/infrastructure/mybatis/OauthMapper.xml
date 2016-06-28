@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.open.openpaas.userservice.app.infrastructure.mybatis.OauthRepositoryMyBatis">
+
+    <resultMap type="OauthClientDetails" id="oauthClientDetailsMap">
+        <id property="id" column="id"/>
+		<result property="clientId" column="appkey"/>
+        <result property="resourceIds" column="resourceIds"/>
+        <result property="clientSecret" column="appsecret"/>
+        <result property="scope" column="scope"/>
+
+        <result property="authorizedGrantTypes" column="authorizedGrantTypes"/>
+        <result property="webServerRedirectUri" column="webServerRedirectUri"/>
+        <result property="authorities" column="authorities"/>
+
+        <result property="accessTokenValidity" column="accessTokenValidity"/>
+        <result property="refreshTokenValidity" column="refreshTokenValidity"/>
+        <result property="additionalInformation" column="additionalInformation"/>
+
+        <result property="createTime" column="createTime"/>
+        <result property="archived" column="archived"/>
+        <result property="trusted" column="trusted"/>
+
+    </resultMap>
+
+    <select id="findOauthClientDetails" parameterType="String" resultMap="oauthClientDetailsMap">
+         select * from app
+         where  appkey = #{clientId}
+	</select>
+
+    <select id="findAllOauthClientDetails" resultMap="oauthClientDetailsMap">
+         select * from app
+	</select>
+
+</mapper>
