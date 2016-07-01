@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
+import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.AESUtil;
@@ -47,6 +48,7 @@ public class ValidateLoginController extends BaseControllerUtil {
      	String client_id=request.getParameter("client_id");
      	String access_token=request.getParameter("access_token");
          String secret= request.getParameter("secret");
+         long startTime = System.currentTimeMillis();
          String source_id="";
          String time="";
          
@@ -107,6 +109,7 @@ public class ValidateLoginController extends BaseControllerUtil {
      	}else{
      		WebUtils.writeSuccessJson(response,map);
      	}
+     	OauthControllerLog.log(startTime,"","",app,map);
          return;
      }
      

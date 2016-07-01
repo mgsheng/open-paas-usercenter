@@ -19,6 +19,7 @@ import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
+import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
@@ -57,7 +58,8 @@ public class AutoLoginController extends BaseControllerUtil {
          String secret= request.getParameter("secret");
          String guid="";
          String time="";
-         
+         String username="";
+         long startTime = System.currentTimeMillis();
      	Map<String, Object> map=new HashMap<String,Object>();
          if(!WebUtils.paraMandatoryCheck(Arrays.asList(client_id,access_token,secret))){
         	 WebUtils.paraMandaChkAndReturn(4,response,"必传参数中有空值");
@@ -101,6 +103,7 @@ public class AutoLoginController extends BaseControllerUtil {
 				    		WebUtils.paraMandaChkAndReturn(3,response,"用户不存在");
 				            return;
 				    	}
+				    	username=user.getUsername();
 				    	
  				}catch (Exception e) {
  					map.clear();
@@ -115,7 +118,9 @@ public class AutoLoginController extends BaseControllerUtil {
      	}else{
      		WebUtils.writeSuccessJson(response,map);
      	}
+     	OauthControllerLog.log(startTime,username,"",app,map);
          return;
+         
      }
      
 }

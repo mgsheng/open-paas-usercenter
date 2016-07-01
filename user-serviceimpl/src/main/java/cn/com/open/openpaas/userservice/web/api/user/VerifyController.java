@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
+import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
@@ -46,6 +47,7 @@ public class VerifyController extends BaseControllerUtil{
     	String account=request.getParameter("account");
     	String accountType=request.getParameter("accountType");
     	Map<String, Object> map=new HashMap<String,Object>();
+    	long startTime = System.currentTimeMillis();
     	log.info("client_id:"+client_id);
         if(!WebUtils.paraMandatoryCheck(Arrays.asList(client_id,access_token,account))){
         	WebUtils.paraMandaChkAndReturn(4, response,"必传参数有空值");
@@ -110,6 +112,7 @@ public class VerifyController extends BaseControllerUtil{
     		  redisClient.setObjectByTime(RedisConstant.USER_NAME_CHECK+account+"_"+accountType, verifyDto, 60);*/
     		  WebUtils.writeSuccessJson(response,map);
     	}
+    	OauthControllerLog.log(startTime,account,"",app,map);
         return;
     }
   

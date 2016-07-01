@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
+import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
@@ -38,6 +39,7 @@ public class CheckTokenController {
     public void userInfo(HttpServletRequest request,HttpServletResponse response) throws Exception {
       String token=	request.getParameter("access_token");
       String clientId=request.getParameter("client_id");
+      long startTime = System.currentTimeMillis();
       Map<String, Object> map=new HashMap<String,Object>();
 
       if(!WebUtils.paraMandatoryCheck(Arrays.asList(clientId,token))){
@@ -71,6 +73,8 @@ public class CheckTokenController {
   	  }else{
   		  WebUtils.writeSuccessJson(response,map);
   	  }
+  	  OauthControllerLog.log(startTime,"","",app,map);
       return;
+      
     }
 }

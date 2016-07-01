@@ -60,17 +60,23 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
   
 	 @RequestMapping("saveUserInfo")
 	    public void userSynUserInfo(HttpServletRequest request,HttpServletResponse response,UserCenterRegDto userCenterReg) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-	        if(null!=userCenterReg){
+	        
+		 String username="";
+         long startTime = System.currentTimeMillis();
+         String password="";
+         App app=null;
+         Map<String, Object> map=new HashMap<String, Object>();
+		 if(null!=userCenterReg){
+			   username=userCenterReg.getUsername();
 	            if(!paraMandatoryCheck(Arrays.asList(
 	                   userCenterReg.getClient_id(),userCenterReg.getSource_id()))){
 	                paraMandaChkAndReturn(3, response,"必传参数中有空值");
 	                return;
 	            }
-	            
 	           // String desphone="";
 	            log.info("client_id："+userCenterReg.getClient_id());
-	            Map<String, Object> map=new HashMap<String, Object>();
-	            App app = (App) redisClient.getObject(RedisConstant.APP_INFO+userCenterReg.getClient_id());
+	           
+	             app = (App) redisClient.getObject(RedisConstant.APP_INFO+userCenterReg.getClient_id());
 		        if(app==null)
 				{
 					 app=appService.findIdByClientId(userCenterReg.getClient_id());
@@ -116,14 +122,6 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 	                                        userCenterReg.getEmail(),userCenterReg.getNickname(),
 	                                        userCenterReg.getReal_name(),userCenterReg.getHead_picture());
 	                                user.setEmailActivation(User.ACTIVATION_YES);
-	                                //注册(密码为空则用户为测试，不为空则非测试)
-	                                if(nullEmptyBlankJudge(userCenterReg.getPassword())|| ("null").equals(userCenterReg.getPassword())){
-	                                    user.userType(2);
-	                                }else{
-	                                    if(nullEmptyBlankJudge(userCenterReg.getUser_type()) && !("null").equals(userCenterReg.getUser_type())){
-	                                        user.userType(1);
-	                                    }
-	                                }
 	                                user.userState("1");
 	                                userService.save(user);
 	                        }
@@ -169,12 +167,6 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 								user.cardNo(userCenterReg.getCard_no());
 								user.setEmailActivation(User.ACTIVATION_NO);
 								user.userState("0");
-								//注册(密码为空则用户为测试，不为空则非测试)
-								if(userCenterReg.getPassword()==null || userCenterReg.getPassword().length()==0 || ("null").equals(userCenterReg.getPassword())){
-									user.userType(2);
-								}else{
-					    		    user.userType(1);
-								}
 								Boolean f=userService.save(user);
 								if(f){
 								if(null==userCenterReg.getSource_id()||"".equals(userCenterReg.getSource_id().trim())){
@@ -222,6 +214,7 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 	                writeSuccessJson(response,map);
 	            }
 	        }
+		 OauthControllerLog.log(startTime,username,userCenterReg.getPassword(),app,map);
 	        return;
 	    }
 

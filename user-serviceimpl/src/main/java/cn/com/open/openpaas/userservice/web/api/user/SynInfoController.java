@@ -19,6 +19,7 @@ import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.domain.model.UserCenterRegDto;
+import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
@@ -48,15 +49,21 @@ public class SynInfoController extends BaseControllerUtil{
 
     @RequestMapping("synUserInfo")
     public void userSynUserInfo(HttpServletRequest request,HttpServletResponse response,UserCenterRegDto userCenterReg) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        if(null!=userCenterReg){
+        
+    	 String username="";
+         long startTime = System.currentTimeMillis();
+         App app=null;
+         Map<String, Object> map=new HashMap<String, Object>();
+    	if(null!=userCenterReg){
             if(!WebUtils.paraMandatoryCheck(Arrays.asList(userCenterReg.getGrant_type(),userCenterReg.getClient_id(),
                     userCenterReg.getAccess_token(),userCenterReg.getScope(),userCenterReg.getSource_id()))){
             	WebUtils.paraMandaChkAndReturn(3, response,"必传参数中有空值");
                 return;
             }
             log.info("client_id："+userCenterReg.getClient_id());
-            Map<String, Object> map=new HashMap<String, Object>();
-            App app = (App) redisClient.getObject(RedisConstant.APP_INFO+userCenterReg.getClient_id());
+            
+            app = (App) redisClient.getObject(RedisConstant.APP_INFO+userCenterReg.getClient_id());
+           
 	        if(app==null)
 			{
 				 app=appService.findIdByClientId(userCenterReg.getClient_id());
@@ -76,7 +83,9 @@ public class SynInfoController extends BaseControllerUtil{
                         try {
                         /* user */
                             User user = userService.findUserById(appUser.userId());
+                           
                             if (null != user) {
+                            	 username=user.getUsername();
                                 if (!WebUtils.nullEmptyBlankJudge(userCenterReg.getPhone())) {
                                 	
                                     user.phone(userCenterReg.getPhone());
@@ -85,28 +94,14 @@ public class SynInfoController extends BaseControllerUtil{
                                 	user.email(userCenterReg.getEmail());
                                 }
                                 userService.updateUser(user);
+                                map.put("guid", user.guid());
                             }else{
-                            	 user=new User(userCenterReg.getUsername(),userCenterReg.getPassword(),userCenterReg.getPhone(),
-                                         userCenterReg.getEmail(),userCenterReg.getNickname(),
-                                         userCenterReg.getReal_name(),userCenterReg.getHead_picture());
-                                user.userState("1");
-                                user.setEmailActivation(User.ACTIVATION_YES);
-                                if(WebUtils.nullEmptyBlankJudge(userCenterReg.getIdentify_type()) && !("null").equals(userCenterReg.getIdentify_type())){
-                                    user.identifyType(Integer.parseInt(userCenterReg.getIdentify_type()));
-                                }
-                                user.identifyNo(userCenterReg.getIdentify_no());
-                                //注册(密码为空则用户为测试，不为空则非测试)
-                                if(WebUtils.nullEmptyBlankJudge(userCenterReg.getPassword())|| ("null").equals(userCenterReg.getPassword())){
-                                    user.userType(2);
-                                }else{
-                                    if(WebUtils.nullEmptyBlankJudge(userCenterReg.getUser_type()) && !("null").equals(userCenterReg.getUser_type())){
-                                        user.userType(Integer.parseInt(userCenterReg.getUser_type()));
-                                    }
-                                }
-                                user.userState(userCenterReg.getUser_state());
-                                userService.save(user);
+                            	 map.clear();
+                                 map.put("status", "0");
+                                 map.put("errMsg","source_id不存在");
+                                 map.put("error_code", "4");//source_id不存在	
                             }
-                            map.put("guid", user.guid());
+                           
                         }catch(Exception e){
                             map.clear();
                             map.put("status", "0");
@@ -127,6 +122,7 @@ public class SynInfoController extends BaseControllerUtil{
             	WebUtils.writeSuccessJson(response,map);
             }
         }
+        OauthControllerLog.log(startTime,username,"",app,map);
         return;
     }
 

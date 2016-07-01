@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
+import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
@@ -52,6 +53,7 @@ public class UserCenterGetPwdRuleController extends BaseControllerUtil {
     	String client_id=request.getParameter("client_id");
     	String access_token=request.getParameter("access_token");
     	Map<String, Object> map=new HashMap<String,Object>();
+    	long startTime = System.currentTimeMillis();
     	log.info("client_id:"+client_id+"access_token:"+access_token);
     	log.info("signature:"+request.getParameter("signature")+"timestamp:"+request.getParameter("timestamp")+"signatureNonce:"+request.getParameter("signatureNonce"));
         if(!paraMandatoryCheck(Arrays.asList(client_id,access_token))){
@@ -82,7 +84,9 @@ public class UserCenterGetPwdRuleController extends BaseControllerUtil {
 		}else{
 			writeSuccessJson(response,map);
 		}
+		OauthControllerLog.log(startTime, "", "", app, map);
 	    return;
+	    
      }
     
 }

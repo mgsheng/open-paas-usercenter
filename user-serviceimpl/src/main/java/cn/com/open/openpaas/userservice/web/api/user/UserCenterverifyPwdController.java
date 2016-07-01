@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
+import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.AESUtil;
@@ -48,6 +49,7 @@ public class UserCenterverifyPwdController extends BaseControllerUtil{
 		String client_id = request.getParameter("client_id");
 		String access_token = request.getParameter("access_token");
 		String password = request.getParameter("password");
+		 long startTime = System.currentTimeMillis();
 		log.info("client_id:"+client_id+"access_token:"+access_token+"password:"+password);
     	log.info("signature:"+request.getParameter("signature")+"timestamp:"+request.getParameter("timestamp")+"signatureNonce:"+request.getParameter("signatureNonce"));
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -115,6 +117,7 @@ public class UserCenterverifyPwdController extends BaseControllerUtil{
 		} else {
 			writeSuccessJson(response, map);
 		}
+		OauthControllerLog.log(startTime,"","",app,map);
 		return;
 	}
 

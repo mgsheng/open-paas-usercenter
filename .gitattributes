@@ -386,6 +386,7 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/Use
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterTestLoginController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterTestRegController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterUnBindController.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterUnBindInfoController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterverifyPwdController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ValidateLoginController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/VerifyController.java -text
