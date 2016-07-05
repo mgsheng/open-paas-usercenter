@@ -1,4 +1,6 @@
 * text=auto !eol
+/build.gradle -text
+/settings.gradle -text
 user-service-test/.classpath -text
 user-service-test/.mymetadata -text
 user-service-test/.project -text

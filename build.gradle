@@ -1,0 +1,69 @@
+allprojects{
+  version='1.0.0.RELEASE'
+  apply plugin: 'java'
+  
+  compileJava {
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
+  }
+  repositories {
+  	maven {
+       name 'open'
+       url "http://maven.open.com.cn/repository/maven-public/"
+    }
+  }
+  
+  dependencies {
+     compile 'javax.mail:mail:1.4.1',
+     	     'opensymphony:sitemesh:2.4',
+     	     'javax.servlet.jsp:jsp-api:2.1',
+     	     'javax.servlet:servlet-api:2.4',
+     	     'org.aspectj:aspectjrt:1.6.10',
+     	     'org.aspectj:aspectjweaver:1.6.10',
+     	     'commons-dbcp:commons-dbcp:1.4',
+     	     'commons-io:commons-io:2.4',
+     	     'org.springframework:spring-aop:3.1.1.RELEASE',
+     	     'org.springframework:spring-beans:3.1.1.RELEASE',
+     	     'org.springframework:spring-context:3.1.1.RELEASE',
+     	     'org.springframework:spring-core:3.1.1.RELEASE',
+     	     'org.springframework:spring-tx:3.1.1.RELEASE',
+     	     'org.springframework:spring-expression:3.1.1.RELEASE',
+     	     'org.springframework:spring-web:3.1.1.RELEASE',
+     	     'org.springframework:spring-webmvc:3.1.1.RELEASE',
+     	     'org.springframework:spring-context-support:3.1.1.RELEASE',
+     	     'org.springframework.security:spring-security-core:3.1.0.RELEASE',
+     	     'org.springframework.security:spring-security-web:3.1.0.RELEASE',
+     	     'org.springframework.security:spring-security-taglibs:3.1.0.RELEASE',
+     	     'org.springframework.security:spring-security-acl:3.1.0.RELEASE',
+     	     'org.springframework.security:spring-security-crypto:3.1.0.RELEASE',
+     	     'org.springframework.security:spring-security-config:3.1.0.RELEASE',
+     	     'org.springframework.security.oauth:spring-security-oauth2:1.0.5.RELEASE',
+     	     'mysql:mysql-connector-java:5.1.6',
+     	     'commons-fileupload:commons-fileupload:1.2.1',
+     	     'log4j:log4j:1.2.14',
+     	     'org.slf4j:slf4j-log4j12:1.7.5',
+     	     'net.sf.json-lib:json-lib:2.4:jdk15@jar',
+     	     'org.mybatis:mybatis:3.2.1',
+     	     'org.mybatis:mybatis-spring:1.1.1',
+     	     'javax.servlet:jstl:1.1.2',
+     	     'taglibs:standard:1.1.2',
+     	     'org.springframework:spring-test:3.1.1.RELEASE',
+     	     'org.testng:testng:6.1.1',
+     	     'com.alibaba:druid:0.2.20',
+     	     'org.springframework.mobile:spring-mobile-device:1.0.0.RELEASE',
+     	     'redis.clients:jedis:2.1.0',
+     	     'org.apache.axis:axis:1.4',
+     	     'axis:axis-wsdl4j:1.5.1',
+     	     'javax.xml.rpc:javax.xml.rpc-api:1.1.1',
+     	     'commons-discovery:commons-discovery:0.5',
+     	     'com.alibaba:fastjson:1.1.31',
+     	     'org.quartz-scheduler:quartz:1.8.6',
+     	     'cglib:cglib:2.2.2',
+     	     'org.apache.directory.studio:org.dom4j.dom4j:1.6.1',
+     	     'org.apache.httpcomponents:httpclient:4.3.1',
+     	     'commons-lang:commons-lang:2.6'
+     	     
+  }
+  
+}
+
