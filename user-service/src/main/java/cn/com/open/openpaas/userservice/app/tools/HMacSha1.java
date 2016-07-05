@@ -6,7 +6,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+import org.bouncycastle.util.encoders.Base64;
   
 public class HMacSha1 {  
   
