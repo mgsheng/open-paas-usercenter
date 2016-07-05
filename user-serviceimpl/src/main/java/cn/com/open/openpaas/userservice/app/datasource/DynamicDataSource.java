@@ -12,9 +12,6 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return DataSourceSwitcher.getDataSource();  
     }
 
-	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 }
