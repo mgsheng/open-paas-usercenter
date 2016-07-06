@@ -194,6 +194,7 @@ user-service/lib/aspectjrt-1.6.10.jar -text
 user-service/lib/aspectjweaver-1.6.10.jar -text
 user-service/lib/axis-1.4.jar -text
 user-service/lib/axis-wsdl4j-1.5.1.jar -text
+user-service/lib/bcprov-jdk16-1.45.jar -text
 user-service/lib/cglib-2.2.2.jar -text
 user-service/lib/commons-beanutils-1.8.0.jar -text
 user-service/lib/commons-codec-1.3.jar -text
