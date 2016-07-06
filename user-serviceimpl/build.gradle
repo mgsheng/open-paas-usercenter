@@ -1,9 +1,6 @@
-
 apply plugin: 'war'
-apply plugin: 'jetty'
-
-
 dependencies {
-     compile project(':user-service')
-     	     
-  }
+  	 providedCompile  'javax.servlet.jsp:jsp-api:2.1@jar',
+     	              'javax.servlet:servlet-api:2.4@jar'
+     compile project(':user-service')     	 
+}
