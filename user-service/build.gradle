@@ -1,1 +1,5 @@
 
+dependencies {
+  	 compile  'javax.servlet.jsp:jsp-api:2.1',
+     	      'javax.servlet:servlet-api:2.4'
+}
