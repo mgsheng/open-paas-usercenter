@@ -1,3 +1,4 @@
+
 allprojects{
   version='1.0.0.RELEASE'
   apply plugin: 'java'
@@ -16,8 +17,6 @@ allprojects{
   dependencies {
      compile 'javax.mail:mail:1.4.1',
      	     'opensymphony:sitemesh:2.4',
-     	     'javax.servlet.jsp:jsp-api:2.1',
-     	     'javax.servlet:servlet-api:2.4',
      	     'org.aspectj:aspectjrt:1.6.10',
      	     'org.aspectj:aspectjweaver:1.6.10',
      	     'commons-dbcp:commons-dbcp:1.4',
