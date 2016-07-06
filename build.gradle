@@ -62,7 +62,8 @@ allprojects{
      	     'org.apache.directory.studio:org.dom4j.dom4j:1.6.1',
      	     'org.apache.httpcomponents:httpclient:4.3.1',
      	     'commons-lang:commons-lang:2.6',
-     	     'org.bouncycastle:bcprov-jdk16:1.45'
+     	     'org.bouncycastle:bcprov-jdk16:1.45',
+     	      'com.baidu.disconf:disconf-client:2.6.33'
      	     
   }
   
