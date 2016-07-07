@@ -399,11 +399,13 @@ user-serviceimpl/src/main/resources/cc/wdcy/infrastructure/mybatis/LogMonitorMap
 user-serviceimpl/src/main/resources/cc/wdcy/infrastructure/mybatis/OauthMapper.xml -text
 user-serviceimpl/src/main/resources/cc/wdcy/infrastructure/mybatis/UserCacheMapper.xml -text
 user-serviceimpl/src/main/resources/cc/wdcy/infrastructure/mybatis/UserMapper.xml -text
+user-serviceimpl/src/main/resources/disconf.properties -text
 user-serviceimpl/src/main/resources/emailtemplate/activation.html -text
 user-serviceimpl/src/main/resources/emailtemplate/resetpassword.html -text
 user-serviceimpl/src/main/resources/logging.properties -text
 user-serviceimpl/src/main/resources/mybatis.xml -text
 user-serviceimpl/src/main/resources/spring-oauth-server.properties -text
+user-serviceimpl/src/main/resources/spring/appCtx-disconf.xml -text
 user-serviceimpl/src/main/resources/spring/context.xml -text
 user-serviceimpl/src/main/resources/spring/job.xml -text
 user-serviceimpl/src/main/resources/spring/security.xml -text
