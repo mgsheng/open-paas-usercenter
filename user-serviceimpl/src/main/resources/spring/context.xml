@@ -25,11 +25,11 @@
     <context:component-scan base-package="cn.com.open.openpaas.userservice.app.appuser.service"/>
 
     <!-- property configuration -->
-    <!-- 
     <bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
-            <list>
+            <list><!--  
                 <value>classpath:spring-oauth-server.properties</value>
+                -->
             </list>
         </property>
     </bean>
@@ -46,7 +46,6 @@
             <value>true</value>  
         </property>  
     </bean>
-     -->
        <!--dataSource-->
  <bean id="parentDataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">  
  <!-- 初始化连接大小 -->
