@@ -27,9 +27,8 @@
     <!-- property configuration -->
     <bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
-            <list><!--  
+            <list>
                 <value>classpath:spring-oauth-server.properties</value>
-                -->
             </list>
         </property>
     </bean>
