@@ -451,7 +451,78 @@ public class HttpTools {
 		}
 		return responseContent;
 	}
-	public static String post(String url, String content)
+	/**
+	 * <pre>
+	 * 发送带参数的POST的HTTP请求
+	 * </pre>
+	 * 
+	 * @param reqUrl HTTP请求URL
+	 * @param parameters 参数映射表
+	 * @return HTTP响应的字符串
+	 */
+	public static void doPostForJson(String reqUrl, Map<String, String> parameters, String recvEncoding) {
+		HttpURLConnection url_con = null;
+		try {
+			StringBuffer params = new StringBuffer();
+			for (Iterator<?> iter = parameters.entrySet().iterator(); iter.hasNext();) {
+				Entry<?, ?> element = (Entry<?, ?>) iter.next();
+				params.append(element.getKey().toString());
+				params.append("=");
+				params.append(URLEncoder.encode(element.getValue().toString(), HttpTools.requestEncoding));
+				params.append("&");
+			}
+
+			if (params.length() > 0) {
+				params = params.deleteCharAt(params.length() - 1);
+			}
+
+			URL url = new URL(reqUrl);
+			url_con = (HttpURLConnection) url.openConnection();
+			url_con.setRequestMethod("POST");
+			// Set header
+			if(headerParamters!=null){
+				for(String key : headerParamters.keySet()){
+					url_con.setRequestProperty(key, headerParamters.get(key).toString());
+				}
+			}
+			System.setProperty("sun.net.client.defaultConnectTimeout", String.valueOf(HttpTools.connectTimeOut));// （单位：毫秒）jdk1.4换成这个,连接超时
+			System.setProperty("sun.net.client.defaultReadTimeout", String.valueOf(HttpTools.readTimeOut)); // （单位：毫秒）jdk1.4换成这个,读操作超时
+			// url_con.setConnectTimeout(5000);//（单位：毫秒）jdk
+			// 1.5换成这个,连接超时
+			// url_con.setReadTimeout(5000);//（单位：毫秒）jdk 1.5换成这个,读操作超时
+			url_con.setDoOutput(true);
+			byte[] b = params.toString().getBytes();
+			url_con.getOutputStream().write(b, 0, b.length);
+			url_con.getOutputStream().flush();
+			url_con.getOutputStream().close();
+		}
+		catch (IOException e) {
+			logger.error("网络故障", e);
+		}
+		finally {
+			if (url_con != null) {
+				url_con.disconnect();
+			}
+		}
+	}
+	public static void post(String url, String content)
+			throws Exception
+	{
+		StringBuffer doc = new StringBuffer();
+		java.io.InputStream in = null;
+		URLConnection conn = (new URL(url)).openConnection();
+		conn.setReadTimeout(1000000);
+		conn.setDoOutput(true);
+		conn.setRequestProperty("content-type", "text/html");
+		if (content.length() > 0)
+		{
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "utf-8"));
+			out.write(content);
+			out.flush();
+			out.close();
+		}
+	}
+	public static String postForJson(String url, String content)
 			throws Exception
 	{
 		StringBuffer doc = new StringBuffer();
