@@ -1,13 +1,19 @@
 package cn.com.open.openpaas.userservice.app.log;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.com.open.openpaas.userservice.app.app.model.App;
+import cn.com.open.openpaas.userservice.app.log.model.LogMonitor;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
+import cn.com.open.openpaas.userservice.app.tools.HttpTools;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * 输出日志类，用于统计各接口执行效率和结果，配置在log4j中的dailyRollingFileOauthControllerLog
@@ -17,7 +23,6 @@ import cn.com.open.openpaas.userservice.app.tools.DateTools;
 public class OauthControllerLog {
 	
 	private static final Logger logger = LoggerFactory.getLogger(OauthControllerLog.class);
-
 	/**
 	 * 输出日志
 	 * 格式：
@@ -28,8 +33,9 @@ public class OauthControllerLog {
 	 * @param app
 	 * @param map
 	 */
-	public static void log(long startTime,String username,String password,App app, Map<String,Object> map){
+	public static void log(long startTime,String username,String password,App app, Map<String,Object> map, UserserviceDev userserviceDev){
 		try {
+			LogMonitor log=new LogMonitor();
 			Throwable ex = new Throwable();
 			StringBuffer msg = new StringBuffer();
 			long endTime = System.currentTimeMillis(); //获取结束时间
@@ -48,16 +54,25 @@ public class OauthControllerLog {
 				//获取appId
 				if(app!=null){
 					msg.append(app.getId()).append("#");
+					log.setAppId(app.getId());
 				}
 				else{
 					msg.append("#");
 				}
+			
+		    	log.setExecTime(endTime-startTime);
+		    	log.setName(ex.getStackTrace()[1].getMethodName());
+		    	log.setUsername(username);
+		    	log.setPassword(password);
+		    	
 				//获取执行状态
 				if(map!=null && map.get("status") !=null){
+					log.setStatus(Integer.parseInt((String) map.get("status")));
 					msg.append(map.get("status")).append("#");
 					//获取错误号status=0为错误
 					if(map.get("status").toString().equals("0") && map.get("error_code")!=null){
 						msg.append(map.get("error_code")).append("#");
+						log.setErrorCode(Integer.parseInt((String) map.get("error_code")));
 					}
 					else{
 						msg.append("#");
@@ -66,12 +81,19 @@ public class OauthControllerLog {
 				if(map!=null && map.get("flag")!=null){
 					if(map.get("flag").equals("false")){
 						msg.append("0").append("#").append(map.get("error_code"));
+						log.setStatus(Integer.parseInt((String) map.get("status")));
+						log.setErrorCode(Integer.parseInt((String) map.get("error_code")));
 					}else{
 						msg.append("1").append("#").append("#");
 					}
 				}
 			}
-			logger.info(msg.toString());
+			logger.info(msg.toString()+"|"+JSONObject.toJSONString(log));
+			Map <String,String>logMap=new HashMap<String,String>();
+			logMap.put("tag", "usercenter");
+			logMap.put("logData", JSONObject.toJSONString(log));
+			HttpTools.doPostForJson(userserviceDev.getKong_log_url(), logMap,"UTF-8");
+			
 			ex = null;
 			msg = null;
 		} catch (Exception e) {
