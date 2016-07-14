@@ -8,7 +8,7 @@ public class UserserviceDev {
 	public String detect_password_time;
 	public String encrypt_iv_key;
 	public String encrypt_password_crypt_key;
-	
+	public String kong_log_url;
 
 	public String getEncrypt_iv_key() {
 		return encrypt_iv_key;
@@ -56,6 +56,14 @@ public class UserserviceDev {
 
 	public void setDetect_password_time(String detect_password_time) {
 		this.detect_password_time = detect_password_time;
+	}
+
+	public String getKong_log_url() {
+		return kong_log_url;
+	}
+
+	public void setKong_log_url(String kong_log_url) {
+		this.kong_log_url = kong_log_url;
 	}
 	
 	
