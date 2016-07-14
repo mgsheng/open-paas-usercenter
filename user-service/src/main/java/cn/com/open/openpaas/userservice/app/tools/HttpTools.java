@@ -1,12 +1,14 @@
 package cn.com.open.openpaas.userservice.app.tools;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
@@ -448,6 +450,30 @@ public class HttpTools {
 			}
 		}
 		return responseContent;
+	}
+	public static String post(String url, String content)
+			throws Exception
+	{
+		StringBuffer doc = new StringBuffer();
+		java.io.InputStream in = null;
+		URLConnection conn = (new URL(url)).openConnection();
+		conn.setReadTimeout(1000000);
+		conn.setDoOutput(true);
+		conn.setRequestProperty("content-type", "text/html");
+		if (content.length() > 0)
+		{
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "utf-8"));
+			out.write(content);
+			out.flush();
+			out.close();
+		}
+		in = conn.getInputStream();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+		for (String line = null; (line = reader.readLine()) != null;)
+			doc.append(line).append("\n");
+
+		reader.close();
+		return doc.toString();
 	}
 	public static void main(String[] args) {
 //		Map<String, String> map = new HashMap<String, String>();
