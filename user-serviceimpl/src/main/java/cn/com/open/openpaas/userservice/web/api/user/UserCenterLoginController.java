@@ -21,11 +21,14 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONObject;
+
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
+import cn.com.open.openpaas.userservice.app.log.model.LogMonitor;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.AESUtil;
@@ -39,7 +42,6 @@ import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
-
 
 /**
  *  用户登录接口(通过用户名-密码)
@@ -369,7 +371,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    	}else{
 	    		writeSuccessJson(response,map);
 	    	}
-	    	OauthControllerLog.log(startTime,username,oldPassword,app,map);
+	    	OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 	        return;
 	    }	
     /**

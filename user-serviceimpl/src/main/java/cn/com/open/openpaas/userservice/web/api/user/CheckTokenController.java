@@ -18,6 +18,7 @@ import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
 /**
@@ -31,7 +32,8 @@ public class CheckTokenController {
 	 private AppService appService; 
 	 @Autowired
 	 private DefaultTokenServices tokenServices;
-    
+	 @Autowired
+	 private UserserviceDev userserviceDev;
     /**
       *  检验access_token
      */
@@ -73,7 +75,7 @@ public class CheckTokenController {
   	  }else{
   		  WebUtils.writeSuccessJson(response,map);
   	  }
-  	  OauthControllerLog.log(startTime,"","",app,map);
+  	  OauthControllerLog.log(startTime,"","",app,map,userserviceDev);
       return;
       
     }

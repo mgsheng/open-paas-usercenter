@@ -19,6 +19,7 @@ import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
 /**
@@ -36,6 +37,8 @@ public class VerifyController extends BaseControllerUtil{
 	private DefaultTokenServices tokenServices;
 	@Autowired
 	private RedisClientTemplate redisClient;
+	 @Autowired
+	 private UserserviceDev userserviceDev;
     /**
      * 用户账号验证接口
      * @return Json
@@ -112,7 +115,7 @@ public class VerifyController extends BaseControllerUtil{
     		  redisClient.setObjectByTime(RedisConstant.USER_NAME_CHECK+account+"_"+accountType, verifyDto, 60);*/
     		  WebUtils.writeSuccessJson(response,map);
     	}
-    	OauthControllerLog.log(startTime,account,"",app,map);
+    	OauthControllerLog.log(startTime,account,"",app,map,userserviceDev);
         return;
     }
   

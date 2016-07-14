@@ -25,6 +25,7 @@ import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
 /**
@@ -44,6 +45,8 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
 	 private RedisClientTemplate redisClient;
 	 @Autowired
 	 private DefaultTokenServices tokenServices;
+	 @Autowired
+	 private UserserviceDev userserviceDev;
     /**
      * 用户信息绑定接口
      * @return Json
@@ -143,7 +146,7 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
     	}else{
     		writeSuccessJson(response,map);
     	}
-    	OauthControllerLog.log(startTime, guid, source_id, app, map);
+    	OauthControllerLog.log(startTime, guid, source_id, app, map,userserviceDev);
         return;
     }
 }

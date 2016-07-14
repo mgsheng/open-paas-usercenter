@@ -214,7 +214,7 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 	                writeSuccessJson(response,map);
 	            }
 	        }
-		 OauthControllerLog.log(startTime,username,userCenterReg.getPassword(),app,map);
+		 OauthControllerLog.log(startTime,username,userCenterReg.getPassword(),app,map,userserviceDev);
 	        return;
 	    }
 

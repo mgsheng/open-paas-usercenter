@@ -20,6 +20,7 @@ import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.StringTool;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
 
@@ -36,6 +37,8 @@ public class UserCenterverifyPwdController extends BaseControllerUtil{
 	 private DefaultTokenServices tokenServices;
 	 @Autowired
 	 private RedisClientTemplate redisClient;
+	 @Autowired
+	 private UserserviceDev userserviceDev;
 
 	/**
 	 * 验证用户密码是否符合规则
@@ -117,7 +120,7 @@ public class UserCenterverifyPwdController extends BaseControllerUtil{
 		} else {
 			writeSuccessJson(response, map);
 		}
-		OauthControllerLog.log(startTime,"","",app,map);
+		OauthControllerLog.log(startTime,"","",app,map,userserviceDev);
 		return;
 	}
 

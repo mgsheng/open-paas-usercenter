@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 
-
 /**
  * 测试用户登录接口(通过用户名-密码)
  * 

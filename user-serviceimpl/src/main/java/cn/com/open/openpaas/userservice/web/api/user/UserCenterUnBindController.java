@@ -28,6 +28,7 @@ import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
 /**
@@ -47,7 +48,8 @@ public class UserCenterUnBindController  extends BaseControllerUtil{
 	 private DefaultTokenServices tokenServices;
 	 @Autowired
 	 private RedisClientTemplate redisClient;
-
+	 @Autowired
+	 private UserserviceDev userserviceDev;
 	 
     /**
      * 用户应用解除绑定接口
@@ -116,7 +118,7 @@ public class UserCenterUnBindController  extends BaseControllerUtil{
                 writeSuccessJson(response,map);
                
             }
-            OauthControllerLog.log(startTime,username,"",app,map);
+            OauthControllerLog.log(startTime,username,"",app,map,userserviceDev);
         }
         return;
     }

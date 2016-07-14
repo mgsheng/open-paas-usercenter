@@ -191,7 +191,7 @@ public class UserCenterRetrievePwdController extends BaseControllerUtil {
     	}else{
     		writeSuccessJson(response,map);
     	}
-    	OauthControllerLog.log(startTime, username, oldPassword, app, map);
+    	OauthControllerLog.log(startTime, username, oldPassword, app, map,userserviceDev);
         return;
     }
 

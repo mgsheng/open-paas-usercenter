@@ -28,6 +28,7 @@ import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
 /**
@@ -45,7 +46,8 @@ public class AutoLoginController extends BaseControllerUtil {
 	 private RedisClientTemplate redisClient;
 	 @Autowired
 	 private UserService userService;
-
+	 @Autowired
+	 private UserserviceDev userserviceDev;
     /**
      * 验证自动登录地址（不需要验证密码规则）
      * @param request
@@ -118,7 +120,7 @@ public class AutoLoginController extends BaseControllerUtil {
      	}else{
      		WebUtils.writeSuccessJson(response,map);
      	}
-     	OauthControllerLog.log(startTime,username,"",app,map);
+     	OauthControllerLog.log(startTime,username,"",app,map,userserviceDev);
          return;
          
      }

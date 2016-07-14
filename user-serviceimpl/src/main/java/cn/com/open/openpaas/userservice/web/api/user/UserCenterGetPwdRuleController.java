@@ -84,7 +84,7 @@ public class UserCenterGetPwdRuleController extends BaseControllerUtil {
 		}else{
 			writeSuccessJson(response,map);
 		}
-		OauthControllerLog.log(startTime, "", "", app, map);
+		OauthControllerLog.log(startTime, "", "", app, map,userserviceDev);
 	    return;
 	    
      }

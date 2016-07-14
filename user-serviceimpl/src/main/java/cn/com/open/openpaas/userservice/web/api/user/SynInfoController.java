@@ -27,6 +27,7 @@ import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
 /**
@@ -46,7 +47,8 @@ public class SynInfoController extends BaseControllerUtil{
 	 private DefaultTokenServices tokenServices;
 	 @Autowired
 	 private RedisClientTemplate redisClient;
-
+	 @Autowired
+	 private UserserviceDev userserviceDev;
     @RequestMapping("synUserInfo")
     public void userSynUserInfo(HttpServletRequest request,HttpServletResponse response,UserCenterRegDto userCenterReg) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         
@@ -122,7 +124,7 @@ public class SynInfoController extends BaseControllerUtil{
             	WebUtils.writeSuccessJson(response,map);
             }
         }
-        OauthControllerLog.log(startTime,username,"",app,map);
+        OauthControllerLog.log(startTime,username,"",app,map,userserviceDev);
         return;
     }
 

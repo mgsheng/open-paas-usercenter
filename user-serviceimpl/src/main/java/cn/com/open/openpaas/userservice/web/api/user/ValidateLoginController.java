@@ -22,6 +22,7 @@ import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
 /**
@@ -37,7 +38,8 @@ public class ValidateLoginController extends BaseControllerUtil {
 	 private DefaultTokenServices tokenServices;
 	 @Autowired
 	 private RedisClientTemplate redisClient;
-
+	 @Autowired
+	 private UserserviceDev userserviceDev;
     /**
      * 验证自动登录地址（不需要验证密码规则）
      * @param request
@@ -109,7 +111,7 @@ public class ValidateLoginController extends BaseControllerUtil {
      	}else{
      		WebUtils.writeSuccessJson(response,map);
      	}
-     	OauthControllerLog.log(startTime,"","",app,map);
+     	OauthControllerLog.log(startTime,"","",app,map,userserviceDev);
          return;
      }
      

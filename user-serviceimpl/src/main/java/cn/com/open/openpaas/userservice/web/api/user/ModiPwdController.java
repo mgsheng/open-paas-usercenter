@@ -103,30 +103,30 @@ public class ModiPwdController extends BaseControllerUtil{
 				if(!nullEmptyBlankJudge(isValidate)&&isValidate.equals("1")){
 				if(WebUtils.nullEmptyBlankJudge(old_pwd)){
 					map = WebUtils.paraMandaChkAndReturnMap(6, response,"旧密码不能为空");
-					OauthControllerLog.log(startTime, account, password, app, map);
+					OauthControllerLog.log(startTime, account, password, app, map,userserviceDev);
 					WebUtils.writeErrorJson(response,map);
 					return;
 				}
 				if(WebUtils.nullEmptyBlankJudge(new_pwd)){
 					map = WebUtils.paraMandaChkAndReturnMap(6, response,"新密码不能为空");
-					OauthControllerLog.log(startTime, account, password, app, map);
+					OauthControllerLog.log(startTime, account, password, app, map,userserviceDev);
 					WebUtils.writeErrorJson(response,map);
 					return;
 				}
 				if(StringTool.isNumeric(new_pwd)){
 					map = WebUtils.paraMandaChkAndReturnMap(6, response,"新密码不能为纯数字");
-					OauthControllerLog.log(startTime, account, password, app, map);
+					OauthControllerLog.log(startTime, account, password, app, map,userserviceDev);
 					WebUtils.writeErrorJson(response,map);
 		        	return;
 				}if(WebUtils.judgeInputNotNo(new_pwd)==1){
 					map = WebUtils.paraMandaChkAndReturnMap(6, response,"新密码必须为6-20位字母、数字或英文下划线符号");
-					OauthControllerLog.log(startTime, account, password, app, map);
+					OauthControllerLog.log(startTime, account, password, app, map,userserviceDev);
 					WebUtils.writeErrorJson(response,map);
 		        	return;
 				}}else{
 					if(judgePwdNo(new_pwd)==1){
 						map = paraMandaChkAndReturnMap(6, response,"密码必须为6-20位");
-						OauthControllerLog.log(startTime, account, password, app, map);
+						OauthControllerLog.log(startTime, account, password, app, map,userserviceDev);
 						writeErrorJson(response,map);
 			        	return;
 					}	
@@ -193,7 +193,7 @@ public class ModiPwdController extends BaseControllerUtil{
     	}else{
     		WebUtils.writeSuccessJson(response,map);
     	}
-    	OauthControllerLog.log(startTime, account, password, app, map);
+    	OauthControllerLog.log(startTime, account, password, app, map,userserviceDev);
         return;
     }
     
