@@ -9,7 +9,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,6 +84,8 @@ public class UserInterfaceController {
     
     @Value("#{properties['user-unbind-info-uri']}")
     private String unBindUserInfoUri;
+    @Value("#{properties['user-verify-payUser-uri']}")
+    private String verifyPayUserUri;
     @Value("#{properties['aes-key']}")
     final static String  SEPARATOR = "&";
     private Map<String,String> map=LoadPopertiesFile.loadProperties();
@@ -679,6 +685,40 @@ public class UserInterfaceController {
 
               return "redirect:" + fullUri;
        }
+        /**
+         * 用户同步信息跳转界面方法
+         * @param model
+         * @return
+         */
+         @RequestMapping(value = "getUserId", method = RequestMethod.GET)
+         public String getUserId(Model model) {
+           model.addAttribute("verifyPayUserUri", verifyPayUserUri);
+           return "usercenter/user_verify_payUser";
+         }
+        
+         @RequestMapping(value = "getUserId", method = RequestMethod.POST)
+         public String getUserId(String sourceId, String appId) throws Exception {
+         	  
+        	 String key=map.get(appId);
+       	  	 String signature="";
+       	  	 String timestamp="";
+       	  	 String signatureNonce="";
+    	   	 if(key!=null){
+    	   		SortedMap<Object,Object> sParaTemp = new TreeMap<Object,Object>();
+    	   		timestamp=DateTools.getSolrDate(new Date());
+    	   		signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
+    	   		sParaTemp.put("appId",appId);
+    	   		sParaTemp.put("timestamp", timestamp);
+    	   		sParaTemp.put("signatureNonce", signatureNonce);
+    	   		sParaTemp.put("source_id", sourceId);
+    	   		String params=createSign(sParaTemp);
+    	   		signature=HMacSha1.HmacSHA1Encrypt(params, key);
+    	   		signature=HMacSha1.getNewResult(signature);
+    	   	 }
+        	 final String fullUri =verifyPayUserUri+"?app_id="+appId+"&source_id="+sourceId+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+             LOG.debug("Send to pay-service-server URL: {}", fullUri);
+             return "redirect:" + fullUri;
+           }
      public static String sendPost(String url, String param) {
         PrintWriter out = null;
         BufferedReader in = null;
@@ -729,4 +769,26 @@ public class UserInterfaceController {
         }
         return result;
     }
+     /**
+		 * 生成加密串
+		 * @param characterEncoding
+		 * @param parameters
+		 * @return
+		 */
+		public static String createSign(SortedMap<Object,Object> parameters){
+			StringBuffer sb = new StringBuffer();
+			Set es = parameters.entrySet();//所有参与传参的参数按照accsii排序（升序）
+			Iterator it = es.iterator();
+			while(it.hasNext()) {
+				Map.Entry entry = (Map.Entry)it.next();
+				String k = (String)entry.getKey();
+				Object v = entry.getValue();
+				if(null != v && !"".equals(v)&& !"null".equals(v) 
+						&& !"sign".equals(k) && !"key".equals(k)) {
+					sb.append(k + "=" + v + "&");
+				}
+			}
+			 String temp_params = sb.toString();  
+			return sb.toString().substring(0, temp_params.length()-1);
+		}
 }

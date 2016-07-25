@@ -105,6 +105,9 @@
         <li>
             <p><a href="userSaveInfo">userSaveInfo</a> <br/>用户信息保存接口</p>
         </li>
+        <li>
+            <p><a href="getUserId">getUserId</a> <br/>获取用户ID</p>
+        </li>
 
     </ul>
 </div>

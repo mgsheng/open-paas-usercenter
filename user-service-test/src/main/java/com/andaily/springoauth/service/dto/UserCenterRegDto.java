@@ -81,9 +81,19 @@ public class UserCenterRegDto implements Serializable {
     private String id;
     private String appUid;
     private String guid;
+    private String whetherBind;
     
     
-    public String getId() {
+    
+    public String getWhetherBind() {
+		return whetherBind;
+	}
+
+	public void setWhetherBind(String whetherBind) {
+		this.whetherBind = whetherBind;
+	}
+
+	public String getId() {
 		return id;
 	}
 
@@ -636,8 +646,8 @@ public class UserCenterRegDto implements Serializable {
     }
 
 	public String getSynInfoUri(String signature, String timestamp,String signatureNonce) {
-		 return String.format("%s?client_id=%s&access_token=%s&grant_type=%s&scope=%s&source_id=%s&phone=%s&email=%s&signature=%s&timestamp=%s&signatureNonce=%s",
-	        		synUserInfoUri,clientId, access_token, grantType, scope, sourceId, phone, email,signature,timestamp,signatureNonce);  
+		 return String.format("%s?client_id=%s&access_token=%s&grant_type=%s&scope=%s&source_id=%s&phone=%s&email=%s&signature=%s&timestamp=%s&signatureNonce=%s&whetherBind=%s",
+	        		synUserInfoUri,clientId, access_token, grantType, scope, sourceId, phone, email,signature,timestamp,signatureNonce,whetherBind);  
 	}
 	
 	/*public String getFullUri() throws UnsupportedEncodingException {

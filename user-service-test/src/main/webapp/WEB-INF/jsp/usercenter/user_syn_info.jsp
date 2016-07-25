@@ -101,6 +101,17 @@
                             <p class="help-block">邮箱</p>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">whetherBind</label>
+
+                        <div class="col-sm-10">
+                            <select name="whetherBind" ng-model="whetherBind" id="whetherBind"class="form-control">
+                                <option value="0">绑定手机号</option>
+                                <option value="1">绑定邮箱</option>
+                            </select>
+                            <p class="help-block">是否绑定</p>
+                        </div>
+                    </div> 
                       <div class="well well-sm">
                         <span class="text-muted">最终发给 spring-oauth-server的 URL:</span>
                         <br/>
