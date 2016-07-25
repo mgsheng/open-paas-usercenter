@@ -82,11 +82,17 @@ public class UserCenterRegDto implements Serializable {
     private String isValidate;
     private String id;
     private String appUid;
+    private String whetherBind;
     
-    
-    
+    public String getWhetherBind() {
+		return whetherBind;
+	}
 
-    public String getAppUid() {
+	public void setWhetherBind(String whetherBind) {
+		this.whetherBind = whetherBind;
+	}
+
+	public String getAppUid() {
 		return appUid;
 	}
 

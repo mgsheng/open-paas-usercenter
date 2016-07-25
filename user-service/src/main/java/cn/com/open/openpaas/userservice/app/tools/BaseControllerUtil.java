@@ -767,5 +767,28 @@ public class BaseControllerUtil {
         }  
         return result;  
     }  	
+    /**
+	 * 生成加密串
+	 * @param characterEncoding
+	 * @param parameters
+	 * @return
+	 */
+	public static String createSign(SortedMap<Object,Object> parameters){
+		StringBuffer sb = new StringBuffer();
+		Set es = parameters.entrySet();//所有参与传参的参数按照accsii排序（升序）
+		Iterator it = es.iterator();
+		while(it.hasNext()) {
+			Map.Entry entry = (Map.Entry)it.next();
+			String k = (String)entry.getKey();
+			Object v = entry.getValue();
+			if(null != v && !"".equals(v)&& !"null".equals(v) 
+					&& !"sign".equals(k) && !"key".equals(k)) {
+				sb.append(k + "=" + v + "&");
+			}
+		}
+		 String temp_params = sb.toString();  
+		return sb.toString().substring(0, temp_params.length()-1);
+	}
+
 
 }

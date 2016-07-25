@@ -393,6 +393,7 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/Use
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterverifyPwdController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ValidateLoginController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/VerifyController.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/VerifyPayUserController.java -text
 user-serviceimpl/src/main/resources/cc/wdcy/infrastructure/mybatis/AppMapper.xml -text
 user-serviceimpl/src/main/resources/cc/wdcy/infrastructure/mybatis/AppUserMapper.xml -text
 user-serviceimpl/src/main/resources/cc/wdcy/infrastructure/mybatis/LogMonitorMapper.xml -text

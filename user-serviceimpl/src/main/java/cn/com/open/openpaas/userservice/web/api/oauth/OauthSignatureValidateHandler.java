@@ -43,4 +43,24 @@ public class OauthSignatureValidateHandler {
 			return false;
 		  
 	    }  
+	  /**
+	   * 
+	   * @param signature 解密结果
+	   * @param encryptText 加密字符串
+	   * @param encryptKey  秘钥
+	   * @return
+	   */
+	  public static boolean validateSignature(String signature,String encryptText, String encryptKey){
+		 	try {
+				String result=	HMacSha1.HmacSHA1Encrypt(encryptText,encryptKey);
+				
+				
+				if(signature.equals(result))
+					return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			return false;
+	}  
 }

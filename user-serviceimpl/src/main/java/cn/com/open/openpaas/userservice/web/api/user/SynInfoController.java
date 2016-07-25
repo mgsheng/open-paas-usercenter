@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +24,6 @@ import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
-import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
@@ -58,7 +58,7 @@ public class SynInfoController extends BaseControllerUtil{
          Map<String, Object> map=new HashMap<String, Object>();
     	if(null!=userCenterReg){
             if(!WebUtils.paraMandatoryCheck(Arrays.asList(userCenterReg.getGrant_type(),userCenterReg.getClient_id(),
-                    userCenterReg.getAccess_token(),userCenterReg.getScope(),userCenterReg.getSource_id()))){
+                    userCenterReg.getAccess_token(),userCenterReg.getScope(),userCenterReg.getSource_id(),userCenterReg.getWhetherBind()))){
             	WebUtils.paraMandaChkAndReturn(3, response,"必传参数中有空值");
                 return;
             }
@@ -87,14 +87,14 @@ public class SynInfoController extends BaseControllerUtil{
                             User user = userService.findUserById(appUser.userId());
                            
                             if (null != user) {
-                            	 username=user.getUsername();
-                                if (!WebUtils.nullEmptyBlankJudge(userCenterReg.getPhone())) {
-                                	
-                                    user.phone(userCenterReg.getPhone());
-                                }
-                                if(!WebUtils.nullEmptyBlankJudge(userCenterReg.getEmail())){
-                                	user.email(userCenterReg.getEmail());
-                                }
+                            	username=user.getUsername();
+                            		//绑定
+                            		if("0".equals(userCenterReg.getWhetherBind())){
+                            			 user.phone(userCenterReg.getPhone());	
+                            		}if("1".equals(userCenterReg.getWhetherBind())){
+                            			user.email(userCenterReg.getEmail());	
+                           		     }
+                            	 
                                 userService.updateUser(user);
                                 map.put("guid", user.guid());
                             }else{
