@@ -92,7 +92,7 @@ public class OauthControllerLog {
 			Map <String,String>logMap=new HashMap<String,String>();
 			logMap.put("tag", "usercenter");
 			logMap.put("logData", JSONObject.toJSONString(log));
-			HttpTools.doPostForJson(userserviceDev.getKong_log_url(), logMap,"UTF-8");
+			HttpTools.URLPost(userserviceDev.getKong_log_url(), logMap,"UTF-8");
 			
 			ex = null;
 			msg = null;
