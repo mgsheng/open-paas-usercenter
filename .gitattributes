@@ -203,6 +203,7 @@ user-service/lib/commons-collections-3.2.1.jar -text
 user-service/lib/commons-dbcp-1.4.jar -text
 user-service/lib/commons-discovery-0.5.jar -text
 user-service/lib/commons-fileupload-1.2.1.jar -text
+user-service/lib/commons-httpclient-3.0.1.jar -text
 user-service/lib/commons-io-2.4.jar -text
 user-service/lib/commons-lang-2.5.jar -text
 user-service/lib/commons-logging-1.1.1.jar -text
