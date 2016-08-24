@@ -9,6 +9,33 @@ public class UserserviceDev {
 	public String encrypt_iv_key;
 	public String encrypt_password_crypt_key;
 	public String kong_log_url;
+	public String user_type;
+	public String kafka_topic;
+	public String kafka_group;
+	
+	public String getKafka_topic() {
+		return kafka_topic;
+	}
+
+	public void setKafka_topic(String kafka_topic) {
+		this.kafka_topic = kafka_topic;
+	}
+
+	public String getKafka_group() {
+		return kafka_group;
+	}
+
+	public void setKafka_group(String kafka_group) {
+		this.kafka_group = kafka_group;
+	}
+
+	public String getUser_type() {
+		return user_type;
+	}
+
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
+	}
 
 	public String getEncrypt_iv_key() {
 		return encrypt_iv_key;
