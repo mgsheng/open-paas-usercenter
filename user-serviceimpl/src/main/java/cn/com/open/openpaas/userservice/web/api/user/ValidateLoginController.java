@@ -67,7 +67,7 @@ public class ValidateLoginController extends BaseControllerUtil {
 			}
 	        Boolean f=OauthSignatureValidateHandler.validateSignature(request,app);
 			if(!f){
-				WebUtils.paraMandaChkAndReturn(9, response,"认证失败");
+				WebUtils.paraMandaChkAndReturn(7, response,"认证失败");
 				return;
 			}
 			map=checkClientIdOrToken(client_id,access_token,app,tokenServices);

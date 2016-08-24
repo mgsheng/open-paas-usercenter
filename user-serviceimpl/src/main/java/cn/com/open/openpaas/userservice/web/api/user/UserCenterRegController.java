@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.domain.model.UserCenterRegDto;
+import cn.com.open.openpaas.userservice.app.kafka.KafkaProducer;
 import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
@@ -273,6 +276,16 @@ public class UserCenterRegController extends BaseControllerUtil {
 		            		map.put("guid", user.guid());
 						}
 					}
+					//发送支付平台用户信息
+					Map<String, Object> sendPaymap=new HashMap<String, Object>();
+					sendPaymap.put("userId",user.getId());
+					sendPaymap.put("appId",app.getId());
+					sendPaymap.put("sourceId",source_id);
+					sendPaymap.put("userName", username);
+					sendPaymap.put("type", userserviceDev.getUser_type());
+					String sendMsg=JSONObject.fromObject(sendPaymap).toString();
+					Thread thread = new Thread( new KafkaProducer(userserviceDev.getKafka_topic(),sendMsg));
+					thread.run();
 				}
 			}else{
 				map.clear();

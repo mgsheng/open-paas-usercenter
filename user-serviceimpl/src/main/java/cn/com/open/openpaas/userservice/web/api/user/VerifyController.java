@@ -73,7 +73,7 @@ public class VerifyController extends BaseControllerUtil{
 		}
        Boolean f=OauthSignatureValidateHandler.validateSignature(request,app);
 		if(!f){
-			WebUtils.paraMandaChkAndReturn(9, response,"认证失败");
+			WebUtils.paraMandaChkAndReturn(5, response,"认证失败");
 			return;
 		}
 		map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
@@ -86,14 +86,7 @@ public class VerifyController extends BaseControllerUtil{
 			}*/
 			
 			User user=null;
-	    	if(account!=null&&!"".equals(account)){	    		
-	    		user=checkUsername(account,accountType,userService);
-	    	}else{
-	    		map.clear();
-	    		map.put("status", "0");
-	    		map.put("error_code", "4");//参数不全
-	    		map.put("errMsg", "登录名为空");//参数不全
-	    	}
+	    	user=checkUsername(account,accountType,userService);
 	    	//判断account是否存在(对应判断属性：username,phone,email)
 		    //	checkUsername(account);
 	    	if(user!=null){

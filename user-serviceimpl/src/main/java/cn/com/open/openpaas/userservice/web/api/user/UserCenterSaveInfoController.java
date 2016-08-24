@@ -86,6 +86,11 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 		        	  desphone=Help_Encrypt.encrypt(userCenterReg.getPhone());	
 		        }*/
 	           if(null!=app){
+	        	   Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
+	    			if(!hmacSHA1Verification){
+	    				paraMandaChkAndReturn(4, response,"认证失败");
+	    				return;
+	    			}
 	                    AppUser appUser = appUserService.findByCidSid(app.getId(), userCenterReg.getSource_id());
 	                    if(null!=appUser){
 	                        /* user */

@@ -176,9 +176,12 @@
             <property name="aes_userCenter_key" value="${aes-userCenter-key}"></property>
             <property name="password_rule" value="${password-rule}"></property>
             <property name="detect_password_time" value="${detect-password-time}"></property>
-              <property name="encrypt_iv_key" value="${encrypt-iv-key}"></property>
+            <property name="encrypt_iv_key" value="${encrypt-iv-key}"></property>
             <property name="encrypt_password_crypt_key" value="${encrypt-password-crypt-key}"></property>
-                <property name="kong_log_url" value="${kong-log-url}"></property>
+            <property name="kong_log_url" value="${kong-log-url}"></property>
+            <property name="user_type" value="${user-type}"></property>
+            <property name="kafka_topic" value="${kafka-topi}"></property>
+            <property name="kafka_group" value="${kafka-group}"></property>
         </bean>
         
 </beans>

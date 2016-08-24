@@ -77,7 +77,7 @@ public class SynInfoController extends BaseControllerUtil{
                 if(null!=app){
                 	Boolean f1=OauthSignatureValidateHandler.validateSignature(request,app);
                 	if(!f1){
-        				WebUtils.paraMandaChkAndReturn(9, response,"认证失败");
+        				WebUtils.paraMandaChkAndReturn(6, response,"认证失败");
         				return;
         			}
                 	AppUser appUser = appUserService.findByCidSid(app.getId(), userCenterReg.getSource_id());
