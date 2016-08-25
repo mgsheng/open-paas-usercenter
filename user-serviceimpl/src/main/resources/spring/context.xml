@@ -180,8 +180,10 @@
             <property name="encrypt_password_crypt_key" value="${encrypt-password-crypt-key}"></property>
             <property name="kong_log_url" value="${kong-log-url}"></property>
             <property name="user_type" value="${user-type}"></property>
-            <property name="kafka_topic" value="${kafka-topi}"></property>
+            <property name="kafka_topic" value="${kafka-topic}"></property>
             <property name="kafka_group" value="${kafka-group}"></property>
+            <property name="zookeeper_connect" value="${zookeeper-connect}"></property>
+            <property name="metadata_broker_list" value="${metadata-broker-list}"></property>
         </bean>
         
 </beans>

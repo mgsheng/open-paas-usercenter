@@ -284,7 +284,7 @@ public class UserCenterRegController extends BaseControllerUtil {
 					sendPaymap.put("userName", username);
 					sendPaymap.put("type", userserviceDev.getUser_type());
 					String sendMsg=JSONObject.fromObject(sendPaymap).toString();
-					Thread thread = new Thread( new KafkaProducer(userserviceDev.getKafka_topic(),sendMsg));
+					Thread thread = new Thread( new KafkaProducer(sendMsg,userserviceDev));
 					thread.run();
 				}
 			}else{

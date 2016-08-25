@@ -360,6 +360,7 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/infrastructu
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/infrastructure/repository/UserRepository.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/job/InitJob.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/job/TimingJob.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/kafka/GlobalConfig.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/kafka/KafkaConsumer.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/kafka/KafkaProducer.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/log/OauthControllerLog.java -text
