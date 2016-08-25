@@ -104,7 +104,7 @@
 		var accessToken=$("input[name='access_token']").val();
 		var account=$("input[name='account']").val();
 		var userCenterVerifyUri=$("input[name='userCenterVerifyUri']").val();
-		console.log(clientId);
+		//console.log(clientId);
 		if(clientId==''){
 		    alert("请输入clientId");
 			return;

@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 
 
 public class AESUtil {
-	private static  String iv="";
+	private static  String iv="user-service-api";
 	
 	/**
 	 * AES加密
@@ -85,12 +85,12 @@ public class AESUtil {
 			return iv;
 		}
 	  public static void main(String[] args) {
-	      String data = "123456";
-	      String key = "945fa18c666a4e0097809f6727bc6997";
+	      String data = "4321abcd";
+	      String key = "3f1853bfc53f42129789712998c0724f";
 	     try {
 			String a= encrypt(data,key);
 			System.out.println(a);
-			String b=decrypt("COX7hPdy1EMgCGzhIV/R0Q==",key);
+			String b=decrypt("S7L1ZDaer2fLrWteq9UcGS7d5lT3kaj19ZL4dzPM16M+YuhTH8CH+3+rNRwDggip",key);
 			System.out.println(b);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

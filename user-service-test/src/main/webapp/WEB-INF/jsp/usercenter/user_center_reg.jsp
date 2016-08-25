@@ -195,7 +195,7 @@
 	   			var email=$("#email").val();
 	   			var isValidate=$("#isValidate").val();
 	   			userCenterRegUri=$("#userCenterRegUri").val();
-	   			console.log(clientId);
+	   			//console.log(clientId);
 				if(clientId==''){
 				    alert("请输入clientId");
 					return;

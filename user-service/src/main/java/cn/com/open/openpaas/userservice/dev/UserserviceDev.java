@@ -12,7 +12,25 @@ public class UserserviceDev {
 	public String user_type;
 	public String kafka_topic;
 	public String kafka_group;
+	private String metadata_broker_list;
+	private String zookeeper_connect;
 	
+	public String getMetadata_broker_list() {
+		return metadata_broker_list;
+	}
+
+	public void setMetadata_broker_list(String metadata_broker_list) {
+		this.metadata_broker_list = metadata_broker_list;
+	}
+
+	public String getZookeeper_connect() {
+		return zookeeper_connect;
+	}
+
+	public void setZookeeper_connect(String zookeeper_connect) {
+		this.zookeeper_connect = zookeeper_connect;
+	}
+
 	public String getKafka_topic() {
 		return kafka_topic;
 	}
