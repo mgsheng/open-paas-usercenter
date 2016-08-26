@@ -24,12 +24,11 @@ import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
-import cn.com.open.openpaas.userservice.dev.UserVerifyDto;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
 /**
- * 用户注册接口
+ * 用户guid查询
  */
 @Controller
 @RequestMapping("/user/")
@@ -38,15 +37,11 @@ public class UserCenterGuidController extends BaseControllerUtil {
 	 @Autowired
 	 private UserService userService;
 	 @Autowired
-	 private AppUserService appUserService;
-	 @Autowired
 	 private AppService appService; 
 	 @Autowired
 	 private RedisClientTemplate redisClient;
 	 @Autowired
 	 private DefaultTokenServices tokenServices;
-	 @Autowired
-	 private UserserviceDev userserviceDev;
   
 	 /**
 	     * 用户账号验证接口
