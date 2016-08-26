@@ -387,6 +387,7 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/Mod
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/SynInfoController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterBindInfoController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterGetPwdRuleController.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterGuidController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterLoginController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterRegController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterRetrievePwdController.java -text
