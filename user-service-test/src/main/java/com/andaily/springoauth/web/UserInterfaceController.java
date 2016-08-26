@@ -86,7 +86,11 @@ public class UserInterfaceController {
     private String unBindUserInfoUri;
     @Value("#{properties['user-verify-payUser-uri']}")
     private String verifyPayUserUri;
+    
+    @Value("#{properties['user-guid-info-uri']}")
+    private String userGuidInfoUri;
     @Value("#{properties['aes-key']}")
+    
     final static String  SEPARATOR = "&";
     private Map<String,String> map=LoadPopertiesFile.loadProperties();
     
@@ -719,6 +723,44 @@ public class UserInterfaceController {
              LOG.debug("Send to pay-service-server URL: {}", fullUri);
              return "redirect:" + fullUri;
            }
+         
+         
+      /**
+       * 用户guid查询
+       * @param model
+       * @return
+       */
+           @RequestMapping(value = "userGuidInfo", method = RequestMethod.GET)
+           public String userGuidInfo(Model model) {
+           	  model.addAttribute("userGuidInfoUri", userGuidInfoUri);
+               return "usercenter/user_guid_info";
+       }
+           
+           @RequestMapping(value = "userGuidInfo", method = RequestMethod.POST)
+           public String userGuidInfo(String userGuidInfoUri,String access_token,String account,String client_id,String accountType) throws Exception {  
+     	  	String key=map.get(client_id);
+     	  	String timestamp="";
+     	  	String signatureNonce="";
+     	  	String result="";
+     	  	if(key!=null){
+     	  	    timestamp=DateTools.getSolrDate(new Date());
+     	  	    StringBuilder encryptText = new StringBuilder();
+     		 	signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
+     		 	encryptText.append(client_id);
+     			encryptText.append(SEPARATOR);
+     		 	encryptText.append(access_token);
+     		 	encryptText.append(SEPARATOR);
+     		 	encryptText.append(timestamp);
+     		 	encryptText.append(SEPARATOR);
+     		 	encryptText.append(signatureNonce);
+     			result=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
+     			result=HMacSha1.getNewResult(result);
+     	  	}
+     	  final String fullUri = userGuidInfoUri+"?access_token="+access_token+"&account="+account+"&client_id="+client_id+"&accountType="+accountType+"&signature="+result+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+           LOG.debug("Send to Oauth-Server URL: {}", fullUri);
+
+           return "redirect:" + fullUri;
+       }     
      public static String sendPost(String url, String param) {
         PrintWriter out = null;
         BufferedReader in = null;

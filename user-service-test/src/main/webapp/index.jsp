@@ -108,6 +108,9 @@
         <li>
             <p><a href="getUserId">getUserId</a> <br/>获取用户ID</p>
         </li>
+         <li>
+            <p><a href="userGuidInfo">userGuidInfo</a> <br/>用户guid查询接口</p>
+        </li>
 
     </ul>
 </div>
