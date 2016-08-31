@@ -4,8 +4,8 @@ allprojects{
   apply plugin: 'java'
   
   compileJava {
-        sourceCompatibility = 1.6
-        targetCompatibility = 1.6
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
   }
   repositories {
   	maven {
@@ -39,6 +39,8 @@ allprojects{
      	     'org.springframework.security.oauth:spring-security-oauth2:1.0.5.RELEASE',
      	     'mysql:mysql-connector-java:5.1.6',
      	     'commons-fileupload:commons-fileupload:1.2.1',
+     	     'org.apache.httpcomponents:httpclient:4.3.1',
+     	     'commons-httpclient:commons-httpclient:3.0.1',
      	     'log4j:log4j:1.2.14',
      	     'org.slf4j:slf4j-log4j12:1.7.5',
      	     'net.sf.json-lib:json-lib:2.4:jdk15@jar',
@@ -61,6 +63,7 @@ allprojects{
      	     'org.apache.directory.studio:org.dom4j.dom4j:1.6.1',
      	     'org.apache.httpcomponents:httpclient:4.3.1',
      	     'commons-lang:commons-lang:2.6',
+     	     'org.apache.kafka:kafka_2.10:0.8.0',
      	     'org.bouncycastle:bcprov-jdk16:1.45',
      	     'com.baidu.disconf:disconf-client:2.6.33',
      	     'net.sf.ezmorph:ezmorph:1.0.6'
