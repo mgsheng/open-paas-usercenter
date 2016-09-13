@@ -248,6 +248,7 @@ public class BaseControllerUtil {
 	     */
 	    public User checkUsername(String username, UserService userService){//flag=1:email   flag=2:phone
 	    	User user=null;
+	    	if(username!=null){
 	        //先校验用户名字段
 	    	user=userService.findByUsername(username);
 	    	if(user==null) {
@@ -273,6 +274,7 @@ public class BaseControllerUtil {
 					user = userList.get(0);
 				}
 	    	}
+	    	}
 	        return user;
 	    }
 	    
@@ -286,6 +288,7 @@ public class BaseControllerUtil {
 	    
 	    public User checkUsername(String username,String accountType,UserService userService){//flag=1:email   flag=2:phone
 	    	User user=null;
+	    	if(username!=null){
 	        if(accountType.equals("1")){//用户名
 	        	user=userService.findByUsername(username);
 			}
@@ -313,7 +316,8 @@ public class BaseControllerUtil {
 	        	}else{
 	        		user=userService.findByUsername(username);
 	        	}
-			}   	
+			}   
+	    	}
 	        return user;
 	    }
    
@@ -325,12 +329,13 @@ public class BaseControllerUtil {
 	     */
 	    public User  checkUserByphone(String username,UserService userService){
 	   	 User user=null;
+	   	 if(username!=null&&!"null".equals(username.toLowerCase())){
 	   	 List<User> userList =userList=userService.findByPhone(username);
 	   	 for(int i=0;i<userList.size();i++){
 	   		 if(!userList.get(i).getUsername().equals(username)){
 	   			 user= userList.get(i);
 	   		 }
-	   	 }
+	   	 }}
 	   	return user;
 	   } 
 	   
