@@ -23,7 +23,7 @@
     <context:component-scan base-package="cn.com.open.openpaas.userservice.app.user.service"/>
     <context:component-scan base-package="cn.com.open.openpaas.userservice.app.infrastructure.repository"/>
     <context:component-scan base-package="cn.com.open.openpaas.userservice.app.appuser.service"/>
-
+    <context:component-scan base-package="cn.com.open.openpaas.userservice.app.kafka"/>
     <!-- property configuration -->
     <bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
@@ -185,5 +185,4 @@
             <property name="zookeeper_connect" value="${zookeeper-connect}"></property>
             <property name="metadata_broker_list" value="${metadata-broker-list}"></property>
         </bean>
-        
 </beans>
