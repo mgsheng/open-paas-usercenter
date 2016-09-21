@@ -59,7 +59,8 @@ public class UserCenterRegController extends BaseControllerUtil {
 	 private DefaultTokenServices tokenServices;
 	 @Autowired
 	 private UserserviceDev userserviceDev;
-  
+	 @Autowired
+	 private KafkaProducer  kafkaProducer;
      /**
      * 用户注册接口
      * @return Json
@@ -284,8 +285,10 @@ public class UserCenterRegController extends BaseControllerUtil {
 					sendPaymap.put("userName", username);
 					sendPaymap.put("type", userserviceDev.getUser_type());
 					String sendMsg=JSONObject.fromObject(sendPaymap).toString();
-					Thread thread = new Thread( new KafkaProducer(sendMsg,userserviceDev));
-					thread.run();
+				//	KafkaProducer kafkaProducer=KafkaProducer.getKafkaProducer();
+					kafkaProducer.sendMessage(userserviceDev.getKafka_topic(), sendMsg);
+				//	Thread thread = new Thread( new KafkaProducer(sendMsg,userserviceDev));
+				//	thread.run();
 				}
 			}else{
 				map.clear();
