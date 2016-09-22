@@ -72,7 +72,6 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
             paraMandaChkAndReturn(3, response,"必传参数中有空值");
             return;
         }
-        String desPhone=Help_Encrypt.encrypt(phone);;
         App app = (App) redisClient.getObject(RedisConstant.APP_INFO+client_id);
         if(app==null)
 		{
@@ -91,7 +90,7 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
           	  user = userService.findByGuid(guid);
             }
             if((null==user||user.getId()<1)&&!nullEmptyBlankJudge(phone)){
-            	List<User> userList = userService.findByPhone(desPhone);
+            	List<User> userList = userService.findByPhone(phone);
             	if(userList!=null && userList.size()>0){
             		user = userList.get(0);
             	}
@@ -134,7 +133,7 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
 							userService.updateUserCardNoById(user.getId(),card_no);
 						}
 						if(!nullEmptyBlankJudge(phone)){
-							userService.updatePhoneById(user.getId(), desPhone);
+							userService.updatePhoneById(user.getId(), phone);
 						}
 	            		map.put("guid", user.guid());
 					}

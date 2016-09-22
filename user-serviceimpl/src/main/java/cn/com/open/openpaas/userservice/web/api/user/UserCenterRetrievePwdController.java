@@ -104,7 +104,7 @@ public class UserCenterRetrievePwdController extends BaseControllerUtil {
 				try {
 					if((null==user||user.getId()<1)&&!nullEmptyBlankJudge(guid)){
 			          	  user = userService.findByGuid(guid);
-			          	phone=Help_Encrypt.decrypt(user.getPhone());
+			          	phone=user.getPhone();
 			           }
 			            
 					bool=true;

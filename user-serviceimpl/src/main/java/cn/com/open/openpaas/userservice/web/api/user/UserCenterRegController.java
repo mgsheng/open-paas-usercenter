@@ -183,28 +183,28 @@ public class UserCenterRegController extends BaseControllerUtil {
 	             String  pid="0";
 	             Boolean defaultUser = false;
 	            if(!nullEmptyBlankJudge(phone)){
-	            	try {
-	        			desPhone=Help_Encrypt.decrypt(phone);
-	        			log.info("解密后 desPhone："+desPhone);
-	        		} catch (Exception e1) {
-	        			  e1.printStackTrace();
-	        			  map = paraMandaChkAndReturnMap(8, response,"手机号加密失败");
-	        	          OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
-	        		}
+//	            	try {
+//	        			desPhone=Help_Encrypt.decrypt(phone);
+//	        			log.info("解密后 desPhone："+desPhone);
+//	        		} catch (Exception e1) {
+//	        			  e1.printStackTrace();
+//	        			  map = paraMandaChkAndReturnMap(8, response,"手机号加密失败");
+//	        	          OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+//	        		}
 	            	List<User> userList = userService.findByPhone(phone);
 	                if(userList!=null && userList.size()>0){
 	                	for(int i=0;i<userList.size();i++){
 	                		user=userList.get(i);
 	                		AppUser appUser=appUserService.findByCidAUid(app.getId(), user.getId());
 	                		if(appUser!=null){
-	                			 String bakDesPhone="";
-		                		   try {
-		                			   bakDesPhone=Help_Encrypt.encrypt(desPhone+"_bak");
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-			           			userService.updatePhoneById(user.getId(),bakDesPhone);
+//	                			 String bakDesPhone="";
+//		                		   try {
+//		                			   bakDesPhone=Help_Encrypt.encrypt(desPhone+"_bak");
+//								} catch (Exception e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
+			           			userService.updatePhoneById(user.getId(),desPhone+"_bak");
 	                		}else{
 	                			userService.updateDefaultUserById(user.getId(), true);
                 				pid=String.valueOf(user.getId());
