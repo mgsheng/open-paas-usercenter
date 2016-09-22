@@ -83,7 +83,7 @@ public class UserCenterRegDto implements Serializable {
     private String id;
     private String appUid;
     private String whetherBind;
-    
+    private String methordName;
     public String getWhetherBind() {
 		return whetherBind;
 	}
@@ -630,6 +630,14 @@ public class UserCenterRegDto implements Serializable {
 
 	public void setAesPassword(String aesPassword) {
 		this.aesPassword = aesPassword;
+	}
+
+	public String getMethordName() {
+		return methordName;
+	}
+
+	public void setMethordName(String methordName) {
+		this.methordName = methordName;
 	}
 
     

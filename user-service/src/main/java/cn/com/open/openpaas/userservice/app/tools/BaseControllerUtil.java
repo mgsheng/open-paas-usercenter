@@ -261,8 +261,8 @@ public class BaseControllerUtil {
 	            Pattern regex2 = Pattern.compile(check2);
 	    		List<User> userList = null;
 	    		if(regex2.matcher(username).matches()){//手机
-	    			String desPhone=Help_Encrypt.encrypt(username);
-					userList=userService.findByPhone(desPhone);
+	    		//	String desPhone=Help_Encrypt.encrypt(username);
+					userList=userService.findByPhone(username);
 				}if(userList==null||userList.size()==0){//邮箱
 					userList=userService.findByEmail(username);
 				}
@@ -293,8 +293,8 @@ public class BaseControllerUtil {
 	        	user=userService.findByUsername(username);
 			}
 	        else if(accountType.equals("2")){//手机
-	        	String desPhone=Help_Encrypt.encrypt(username);
-	        	List<User> userList = userService.findByPhone(desPhone);
+//	        	String desPhone=Help_Encrypt.encrypt(username);
+	        	List<User> userList = userService.findByPhone(username);
 	        	if(userList!=null && userList.size()>0){
 	        		user = userList.get(0);
 	        	}else{
@@ -671,8 +671,8 @@ public class BaseControllerUtil {
         if(userCache==null) {
         	List<UserCache> userList = null;
         	if(regex2.matcher(username).matches()){//手机
-        		String desPhone=Help_Encrypt.encrypt(username);
-    			userList=userCacheService.findByPhone(desPhone,appid);
+//        		String desPhone=Help_Encrypt.encrypt(username);
+    			userList=userCacheService.findByPhone(username,appid);
     		}
         	if(userList==null||userList.size()==0){//邮箱
             	userList=userCacheService.findByEmail(username, appid);
