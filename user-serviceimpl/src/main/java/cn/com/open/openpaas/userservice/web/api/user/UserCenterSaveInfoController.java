@@ -84,10 +84,24 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 		       /* if(!nullEmptyBlankJudge(userCenterReg.getPhone())){
 		        	  desphone=Help_Encrypt.encrypt(userCenterReg.getPhone());	
 		        }*/
+		        boolean flag=false;
 	           if(null!=app){
+	        	   
+	        	   String methord=userCenterReg.getMethordName();
+	        	   if(methord!=null&&methord.equals("registerUser"))
+	        	   {
+	        		   flag=   registerUser(app,userCenterReg);
+	        	   }
+                   else if(methord!=null&&methord.equals("sysUserInfo")){
+                	   flag=  sysUserInfo(app,userCenterReg);
+	        	   }
+                   else if(methord!=null&&methord.equals("bindUserInfo")){
+                	   flag=  bindUserInfo(app,userCenterReg);
+	        	   }
+	        	 /*  
 	                    AppUser appUser = appUserService.findByCidSid(app.getId(), userCenterReg.getSource_id());
 	                    if(null!=appUser){
-	                        /* user */
+	                         user 
 	                            User user = userService.findUserById(appUser.userId());
 	                            if (null != user) {
 	                                if (!nullEmptyBlankJudge(userCenterReg.getUsername())) {
@@ -124,7 +138,9 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 	                                user.userState("1");
 	                                userService.save(user);
 	                        }
-	                    }else {
+	                    }*/
+	                    
+	                    /*    else {
 	                        User user = null;
 	                        if(!nullEmptyBlankJudge(userCenterReg.getGuid())){
 	                      	  user = userService.findByGuid(userCenterReg.getGuid());
@@ -159,10 +175,10 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 								  user.guid(userCenterReg.getGuid());	
 								}
 								//sha1 加密
-							/*	PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
+								PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
 								sha1Password=passwordEncoder.encodePassword(password, null);
 								
-								user.setSha1Password(sha1Password);*/
+								user.setSha1Password(sha1Password);
 								user.cardNo(userCenterReg.getCard_no());
 								user.setEmailActivation(User.ACTIVATION_NO);
 								user.userState("0");
@@ -205,18 +221,106 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 	            	            		map.put("guid", user.guid());
 	            					}
 	            				}
-	            		}
+	            		}*/
 	                }
-	            if(map.get("status")=="0"){
+	            if(!flag){
 	                writeErrorJson(response,map);
+	                log.info("[error]~~~~~~~~~~~~~~methord:"+userCenterReg.getMethordName()+",userId:"+userCenterReg.getId()+",appId:"+app.getId());
 	            }else{
 	                writeSuccessJson(response,map);
 	            }
 	        }
-		 OauthControllerLog.log(startTime,username,userCenterReg.getPassword(),app,map,userserviceDev);
+		     OauthControllerLog.log(startTime,username,userCenterReg.getMethordName(),app,map,userserviceDev);
 	        return;
 	    }
 
-	
-
+	public  boolean registerUser( App app,UserCenterRegDto userCenterReg){
+		boolean flag=false;
+		User user=new User(userCenterReg.getUsername(),userCenterReg.getPassword(),userCenterReg.getPhone(),userCenterReg.getEmail(),"","","");
+		AppUser appUser=null;
+			String aesPassword="";
+			try {
+				aesPassword=AESUtil.encrypt(userCenterReg.getPassword(), userserviceDev.getAes_userCenter_key());
+			} catch (Exception e1) {
+				log.info("aes加密出错："+userCenterReg.getPassword());
+				e1.printStackTrace();
+			}
+			user.setAesPassword(aesPassword);
+			user.setAppId(app.getId());
+			if(!nullEmptyBlankJudge(userCenterReg.getId())){
+			  user.setId(Integer.parseInt(userCenterReg.getId()));	
+			}if(!nullEmptyBlankJudge(userCenterReg.getGuid())){
+			  user.guid(userCenterReg.getGuid());	
+			}
+			user.cardNo(userCenterReg.getCard_no());
+			user.setEmailActivation(User.ACTIVATION_NO);
+			user.userState("0");
+			Boolean f=userService.save(user);
+			if(f){
+			if(null==userCenterReg.getSource_id()||"".equals(userCenterReg.getSource_id().trim())){
+				appUser=new AppUser(app.getId(),user.getId(),user.guid());
+			}else{
+				appUser=new AppUser(app.getId(),user.getId(),userCenterReg.getSource_id());
+			}
+			if(!nullEmptyBlankJudge(userCenterReg.getAppUid())){
+				appUser.appUid(Integer.parseInt(userCenterReg.getAppUid()));
+			}
+			flag =appUserService.saveAppUser(appUser);
+		 }
+			return flag;
+	}
+	public  boolean sysUserInfo( App app,UserCenterRegDto userCenterReg){
+	        	boolean flag=false;
+		           if(!nullEmptyBlankJudge(userCenterReg.getId()))
+		           {
+		               User user = userService.findUserById(Integer.parseInt(userCenterReg.getId()));
+	                   if (null != user) {
+	                       if (!nullEmptyBlankJudge(userCenterReg.getUsername())) {
+	                       user.setUsername(userCenterReg.getUsername());
+	                       }
+	                       if (!nullEmptyBlankJudge(userCenterReg.getPassword())) {
+	                       	String aesPassword="";
+	   						try {
+	   							aesPassword=AESUtil.encrypt(userCenterReg.getPassword(), userserviceDev.getAes_userCenter_key());
+	   						} catch (Exception e1) {
+	   							log.info("aes加密出错："+userCenterReg.getPassword());
+	   							e1.printStackTrace();
+	   						}
+	   						user.setAesPassword(aesPassword);
+	                       }
+	                       if(!nullEmptyBlankJudge(userCenterReg.getPhone())){
+	                       user.setPhone(userCenterReg.getPhone());
+	                       }if (!nullEmptyBlankJudge(userCenterReg.getEmail())) {
+	                         user.setEmail(userCenterReg.getEmail());
+	                       }if (!nullEmptyBlankJudge(userCenterReg.getCard_no())) {
+	                         user.setCardNo(userCenterReg.getCard_no());
+	                       }  if(nullEmptyBlankJudge(userCenterReg.getPassword())|| ("null").equals(userCenterReg.getPassword())){
+	                           user.userType(1);
+	                       } user.userState("1");
+	                       if(!nullEmptyBlankJudge(userCenterReg.getGuid())){
+	                          user.guid(userCenterReg.getGuid());
+	                        }
+	                       flag=userService.updateUser(user);
+	                   }
+	                   else{
+	                	   log.info("~~~~~~~~~~~~~~sysUserInfo:not found user,userId:"+userCenterReg.getId()+",appId:"+app.getId());
+	                   }  
+		           }
+		           return flag;
+            
+	}
+	public  boolean bindUserInfo( App app,UserCenterRegDto userCenterReg){
+    	boolean flag=false;
+    	AppUser appUser=null;
+           if(!nullEmptyBlankJudge(userCenterReg.getId()))
+           {
+        	   appUser=new AppUser(app.getId(),Integer.parseInt(userCenterReg.getId()),userCenterReg.getSource_id());
+			if(!nullEmptyBlankJudge(userCenterReg.getAppUid())){
+				appUser.appUid(Integer.parseInt(userCenterReg.getAppUid()));
+			}
+			flag=appUserService.saveAppUser(appUser);
+           }
+           return flag;
+    
+}
 } 
