@@ -67,7 +67,7 @@
     <select id="findByGuid" parameterType="String" resultMap="userMap">
          select 
          <include refid="Column_List" />
-         from user_account where  guid = #{guid}
+         from user_account where  guid = #{guid}  limit 1
 	</select>
 
     <!-- <select id="findUserById" parameterType="Integer" resultMap="userMap">
@@ -75,11 +75,11 @@
 	</select> -->
 	
 	<select id="findUserById" parameterType="Integer" resultMap="userMap">
-         select <include refid="Column_List" /> from user_account where id = #{id}
+         select <include refid="Column_List" /> from user_account where id = #{id}  limit 1
 	</select>
 
     <select id="findPrivilegesByUserId" parameterType="Integer" resultType="Privilege">
-         select privilege from user_privilege where user_id = #{userId}
+         select privilege from user_privilege where user_id = #{userId} 
 	</select>
 
     <!-- <select id="findByUsername" parameterType="String" resultMap="userMap">
@@ -101,7 +101,7 @@
          <include refid="Column_List" />
          from user_account
          where real_name = #{realname}
-         and archived = 0
+         and archived = 0 limit 1
 	</select>
 	
 	<!-- <select id="findByEmail" parameterType="String" resultMap="userMap">
@@ -119,13 +119,13 @@
 	<select id="findByEmail" parameterType="String" resultMap="userMap">
          select <include refid="Column_List" /> from user_account
          where email = #{email}
-         and archived = 0
+         and archived = 0 limit 1
 	</select>
 	
 	<select id="findByPhone" parameterType="String" resultMap="userMap">
          select <include refid="Column_List" /> from user_account
          where phone = #{phone}
-         and archived = 0
+         and archived = 0 limit 1
 	</select>
 
 	<select id="findByRnIn" resultMap="userMap" parameterType="map">

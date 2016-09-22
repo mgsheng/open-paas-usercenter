@@ -29,7 +29,7 @@
 	
 	<select id="findByCidSid" resultMap="appUserMap" parameterType="map">
          select * from app_user
-         where  app_id = #{appId, jdbcType=INTEGER} and source_id = #{sourceId, jdbcType=VARCHAR}
+         where  app_id = #{appId, jdbcType=INTEGER} and source_id = #{sourceId, jdbcType=VARCHAR} limit 1
 	</select>
 	
 	<!-- <select id="findByCidUid" resultMap="appUserMap" parameterType="map">
@@ -38,11 +38,11 @@
 	</select> -->
 	<select id="findByCidAUid" resultMap="appUserMap" parameterType="map">
          select * from app_user
-         where  app_id = #{appId, jdbcType=INTEGER} and user_id = #{userId, jdbcType=INTEGER}
+         where  app_id = #{appId, jdbcType=INTEGER} and user_id = #{userId, jdbcType=INTEGER}  limit 1
 	</select>
 	<select id="findByCidUid" resultMap="appUserMap" parameterType="map">
          select * from app_user
-         where  app_id = #{appId, jdbcType=INTEGER} and user_id = #{userId, jdbcType=INTEGER}
+         where  app_id = #{appId, jdbcType=INTEGER} and user_id = #{userId, jdbcType=INTEGER}  limit 1
 	</select>
 	
 	<!-- <select id="findByUserId" resultMap="appUserMap" parameterType="java.lang.Integer">
@@ -52,7 +52,7 @@
 	
 	<select id="findByUserId" resultMap="appUserMap" parameterType="java.lang.Integer">
          select * from app_user
-         where  user_id = #{userId, jdbcType=INTEGER}
+         where  user_id = #{userId, jdbcType=INTEGER}  limit 0,5
 	</select>
 	
 	<select id="pageByParameters" resultMap="appUserMap">
