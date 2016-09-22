@@ -320,6 +320,14 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 				appUser.appUid(Integer.parseInt(userCenterReg.getAppUid()));
 			}
 			flag=appUserService.saveAppUser(appUser);
+			if(flag){
+				if(!nullEmptyBlankJudge(userCenterReg.getCard_no())){
+					userService.updateUserCardNoById(Integer.parseInt(userCenterReg.getId()),userCenterReg.getCard_no());
+				}
+				if(!nullEmptyBlankJudge(userCenterReg.getPhone())){
+					userService.updatePhoneById(Integer.parseInt(userCenterReg.getId()), userCenterReg.getPhone());
+				}
+			}
            }
            return flag;
     
