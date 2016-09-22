@@ -33,6 +33,7 @@ import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
+import cn.com.open.openpaas.userservice.app.tools.CommonConstant;
 import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
 import cn.com.open.openpaas.userservice.app.tools.StringTool;
 import cn.com.open.openpaas.userservice.app.user.model.User;
@@ -88,14 +89,14 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 	           if(null!=app){
 	        	   
 	        	   String methord=userCenterReg.getMethordName();
-	        	   if(methord!=null&&methord.equals("registerUser"))
+	        	   if(methord!=null&&methord.equals(CommonConstant.METHORD_REGISTER_USER))
 	        	   {
 	        		   flag=   registerUser(app,userCenterReg);
 	        	   }
-                   else if(methord!=null&&methord.equals("sysUserInfo")){
+                   else if(methord!=null&&methord.equals(CommonConstant.METHORD_SYS_USER_INFO)){
                 	   flag=  sysUserInfo(app,userCenterReg);
 	        	   }
-                   else if(methord!=null&&methord.equals("bindUserInfo")){
+                   else if(methord!=null&&methord.equals(CommonConstant.METHORD_BIND_USER_INFO)){
                 	   flag=  bindUserInfo(app,userCenterReg);
 	        	   }
 	        	 /*  
