@@ -271,6 +271,7 @@ user-service/src/main/java/cn/com/open/openpaas/userservice/app/shared/model/Rep
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/shared/security/model/WdcyUserDetails.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/AESUtil.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/BaseControllerUtil.java -text
+user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/CommonConstant.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/CommonUtils.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/DBHelp.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/DBUtil.java -text
