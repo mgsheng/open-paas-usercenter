@@ -95,8 +95,24 @@ public class VerifyController extends BaseControllerUtil{
 	    		map.put("error_code", "3");//用户已存在
 	    		map.put("errMsg", "用户已存在");//参数不全
 	    	}else{
-	    		map.clear();
-	    		map.put("status", "1");
+	    		int returnValue; 
+				returnValue=judgeInput(account);
+				if(returnValue==1){
+					map = paraMandaChkAndReturnMap(6, response,"用户名5~20个字符");
+					writeErrorJson(response,map);
+					return;
+				}else if(returnValue==2){
+					map = paraMandaChkAndReturnMap(6, response,"用户名必须为数字、字母、下划线中最少两个组合");
+					writeErrorJson(response,map);
+					return;
+				}else if(returnValue==3){
+					map = paraMandaChkAndReturnMap(6, response,"用户名不能为除手机号以外的纯数字");
+					writeErrorJson(response,map);
+					return;
+				}else{
+					map.clear();
+		    		map.put("status", "1");
+				}
 	    	}
 		}
     	if(map.get("status")=="0"){
