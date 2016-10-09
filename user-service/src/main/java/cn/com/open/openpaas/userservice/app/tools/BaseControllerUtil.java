@@ -114,7 +114,7 @@ public class BaseControllerUtil {
 	     */
 	    public  int  judgeInput(String value){
 	    	int returnValue=0;
-	    	if(value.length()>50||value.length()<5){
+	    	if(value.length()>20||value.length()<5){
 	    		returnValue=1;
 	    		return returnValue;
 	    	}else{
@@ -134,7 +134,8 @@ public class BaseControllerUtil {
 	    		return returnValue;
 	    	}
 	    	    String check2="^[1][1-9]{1}[0-9]{9}$";
-	            //Pattern regex1 = Pattern.compile(check1);
+	    	   //String check2="^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
+	    	   //Pattern regex1 = Pattern.compile(check1);
 	            Pattern regex2 = Pattern.compile(check2);
 	    		if(regex2.matcher(value).matches()){//手机
 	    			return 0;
