@@ -96,7 +96,7 @@ public class VerifyController extends BaseControllerUtil{
 	    		map.put("errMsg", "用户已存在");//参数不全
 	    	}else{
 	    		int returnValue; 
-				returnValue=judgeInput(account);
+				returnValue=judgeVerifyInput(account);
 				if(returnValue==1){
 					map = paraMandaChkAndReturnMap(6, response,"用户名5~20个字符");
 					writeErrorJson(response,map);

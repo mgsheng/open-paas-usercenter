@@ -114,6 +114,53 @@ public class BaseControllerUtil {
 	     */
 	    public  int  judgeInput(String value){
 	    	int returnValue=0;
+	    	if(value.length()>50||value.length()<5){
+	    		returnValue=1;
+	    		return returnValue;
+	    	}else{
+	    	Pattern p = Pattern.compile("[0-9A-Za-z_]*");
+	    	//Pattern p = Pattern.compile("^[a-zA-Z]/w{5,17}$");
+	    	Matcher m = p.matcher(value);
+	    	boolean chinaKey = m.matches();
+	    	if(chinaKey){
+	    		returnValue=0;
+	    	} else{
+	    		if(checkEmail(value)){
+	    			returnValue=0;	
+	    		}else{
+	    			returnValue=2;	
+	    		}
+	    		
+	    		return returnValue;
+	    	}
+	    	    String check2="^[1][1-9]{1}[0-9]{9}$";
+	    	   //String check2="^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
+	    	   //Pattern regex1 = Pattern.compile(check1);
+	            Pattern regex2 = Pattern.compile(check2);
+	    		if(regex2.matcher(value).matches()){//手机
+	    			return 0;
+				}else{
+	    		Pattern pattern1 = Pattern.compile("[0-9]*"); 
+				Matcher isNum = pattern1.matcher(value);
+				if(!isNum.matches()){
+					 returnValue=0 ; 
+				} else{
+					returnValue=3; 
+					return  returnValue;
+				}	
+	    	}
+	    	
+	    	}
+	    	return  returnValue;
+	    	
+	    }
+	    /**
+	     * 验证用户名必须为英文、数字、下划线的组合
+	     * @param value
+	     * @return
+	     */
+	    public  int  judgeVerifyInput(String value){
+	    	int returnValue=0;
 	    	if(value.length()>20||value.length()<5){
 	    		returnValue=1;
 	    		return returnValue;
