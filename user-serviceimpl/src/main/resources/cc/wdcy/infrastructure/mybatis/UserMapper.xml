@@ -30,9 +30,6 @@
 		<result property="md5Salt" column="md5_salt"/>
 		<result property="app_id" column="appId"/>
 		<result property="card_no" column="cardNo"/>
-		
-        <collection property="privileges" column="id" select="findPrivilegesByUserId" ofType="Privilege"/>
-
     </resultMap>
     
     <sql id="Column_List">

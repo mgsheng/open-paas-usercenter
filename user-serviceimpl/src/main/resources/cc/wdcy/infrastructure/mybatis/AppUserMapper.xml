@@ -12,9 +12,6 @@
         <result property="createTime" column="create_time"/>
         <result property="lastloginTime" column="lastlogin_time"/>
         <result property="loginTimes" column="login_times"/>
-        
-        <collection property="privileges" column="appUid" select="findPrivilegesByUserId" ofType="Privilege"/>
-        
     </resultMap>
 
     <select id="countByAppId" parameterType="Integer" resultType="java.lang.Integer">
