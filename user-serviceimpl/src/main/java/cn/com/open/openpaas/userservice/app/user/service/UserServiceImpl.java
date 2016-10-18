@@ -170,6 +170,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> findByPhone(String phone) {
+		
+		if(phone.length()<7)
+		{
+			return null;
+		}
 		return userRepository.findByPhone(phone);
 	}
 	
