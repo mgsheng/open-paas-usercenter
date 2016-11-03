@@ -42,13 +42,21 @@ public class PropertiesTool {
 	 */
 	public static Properties getProperties(File file){
 		Properties props = new Properties();
+		FileInputStream fis=null;
 		try {
-			FileInputStream fis = new FileInputStream(file);
+			 fis = new FileInputStream(file);
 			props.load(fis);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		finally{
+			try {
+				fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return props;
 	}
