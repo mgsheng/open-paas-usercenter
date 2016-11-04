@@ -36,8 +36,8 @@ import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHand
  */
 @Controller
 @RequestMapping("/user/")
-public class AutoLoginController extends BaseControllerUtil {
-	private static final Logger log = LoggerFactory.getLogger(AutoLoginController.class);
+public class VerfiyAutoLoginController extends BaseControllerUtil {
+	private static final Logger log = LoggerFactory.getLogger(VerfiyAutoLoginController.class);
 	 @Autowired
 	 private AppService appService; 
 	 @Autowired

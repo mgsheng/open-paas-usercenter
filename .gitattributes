@@ -383,7 +383,6 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/user/service
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/oauth/OauthSignatureValidateHandler.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/oauth/OauthUserApprovalHandler.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ApiCommonController.java -text
-user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/AutoLoginController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/CheckTokenController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ModiPwdController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/SynInfoController.java -text
@@ -400,6 +399,7 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/Use
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterUnBindInfoController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterverifyPwdController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ValidateLoginController.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/VerfiyAutoLoginController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/VerifyController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/VerifyPayUserController.java -text
 user-serviceimpl/src/main/resources/cc/wdcy/infrastructure/mybatis/AppMapper.xml -text
