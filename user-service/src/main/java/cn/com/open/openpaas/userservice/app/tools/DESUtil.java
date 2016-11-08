@@ -75,4 +75,11 @@ public class DESUtil {
         String decryptData = decrypt(encryptData,  key);
         System.out.println("解密后: " + decryptData);
     }
+
+    public static String getNewSecert(String password){
+    	if(password.contains("+")){
+    		password=password.replaceAll("\\+", "%2B");
+    	}
+    	return password;
+    };
 }
