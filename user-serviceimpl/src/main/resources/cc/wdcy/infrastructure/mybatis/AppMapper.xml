@@ -31,6 +31,7 @@
         <result property="resourceIds" column="resourceIds"/>
         <result property="additionalInformation" column="additionalInformation"/>
         <result property="icon" column="icon"/>
+         <result property="indexUrl" column="indexUrl"/>
     </resultMap>
 			
     <!-- <select id="findIdByClientId" parameterType="Integer" resultMap="appMap">

@@ -111,6 +111,9 @@
          <li>
             <p><a href="userGuidInfo">userGuidInfo</a> <br/>用户guid查询接口</p>
         </li>
+        <li>
+            <p><a href="validateLoginNoToken">validateLoginNoToken</a> <br/>验证用户自动登录地址(无accessToken)</p>
+        </li>
 
     </ul>
 </div>

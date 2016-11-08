@@ -51,7 +51,7 @@ public class App implements Serializable {
 	private String resourceIds;
 	private String additionalInformation;
 	private String icon;
-	
+	private String indexUrl;
 	private String callbackUrl;
 
     public App() {
@@ -286,4 +286,11 @@ public class App implements Serializable {
 		this.appAuthorities = appAuthorities;
 	}
 
+	public String getIndexUrl() {
+		return indexUrl;
+	}
+
+	public void setIndexUrl(String indexUrl) {
+		this.indexUrl = indexUrl;
+	}
 }

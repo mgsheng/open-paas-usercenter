@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.andaily.springoauth.service.dto.UserCenterLoginDto;
 import com.andaily.springoauth.service.dto.UserCenterRegDto;
 import com.andaily.springoauth.tools.AESUtil;
+import com.andaily.springoauth.tools.DES;
 import com.andaily.springoauth.tools.DESUtil;
 import com.andaily.springoauth.tools.DateTools;
 import com.andaily.springoauth.tools.HMacSha1;
@@ -81,6 +82,8 @@ public class UserInterfaceController {
 
     @Value("#{properties['validate-login-uri']}")
     private String validateLoginUri;
+    @Value("#{properties['validate-login-noToken-uri']}")
+    private String validateLoginNoTokenUri;
     
     @Value("#{properties['user-unbind-info-uri']}")
     private String unBindUserInfoUri;
@@ -644,9 +647,27 @@ public class UserInterfaceController {
                LOG.debug("Send to Oauth-Server URL: {}", fullUri);
                return "redirect:" + fullUri;
          }
+       /** 
+        * 
+       *验证自动登录地址（不需要验证密码规则）
+       */
+       @RequestMapping(value = "validateLoginNoToken", method = RequestMethod.GET)
+       public String validateLoginNoToken(Model model) {
+           model.addAttribute("validateLoginNoTokenUri", validateLoginNoTokenUri);
+           return "usercenter/usercenter_validate_login_notoken";
+           }
+        @RequestMapping(value = "validateLoginNoToken", method = RequestMethod.POST)
+        public String validateLoginNoToken(String secret,String client_id) throws Exception {            	   
+             String key=map.get(client_id);
+             if(key!=null){
+                 secret=DES.encrypt(secret, key);
+                 secret=DES.getNewSecert(secret);
+               }
+                final String fullUri = validateLoginNoTokenUri+"?client_id="+client_id+"&secret="+secret;
+                LOG.debug("Send to Oauth-Server URL: {}", fullUri);
+                return "redirect:" + fullUri;
+          }
 
-
-	
  
       /**
        * 用户应用解除绑定接口

@@ -57,6 +57,7 @@ user-service-test/src/main/java/com/andaily/springoauth/service/impl/UserDtoResp
 user-service-test/src/main/java/com/andaily/springoauth/service/password/PasswordOauthHandler.java -text
 user-service-test/src/main/java/com/andaily/springoauth/service/password/PasswordParams.java -text
 user-service-test/src/main/java/com/andaily/springoauth/tools/AESUtil.java -text
+user-service-test/src/main/java/com/andaily/springoauth/tools/DES.java -text
 user-service-test/src/main/java/com/andaily/springoauth/tools/DESUtil.java -text
 user-service-test/src/main/java/com/andaily/springoauth/tools/DateTools.java -text
 user-service-test/src/main/java/com/andaily/springoauth/tools/HMacSha1.java -text
@@ -127,6 +128,7 @@ user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_syn_info.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_syn_name.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_unbind_info.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_verify_payUser.jsp -text
+user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/usercenter_validate_login_notoken.jsp -text
 user-service-test/src/main/webapp/WEB-INF/log4j.xml -text
 user-service-test/src/main/webapp/WEB-INF/soc-servlet.xml -text
 user-service-test/src/main/webapp/WEB-INF/web.xml -text
@@ -275,6 +277,7 @@ user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/CommonCons
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/CommonUtils.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/DBHelp.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/DBUtil.java -text
+user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/DES.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/DESUtil.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/DateTools.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/tools/EmailTools.java -text
@@ -383,6 +386,7 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/user/service
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/oauth/OauthSignatureValidateHandler.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/oauth/OauthUserApprovalHandler.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ApiCommonController.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/AutoLoginController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/CheckTokenController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ModiPwdController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/SynInfoController.java -text
@@ -400,6 +404,7 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/Use
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterverifyPwdController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ValidateLoginController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/VerfiyAutoLoginController.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/VerfiyNoTokenController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/VerifyController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/VerifyPayUserController.java -text
 user-serviceimpl/src/main/resources/cc/wdcy/infrastructure/mybatis/AppMapper.xml -text
