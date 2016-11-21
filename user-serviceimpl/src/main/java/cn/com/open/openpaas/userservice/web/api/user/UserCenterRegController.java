@@ -284,6 +284,9 @@ public class UserCenterRegController extends BaseControllerUtil {
 					sendPaymap.put("sourceId",source_id);
 					sendPaymap.put("userName", username);
 					sendPaymap.put("type", userserviceDev.getUser_type());
+					
+					sendPaymap.put("messageType", "message_create_payaccount");
+					
 					String sendMsg=JSONObject.fromObject(sendPaymap).toString();
 				//	KafkaProducer kafkaProducer=KafkaProducer.getKafkaProducer();
 					kafkaProducer.sendMessage(userserviceDev.getKafka_topic(), sendMsg);
@@ -306,7 +309,4 @@ public class UserCenterRegController extends BaseControllerUtil {
     	OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
         return;
     }
-
-	
-
 } 
