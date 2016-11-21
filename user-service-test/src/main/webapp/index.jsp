@@ -114,6 +114,9 @@
         <li>
             <p><a href="validateLoginNoToken">validateLoginNoToken</a> <br/>验证用户自动登录地址(无accessToken)</p>
         </li>
+        <li>
+            <p><a href="autoLogin">autoLogin</a> <br/>oes跳转接口</p>
+        </li>
 
     </ul>
 </div>

@@ -89,7 +89,8 @@ public class UserInterfaceController {
     private String unBindUserInfoUri;
     @Value("#{properties['user-verify-payUser-uri']}")
     private String verifyPayUserUri;
-    
+    @Value("#{properties['user-auto-login-uri']}")
+    private String autoLoginUri;
     @Value("#{properties['user-guid-info-uri']}")
     private String userGuidInfoUri;
     @Value("#{properties['aes-key']}")
@@ -781,7 +782,28 @@ public class UserInterfaceController {
            LOG.debug("Send to Oauth-Server URL: {}", fullUri);
 
            return "redirect:" + fullUri;
-       }     
+       }
+           
+           /** 
+            * 
+            *验证自动登录地址（不需要验证密码规则）
+            */
+           @RequestMapping(value = "autoLogin", method = RequestMethod.GET)
+           public String autoLogin(Model model) {
+           	model.addAttribute("autoLoginUri", autoLoginUri);
+               return "usercenter/user_center_auto_login";
+           }
+        @RequestMapping(value = "autoLogin", method = RequestMethod.POST)
+        public String autoLogin(String secret,String app_id,String desApp_id,String desAddress) throws Exception {
+     		String key=map.get(app_id);
+           	if(key!=null){
+           		secret=DES.encrypt(secret, key);
+           		secret=DES.getNewSecert(secret);
+           	    }
+                   final String fullUri = autoLoginUri+"?app_id="+app_id+"&secret="+secret+"&desApp_id="+desApp_id+"&desAddress="+desAddress;
+                   LOG.debug("Send to Oauth-Server URL: {}", fullUri);
+                   return "redirect:" + fullUri;
+               }
      public static String sendPost(String url, String param) {
         PrintWriter out = null;
         BufferedReader in = null;
