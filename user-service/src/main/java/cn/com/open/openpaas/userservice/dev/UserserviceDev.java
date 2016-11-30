@@ -14,6 +14,7 @@ public class UserserviceDev {
 	public String kafka_group;
 	private String metadata_broker_list;
 	private String zookeeper_connect;
+	private String message_type;
 	
 	public String getMetadata_broker_list() {
 		return metadata_broker_list;
@@ -109,6 +110,14 @@ public class UserserviceDev {
 
 	public void setKong_log_url(String kong_log_url) {
 		this.kong_log_url = kong_log_url;
+	}
+
+	public String getMessage_type() {
+		return message_type;
+	}
+
+	public void setMessage_type(String message_type) {
+		this.message_type = message_type;
 	}
 	
 	
