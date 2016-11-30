@@ -18,11 +18,13 @@
         <context:component-scan base-package="cn.com.open.user.platform.manager.web"/>
     <context:component-scan base-package="cn.com.open.user.platform.manager.redis"/>
     <context:component-scan base-package="cn.com.open.user.platform.manager.user.service"/>
+    <context:component-scan base-package="cn.com.open.user.platform.manager.app.service"/>
+    <context:component-scan base-package="cn.com.open.user.platform.manager.appuser.service"/>
     <!-- property configuration -->
     <bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
             <list>
-                <value>classpath:pay-service-message.properties</value>
+                <value>classpath:user-service-message.properties</value>
             </list>
         </property>
     </bean>
@@ -161,6 +163,6 @@
             <property name="kafka_group" value="${kafka_group}"></property>
             <property name="zookeeper_connect" value="${zookeeper_connect}"></property>
             <property name="metadata_broker_list" value="${metadata_broker_list}"></property>
-            
+            <property name="aes_userCenter_key" value="${aes-userCenter-key}"></property>
         </bean>
 </beans>

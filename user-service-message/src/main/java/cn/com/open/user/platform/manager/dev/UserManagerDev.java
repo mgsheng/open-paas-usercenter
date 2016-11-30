@@ -6,6 +6,7 @@ public class UserManagerDev {
 	public String kafka_group;
 	public String zookeeper_connect;
 	public String metadata_broker_list;
+	public String aes_userCenter_key;
 	
 	
 	
@@ -48,6 +49,13 @@ public class UserManagerDev {
 	public void setServer_host(String server_host) {
 		this.server_host = server_host;
 	}
-	
+
+	public String getAes_userCenter_key() {
+		return aes_userCenter_key;
+	}
+
+	public void setAes_userCenter_key(String aes_userCenter_key) {
+		this.aes_userCenter_key = aes_userCenter_key;
+	}
 
 }

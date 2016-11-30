@@ -49,12 +49,12 @@ public class InitKafkaMessage extends HttpServlet {
 	 * @throws ServletException if an error occurred
 	 * @throws IOException if an error occurred
 	 */
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
+	/*public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Thread thread = new Thread( new KafkaConsumer(userAccountBalanceService,userManagerDev));
 		thread.run();
 
-	}
+	}*/
 
 	/**
 	 * The doPost method of the servlet. <br>

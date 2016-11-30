@@ -9,11 +9,16 @@
         <setting name="useGeneratedKeys" value="true"/>
     </settings>
     <typeAliases>
-        <typeAlias alias="UserAccountBalance" type="cn.com.open.user.platform.manager.user.model.UserAccountBalance"/>
+        <typeAlias alias="User" type="cn.com.open.user.platform.manager.user.model.User"/>
+		<typeAlias alias="AppUser" type="cn.com.open.user.platform.manager.appuser.model.AppUser"/> 
+		<typeAlias alias="App" type="cn.com.open.user.platform.manager.app.model.App"/>
+		<typeAlias alias="Privilege" type="cn.com.open.user.platform.manager.user.model.Privilege"/>
     </typeAliases>
 
     <mappers>
-        <mapper resource="cc/wdcy/infrastructure/mybatis/UserAccountBalanceMapper.xml"/>
+        <mapper resource="cc/wdcy/infrastructure/mybatis/UserMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/AppUserMapper.xml"/> 
+		<mapper resource="cc/wdcy/infrastructure/mybatis/AppMapper.xml"/>
     </mappers>
 
 </configuration>

@@ -27,7 +27,7 @@
 		class="com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean">
 		<property name="locations">
 			<list>
-				<value>pay-service-message.properties</value>
+				<value>user-service-message.properties</value>
 				</list>
 		</property>
 	</bean>
