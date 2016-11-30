@@ -77,8 +77,11 @@ user-service-message/src/main/java/cn/com/open/user/platform/manager/user/servic
 user-service-message/src/main/java/cn/com/open/user/platform/manager/web/DelegatingServletProxy.java -text
 user-service-message/src/main/java/cn/com/open/user/platform/manager/web/InitJob.java -text
 user-service-message/src/main/java/cn/com/open/user/platform/manager/web/InitKafkaMessage.java -text
+user-service-message/src/main/resources/cc/wdcy/infrastructure/mybatis/AppMapper.xml -text
+user-service-message/src/main/resources/cc/wdcy/infrastructure/mybatis/AppUserMapper.xml -text
 user-service-message/src/main/resources/cc/wdcy/infrastructure/mybatis/MerchantOrderInfoMapper.xml -text
 user-service-message/src/main/resources/cc/wdcy/infrastructure/mybatis/UserAccountBalanceMapper.xml -text
+user-service-message/src/main/resources/cc/wdcy/infrastructure/mybatis/UserMapper.xml -text
 user-service-message/src/main/resources/disconf.properties -text
 user-service-message/src/main/resources/emailtemplate/activation.html -text
 user-service-message/src/main/resources/emailtemplate/resetpassword.html -text
