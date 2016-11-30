@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="user-service-message"
+  id="myeclipse.1470620261497"
+  context-root="/pay-service-message"
+  j2ee-spec="6.0"
+  archive="user-service-message.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+

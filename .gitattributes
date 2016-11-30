@@ -1,6 +1,10 @@
 * text=auto !eol
 /build.gradle -text
 /settings.gradle -text
+user-service-message/.classpath -text
+user-service-message/.mymetadata -text
+user-service-message/.project -text
+user-service-message/pom.xml -text
 user-service-message/src/main/java/cn/com/open/user/platform/manager/constant/ConstantMessage.java -text
 user-service-message/src/main/java/cn/com/open/user/platform/manager/datasource/DataSourceAdvice.java -text
 user-service-message/src/main/java/cn/com/open/user/platform/manager/datasource/DataSourceSwitcher.java -text
