@@ -66,6 +66,17 @@ user-service-message/src/main/webapp/META-INF/MANIFEST.MF -text
 user-service-message/src/main/webapp/WEB-INF/log4j.xml -text
 user-service-message/src/main/webapp/WEB-INF/soc-servlet.xml -text
 user-service-message/src/main/webapp/WEB-INF/web.xml -text
+user-service-message/target/classes/cc/wdcy/infrastructure/mybatis/MerchantOrderInfoMapper.xml -text
+user-service-message/target/classes/cc/wdcy/infrastructure/mybatis/UserAccountBalanceMapper.xml -text
+user-service-message/target/classes/emailtemplate/activation.html -text
+user-service-message/target/classes/emailtemplate/resetpassword.html -text
+user-service-message/target/classes/log4j.properties -text
+user-service-message/target/classes/logging.properties -text
+user-service-message/target/classes/mybatis.xml -text
+user-service-message/target/classes/pay-service-message.properties -text
+user-service-message/target/classes/spring/appCtx-disconf.xml -text
+user-service-message/target/classes/spring/context.xml -text
+user-service-message/target/classes/spring/job.xml -text
 user-service-test/.classpath -text
 user-service-test/.mymetadata -text
 user-service-test/.project -text
