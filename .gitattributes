@@ -4,6 +4,15 @@
 user-service-message/.classpath -text
 user-service-message/.mymetadata -text
 user-service-message/.project -text
+user-service-message/.settings/.jsdtscope -text
+user-service-message/.settings/com.genuitec.eclipse.j2eedt.core.prefs -text
+user-service-message/.settings/org.eclipse.core.resources.prefs -text
+user-service-message/.settings/org.eclipse.jdt.core.prefs -text
+user-service-message/.settings/org.eclipse.m2e.core.prefs -text
+user-service-message/.settings/org.eclipse.wst.common.component -text
+user-service-message/.settings/org.eclipse.wst.common.project.facet.core.xml -text
+user-service-message/.settings/org.eclipse.wst.jsdt.ui.superType.container -text
+user-service-message/.settings/org.eclipse.wst.jsdt.ui.superType.name -text
 user-service-message/pom.xml -text
 user-service-message/src/main/java/cn/com/open/user/platform/manager/constant/ConstantMessage.java -text
 user-service-message/src/main/java/cn/com/open/user/platform/manager/datasource/DataSourceAdvice.java -text
