@@ -184,5 +184,6 @@
             <property name="kafka_group" value="${kafka-group}"></property>
             <property name="zookeeper_connect" value="${zookeeper-connect}"></property>
             <property name="metadata_broker_list" value="${metadata-broker-list}"></property>
+        	<property name="message_type" value="${message-type}"></property>
         </bean>
 </beans>
