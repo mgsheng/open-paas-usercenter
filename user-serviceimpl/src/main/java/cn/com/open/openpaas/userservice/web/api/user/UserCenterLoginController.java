@@ -11,30 +11,26 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.alibaba.fastjson.JSONObject;
 
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
-import cn.com.open.openpaas.userservice.app.log.model.LogMonitor;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
-import cn.com.open.openpaas.userservice.app.tools.PropertiesTool;
 import cn.com.open.openpaas.userservice.app.tools.StringTool;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.model.UserCache;
@@ -359,6 +355,9 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    		    	map.put("status", "2");
 	    		    }
 	    		    map.put("infoList", allInfoList);
+	    		    //将登录成功用户存入session中
+	    		    HttpSession session = request.getSession();
+	    		    session.setAttribute("SingleSignOnUser", user);
 				}
 				//没有符合条件的用户，则返回错误消息
 				else{
