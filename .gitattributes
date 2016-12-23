@@ -492,12 +492,16 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/user/service
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserActivatedServiceImpl.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserCacheServiceImpl.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserServiceImpl.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/BaseController.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/WebUtils.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/oauth/OauthSignatureValidateHandler.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/oauth/OauthUserApprovalHandler.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ApiCommonController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/AutoLoginController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/CheckTokenController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ModiPwdController.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/SessionDestoryController.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/SessionVerifyController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/SynInfoController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterBindInfoController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/UserCenterGetPwdRuleController.java -text
