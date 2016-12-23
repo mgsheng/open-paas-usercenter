@@ -873,7 +873,7 @@ public class UserInterfaceController {
 			signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
 			signature=HMacSha1.getNewResult(signature);
    	   	 }
-       	 final String fullUri =verifySessionUri+"?client_id="+clientId+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+       	 final String fullUri =destorySessionUri+"?client_id="+clientId+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
             LOG.debug("Send to user-service-server URL: {}", fullUri);
             return "redirect:" + fullUri;
        } 

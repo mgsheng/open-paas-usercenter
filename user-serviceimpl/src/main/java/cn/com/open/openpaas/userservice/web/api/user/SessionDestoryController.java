@@ -24,7 +24,7 @@ import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHand
  * 
  */
 @Controller
-@RequestMapping("/user/verify")
+@RequestMapping("/user/destory")
 public class SessionDestoryController  extends BaseController{
 	private static final Logger log = LoggerFactory.getLogger(SessionDestoryController.class);
 	
@@ -32,7 +32,7 @@ public class SessionDestoryController  extends BaseController{
      * 用户账号退出注销Session用户接口
      * @return Json
      */
-    @RequestMapping("destorySession")
+    @RequestMapping("session")
     public void userCenterDelSession(HttpServletRequest request,HttpServletResponse response) {
     	String client_id=request.getParameter("client_id");
     	String access_token=request.getParameter("access_token");
