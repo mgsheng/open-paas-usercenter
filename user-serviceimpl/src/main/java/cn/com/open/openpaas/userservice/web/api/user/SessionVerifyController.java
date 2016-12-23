@@ -26,7 +26,7 @@ import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHand
  * 
  */
 @Controller
-@RequestMapping("/user/verify")
+@RequestMapping("/user/session")
 public class SessionVerifyController  extends BaseController{
 	private static final Logger log = LoggerFactory.getLogger(SessionVerifyController.class);
 	@Autowired
@@ -35,7 +35,7 @@ public class SessionVerifyController  extends BaseController{
      * 用户账号验证接口
      * @return Json
      */
-    @RequestMapping("session")
+    @RequestMapping("verify")
     public void userCenterVerifySession(HttpServletRequest request,HttpServletResponse response) {
     	String client_id=request.getParameter("client_id");
     	String access_token=request.getParameter("access_token");
