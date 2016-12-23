@@ -117,6 +117,12 @@
         <li>
             <p><a href="autoLogin">autoLogin</a> <br/>oes跳转接口</p>
         </li>
+        <li>
+            <p><a href="verifySession">verifySession</a> <br/>验证session</p>
+        </li>
+        <li>
+            <p><a href="destorySession">destroySession</a> <br/>销毁session用户</p>
+        </li>
 
     </ul>
 </div>

@@ -91,6 +91,10 @@ public class UserInterfaceController {
     private String verifyPayUserUri;
     @Value("#{properties['user-auto-login-uri']}")
     private String autoLoginUri;
+    @Value("#{properties['verify-session-uri']}")
+    private String verifySessionUri;
+    @Value("#{properties['destory-session-uri']}")
+    private String destorySessionUri;
     @Value("#{properties['user-guid-info-uri']}")
     private String userGuidInfoUri;
     @Value("#{properties['aes-key']}")
@@ -804,6 +808,76 @@ public class UserInterfaceController {
                    LOG.debug("Send to Oauth-Server URL: {}", fullUri);
                    return "redirect:" + fullUri;
                }
+        
+
+        /** 
+         * 
+         *验证Session
+         */
+        @RequestMapping(value = "verifySession", method = RequestMethod.GET)
+        public String verifySession(Model model) {
+        	model.addAttribute("verifySessionUri", verifySessionUri);
+            return "usercenter/user_center_verify_session";
+        }
+        @RequestMapping(value = "verifySession", method = RequestMethod.POST)
+        public String verifySession(String clientId,String accessToken) throws Exception {
+        	String key=map.get(clientId);
+      	  	 String signature="";
+      	  	 String timestamp="";
+      	  	 String signatureNonce="";
+	   	   	 if(key!=null){
+	   	   		timestamp=DateTools.getSolrDate(new Date());
+		   	   	 StringBuilder encryptText = new StringBuilder();
+	  		 	signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
+	  		 	encryptText.append(clientId);
+	  			encryptText.append(SEPARATOR);
+	  		 	encryptText.append(accessToken);
+	  		 	encryptText.append(SEPARATOR);
+	  		 	encryptText.append(timestamp);
+	  		 	encryptText.append(SEPARATOR);
+	  		 	encryptText.append(signatureNonce);
+	  			signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
+	  			signature=HMacSha1.getNewResult(signature);
+	   	   	 }
+	       	 final String fullUri =verifySessionUri+"?client_id="+clientId+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+	            LOG.debug("Send to user-service-server URL: {}", fullUri);
+	            return "redirect:" + fullUri;
+       }
+        
+        /** 
+         * 
+         *注销Session用户
+         */
+        @RequestMapping(value = "destorySession", method = RequestMethod.GET)
+        public String destorySession(Model model) {
+        	model.addAttribute("destorySessionUri", destorySessionUri);
+            return "usercenter/user_center_destory_session";
+        }
+        @RequestMapping(value = "destorySession", method = RequestMethod.POST)
+        public String destorySession(String clientId,String accessToken) throws Exception {
+        	String key=map.get(clientId);
+      	  	 String signature="";
+      	  	 String timestamp="";
+      	  	 String signatureNonce="";
+   	   	 if(key!=null){
+   	   	timestamp=DateTools.getSolrDate(new Date());
+  	   	 StringBuilder encryptText = new StringBuilder();
+		 	signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
+		 	encryptText.append(clientId);
+			encryptText.append(SEPARATOR);
+		 	encryptText.append(accessToken);
+		 	encryptText.append(SEPARATOR);
+		 	encryptText.append(timestamp);
+		 	encryptText.append(SEPARATOR);
+		 	encryptText.append(signatureNonce);
+			signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
+			signature=HMacSha1.getNewResult(signature);
+   	   	 }
+       	 final String fullUri =verifySessionUri+"?client_id="+clientId+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+            LOG.debug("Send to user-service-server URL: {}", fullUri);
+            return "redirect:" + fullUri;
+       } 
+        
      public static String sendPost(String url, String param) {
         PrintWriter out = null;
         BufferedReader in = null;
@@ -854,6 +928,7 @@ public class UserInterfaceController {
         }
         return result;
     }
+     
      /**
 		 * 生成加密串
 		 * @param characterEncoding

@@ -213,6 +213,7 @@ user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/dynamic_login.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_bind_info.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_auto_login.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_checktoken.jsp -text
+user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_destory_session.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_dev_login.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_dev_login_callback.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_getInfoList.jsp -text
@@ -231,6 +232,7 @@ user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_validate_lo
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_verify1.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_verify2.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_verifyPassWord.jsp -text
+user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_verify_session.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_guid_info.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_save_info.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_syn_info.jsp -text
