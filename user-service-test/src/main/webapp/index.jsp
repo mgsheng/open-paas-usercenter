@@ -124,6 +124,9 @@
             <p><a href="destorySession">destroySession</a> <br/>销毁session用户</p>
         </li>
 
+        <li>
+            <p><a href="testSingleSign">testSingleSign</a> <br/>单点登录测试页面</p>
+        </li>
     </ul>
 </div>
 </body>

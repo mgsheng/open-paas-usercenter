@@ -878,6 +878,16 @@ public class UserInterfaceController {
             return "redirect:" + fullUri;
        } 
         
+        /** 
+         * 单点登录测试
+         */
+        @RequestMapping(value = "testSingleSign", method = RequestMethod.GET)
+        public String testSingleSign(Model model) {
+          	//model.addAttribute("verifySessionUri", verifySessionUri);
+          	model.addAttribute("userCenterPasswordUri", userCenterPasswordUri);
+           return "usercenter/test_single_sign";
+        }
+        
      public static String sendPost(String url, String param) {
         PrintWriter out = null;
         BufferedReader in = null;

@@ -210,6 +210,7 @@ user-service-test/src/main/webapp/WEB-INF/jsp/refresh_token.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/register.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/resources/user_user_info.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/dynamic_login.jsp -text
+user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/test_single_sign.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_bind_info.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_auto_login.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_checktoken.jsp -text
