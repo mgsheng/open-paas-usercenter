@@ -1,8 +1,6 @@
 package cn.com.open.openpaas.userservice.web.api.user;
 
-import java.net.URLEncoder;
 import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +16,6 @@ import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.tools.DES;
-import cn.com.open.openpaas.userservice.app.tools.DESUtil;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
