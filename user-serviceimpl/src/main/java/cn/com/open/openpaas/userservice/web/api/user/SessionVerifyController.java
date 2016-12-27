@@ -19,6 +19,7 @@ import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.BaseController;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
@@ -31,6 +32,8 @@ public class SessionVerifyController  extends BaseController{
 	private static final Logger log = LoggerFactory.getLogger(SessionVerifyController.class);
 	@Autowired
 	private AppUserService appUserService;
+	 @Autowired
+	 private UserserviceDev userserviceDev;
 	/**
      * 用户账号验证接口
      * @return Json
@@ -60,7 +63,7 @@ public class SessionVerifyController  extends BaseController{
 				return;
 			}
 			HttpSession session = request.getSession();
-			Object o = session.getAttribute("SingleSignOnUser");
+			Object o = session.getAttribute(userserviceDev.getSingle_sign_user());
 			if(o!=null){
 				User user = (User) o;
 				AppUser appUser = appUserService.findByCidAUid(app.getId(), user.getId());

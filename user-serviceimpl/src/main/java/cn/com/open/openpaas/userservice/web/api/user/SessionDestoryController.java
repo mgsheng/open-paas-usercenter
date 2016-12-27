@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,6 +18,7 @@ import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.domain.model.AbstractDomain;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.BaseController;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
@@ -27,7 +29,9 @@ import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHand
 @RequestMapping("/user/session")
 public class SessionDestoryController  extends BaseController{
 	private static final Logger log = LoggerFactory.getLogger(SessionDestoryController.class);
-	
+
+	 @Autowired
+	 private UserserviceDev userserviceDev;
     /**
      * 用户账号退出注销Session用户接口
      * @return Json
@@ -57,7 +61,7 @@ public class SessionDestoryController  extends BaseController{
 				return;
 			}
 			HttpSession session = request.getSession();
-			session.removeAttribute("SingleSignOnUser");
+			session.removeAttribute(userserviceDev.getSingle_sign_user());
 			map.clear();
 			map.put("status","1");
 		}

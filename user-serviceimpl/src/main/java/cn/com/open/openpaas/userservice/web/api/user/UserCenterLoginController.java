@@ -357,7 +357,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    		    map.put("infoList", allInfoList);
 	    		    //将登录成功用户存入session中
 	    		    HttpSession session = request.getSession();
-	    		    session.setAttribute("SingleSignOnUser", user);
+	    		    session.setAttribute(userserviceDev.getSingle_sign_user(), user);
 				}
 				//没有符合条件的用户，则返回错误消息
 				else{

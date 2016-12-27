@@ -15,6 +15,7 @@ public class UserserviceDev {
 	private String metadata_broker_list;
 	private String zookeeper_connect;
 	private String message_type;
+	private String single_sign_user;
 	
 	public String getMetadata_broker_list() {
 		return metadata_broker_list;
@@ -119,7 +120,12 @@ public class UserserviceDev {
 	public void setMessage_type(String message_type) {
 		this.message_type = message_type;
 	}
-	
-	
-	
+
+	public String getSingle_sign_user() {
+		return single_sign_user;
+	}
+
+	public void setSingle_sign_user(String single_sign_user) {
+		this.single_sign_user = single_sign_user;
+	}		
 }
