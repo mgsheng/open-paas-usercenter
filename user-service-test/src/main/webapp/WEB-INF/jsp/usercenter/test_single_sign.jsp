@@ -56,7 +56,17 @@
 	                    </select>
 	                    <p class="help-block"></p>
 	                </div>
-	            </div>                
+	            </div>                     
+	            <div class="form-group">
+	                <label class="col-sm-2 control-label">pwdtype</label>
+	                <div class="col-sm-10">
+	                    <select name="pwdtype" ng-model="pwdtype" id="pwdtype" class="form-control ng-pristine ng-valid">
+                                <option value="MD5">MD5</option>
+                                <option value="SHA1">SHA1</option>
+                            </select>
+	                    <p class="help-block">用户密码类型</p>
+	                </div>
+	            </div>              
        			<div class="form-group">
                     <label class="col-sm-2 control-label">username</label>
                     <div class="col-sm-10">
@@ -125,6 +135,7 @@
     	var access_token=$("#access_token").val();
     	var grant_type=$("#grant_type").val();
     	var scope=$("#scope").val();
+    	var pwdtype=$("#pwdtype").val();
     	var username=$("#username").val();
     	var password=$("#password").val();
     	if(username == null || password == null){
@@ -136,6 +147,7 @@
     			access_token:access_token,
     			grant_type:grant_type,
     			scope:scope,
+    			pwdtype:pwdtype,
     			userCenterPasswordUri:userCenterPasswordUriToServer,
     			username:username,
     			password:password
