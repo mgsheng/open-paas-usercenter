@@ -88,7 +88,6 @@ user-service-message/src/main/resources/emailtemplate/resetpassword.html -text
 user-service-message/src/main/resources/log4j.properties -text
 user-service-message/src/main/resources/logging.properties -text
 user-service-message/src/main/resources/mybatis.xml -text
-user-service-message/src/main/resources/pay-service-message.properties -text
 user-service-message/src/main/resources/spring/appCtx-disconf.xml -text
 user-service-message/src/main/resources/spring/context.xml -text
 user-service-message/src/main/resources/spring/job.xml -text
