@@ -185,6 +185,8 @@
             <property name="zookeeper_connect" value="${zookeeper-connect}"></property>
             <property name="metadata_broker_list" value="${metadata-broker-list}"></property>
         	<property name="message_type" value="${message-type}"></property>
+        	<property name="access_token_uri" value="${access-token-uri}"></property>
+        	<property name="user_center_getInfoList_uri" value="${user-center-getInfoList-uri}"></property>
         	<property name="single_sign_user" value="${single-sign-user}"></property>
         </bean>
 </beans>
