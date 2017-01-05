@@ -240,6 +240,7 @@ user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_syn_name.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_unbind_info.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_verify_payUser.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/usercenter_validate_login_notoken.jsp -text
+user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/verify_auto_login.jsp -text
 user-service-test/src/main/webapp/WEB-INF/log4j.xml -text
 user-service-test/src/main/webapp/WEB-INF/soc-servlet.xml -text
 user-service-test/src/main/webapp/WEB-INF/web.xml -text

@@ -97,6 +97,9 @@ public class UserInterfaceController {
     private String destorySessionUri;
     @Value("#{properties['user-guid-info-uri']}")
     private String userGuidInfoUri;
+    
+   @Value("#{properties['verify-auto-login-uri']}")
+    private String verifyAutoLogin;
     @Value("#{properties['aes-key']}")
     
     final static String  SEPARATOR = "&";
@@ -120,6 +123,43 @@ public class UserInterfaceController {
             LOG.debug("Send to Oauth-Server URL: {}", fullUri);
 
             return "redirect:" + fullUri;
+        }
+       /**
+        * 验证自动登录接口
+        * @param model
+        * @return
+        */
+       @RequestMapping(value = "verifyAutoLogin", method = RequestMethod.GET)
+       public String verifyAutoLogin(Model model) {
+       	model.addAttribute("verifyAutoLogin", verifyAutoLogin);
+       	
+         return "usercenter/verify_auto_login";
+       }
+        @RequestMapping(value = "verifyAutoLogin", method = RequestMethod.POST)
+        public String verifyAutoLogin(String secret,String clientId,String accessToken) throws Exception {
+        	String key=map.get(clientId);
+        	  String signature="";
+	    	  String timestamp="";
+	    	  String signatureNonce="";
+           	if(key!=null){
+           		secret=DES.encrypt(secret, key);
+           		secret=DES.getNewSecert(secret);
+           		timestamp=DateTools.getSolrDate(new Date());
+	  		 	StringBuilder encryptText = new StringBuilder();
+	  		 	signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
+	  		 	encryptText.append(clientId);
+	  			encryptText.append(SEPARATOR);
+	  		 	encryptText.append(accessToken);
+	  		 	encryptText.append(SEPARATOR);
+	  		 	encryptText.append(timestamp);
+	  		 	encryptText.append(SEPARATOR);
+	  		 	encryptText.append(signatureNonce);
+	  		 	signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
+	  		 	signature=HMacSha1.getNewResult(signature);
+           	    }
+                   final String fullUri = verifyAutoLogin+"?client_id="+clientId+"&secret="+secret+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+                   LOG.debug("Send to Oauth-Server URL: {}", fullUri);
+                   return "redirect:" + fullUri;
         }
        /**
         * 用户保存信息接口
@@ -331,7 +371,7 @@ public class UserInterfaceController {
          			 	signature=HMacSha1.getNewResult(signature);
          	      		
          	   }
-         fullUri = bindUserInfoUri+"?access_token="+access_token+"&client_id="+client_id+"&guid="+guid+"&source_id="+source_id+"&grant_type="+grant_type+"&scope="+scope+"& phone="+ phone+"&email="+email+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;;
+         fullUri = bindUserInfoUri+"?access_token="+access_token+"&client_id="+client_id+"&guid="+guid+"&source_id="+source_id+"&grant_type="+grant_type+"&scope="+scope+"& phone="+ phone+"&email="+email+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
          LOG.debug("Send to Oauth-Server URL: {}", fullUri);
          return "redirect:" + fullUri;
       }  

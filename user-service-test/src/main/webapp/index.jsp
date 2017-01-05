@@ -127,6 +127,9 @@
         <li>
             <p><a href="testSingleSign">testSingleSign</a> <br/>单点登录测试页面</p>
         </li>
+         <li>
+            <p><a href="verifyAutoLogin">verifyAutoLogin</a> <br/>单点登录测试页面</p>
+        </li>
     </ul>
 </div>
 </body>

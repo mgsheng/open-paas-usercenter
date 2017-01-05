@@ -70,7 +70,7 @@ public class DESUtil {
     };
 
     public static void main(String[] args) throws Exception {
-        String source = "111111";
+        String source = "2206880#2016110816271111#91d921e029d0470b9eb41e39d895a0e0";
         System.out.println("原文: " + source);
         String key = "9ebada02676c4ccbbbdaeae27362896b";
         String encryptData = encrypt(source, key);
