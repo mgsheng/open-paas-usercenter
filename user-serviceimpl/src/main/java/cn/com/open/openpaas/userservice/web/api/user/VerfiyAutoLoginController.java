@@ -4,9 +4,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
-import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
-import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
+import cn.com.open.openpaas.userservice.app.oauth.service.OauthService;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
+import cn.com.open.openpaas.userservice.app.tools.DES;
 import cn.com.open.openpaas.userservice.app.tools.DESUtil;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.user.model.User;
@@ -45,9 +49,11 @@ public class VerfiyAutoLoginController extends BaseControllerUtil {
 	 @Autowired
 	 private RedisClientTemplate redisClient;
 	 @Autowired
-	 private UserService userService;
-	 @Autowired
 	 private UserserviceDev userserviceDev;
+	 @Autowired
+	 private UserService userService;
+
+	 
     /**
      * 验证自动登录地址（不需要验证密码规则）
      * @param request
@@ -81,7 +87,7 @@ public class VerfiyAutoLoginController extends BaseControllerUtil {
 			map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
  		 if(map.get("status").equals("1")){//client_id,access_token正确
  				try {					
-					secret=	DESUtil.decrypt(secret, app.getAppsecret());
+					secret=	DES.decrypt(secret, app.getAppsecret());
 					//secret=	AESUtil.decrypt(secret, app.getAppsecret());
 					log.info("解密后 secret："+secret);
 				    	String sercret[]=secret.split("#");
@@ -102,11 +108,37 @@ public class VerfiyAutoLoginController extends BaseControllerUtil {
 				    	}
 				    	User  user = userService.findByGuid(guid);
 				    	if(user==null){
-				    		WebUtils.paraMandaChkAndReturn(3,response,"用户不存在");
-				            return;
+				    		//获取token
+					    	SortedMap<Object,Object> sParaTemp1 = new TreeMap<Object,Object>();
+							sParaTemp1.put("grant_type","client_credentials");
+							sParaTemp1.put("client_id", client_id);
+							sParaTemp1.put("client_secret", app.getAppsecret());
+							sParaTemp1.put("scope", "read,write");
+					    	String result=sendPost(userserviceDev.getAccess_token_uri(), sParaTemp1);
+							 JSONObject obj = JSONObject.fromObject(result);
+							 String accessToken="";
+							if(!nullEmptyBlankJudge(result)){
+									accessToken= obj.getString("access_token");
+							}else{
+									WebUtils.paraMandaChkAndReturn(7,response,"token获取失败");
+		 				             return;
+							}
+							//根据guid 获取用户信息
+							//获取token
+					    	SortedMap<Object,Object> sParaTemp2 = new TreeMap<Object,Object>();
+							sParaTemp2.put("client_id", client_id);
+							sParaTemp2.put("accessToken", accessToken);
+							sParaTemp2.put("guid", guid);
+					    	String infoResult=sendPost(userserviceDev.getUser_center_getInfoList_uri(), sParaTemp2);
+							 JSONObject infoObj = JSONObject.fromObject(infoResult);
+							 String infoStatus = infoObj.getString("status");
+							if(!infoStatus.equals("1")){
+								WebUtils.paraMandaChkAndReturn(7,response,"用户不存在");
+		 				        return;
+							}
 				    	}
 				    	username=user.getUsername();
-				    	
+				    
  				}catch (Exception e) {
  					map.clear();
  					map.put("status", "0");
