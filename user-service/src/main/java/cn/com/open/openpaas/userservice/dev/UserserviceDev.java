@@ -15,8 +15,27 @@ public class UserserviceDev {
 	private String metadata_broker_list;
 	private String zookeeper_connect;
 	private String message_type;
+	private String user_center_getInfoList_uri;
+	private String access_token_uri;
 	private String single_sign_user;
 	
+	
+	public String getUser_center_getInfoList_uri() {
+		return user_center_getInfoList_uri;
+	}
+
+	public void setUser_center_getInfoList_uri(String user_center_getInfoList_uri) {
+		this.user_center_getInfoList_uri = user_center_getInfoList_uri;
+	}
+
+	public String getAccess_token_uri() {
+		return access_token_uri;
+	}
+
+	public void setAccess_token_uri(String access_token_uri) {
+		this.access_token_uri = access_token_uri;
+	}
+
 	public String getMetadata_broker_list() {
 		return metadata_broker_list;
 	}
