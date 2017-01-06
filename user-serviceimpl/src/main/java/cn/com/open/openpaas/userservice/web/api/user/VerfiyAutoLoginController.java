@@ -22,12 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
-import cn.com.open.openpaas.userservice.app.oauth.service.OauthService;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.DES;
-import cn.com.open.openpaas.userservice.app.tools.DESUtil;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
@@ -127,19 +125,24 @@ public class VerfiyAutoLoginController extends BaseControllerUtil {
 							//获取token
 					    	SortedMap<Object,Object> sParaTemp2 = new TreeMap<Object,Object>();
 							sParaTemp2.put("client_id", client_id);
-							sParaTemp2.put("accessToken", accessToken);
+							sParaTemp2.put("access_token", accessToken);
 							sParaTemp2.put("guid", guid);
 					    	String infoResult=sendPost(userserviceDev.getUser_center_getInfoList_uri(), sParaTemp2);
-							 JSONObject infoObj = JSONObject.fromObject(infoResult);
-							 String infoStatus = infoObj.getString("status");
-							if(!infoStatus.equals("1")){
+							if(infoResult.indexOf("\"status\":\"1\"")==-1)
+							{
 								WebUtils.paraMandaChkAndReturn(7,response,"用户不存在");
-		 				        return;
+		 				        return;	
 							}
+					    	// JSONObject infoObj = JSONObject.fromObject(infoResult);
+//							 String infoStatus = infoObj.getString("status");
+//							if(!infoStatus.equals("1")){
+//								WebUtils.paraMandaChkAndReturn(7,response,"用户不存在");
+//		 				        return;
+//							}
 				    	}
-				    	username=user.getUsername();
 				    
  				}catch (Exception e) {
+ 					e.printStackTrace();
  					map.clear();
  					map.put("status", "0");
  	        		map.put("error_code", "6");//用户名、手机或邮箱不正确
@@ -152,7 +155,7 @@ public class VerfiyAutoLoginController extends BaseControllerUtil {
      	}else{
      		WebUtils.writeSuccessJson(response,map);
      	}
-     	OauthControllerLog.log(startTime,username,"",app,map,userserviceDev);
+     	OauthControllerLog.log(startTime,guid,"",app,map,userserviceDev);
          return;
          
      }
