@@ -82,8 +82,8 @@ public class RedisSessionController   extends BaseControllerUtil {
             writeErrorJson(response,map);
         }else{
             String domain = getDomain(strUrl);
-            if(null == redisClient.getObject(username+"_"+session_id)){
-                Cookie cookie = new Cookie(redisKey,session_id);
+            if(null == redisClient.getObject(username)){
+                Cookie cookie = new Cookie(username,session_id);
                 if(null != domain && "" != domain)
                 {
                     cookie.setDomain(domain);
@@ -97,13 +97,6 @@ public class RedisSessionController   extends BaseControllerUtil {
                 redisClient.setObject(redisKey,mapRedis);
             }else{
                 /*获取上次的sessionid*/
-                /*String sessionid = null;
-                Cookie[] cookies = request.getCookies();
-                for (Cookie cookieSingle : cookies){
-                    if(cookieSingle.getName().equals(redisKey)){
-                        sessionid = cookieSingle.getValue();
-                    }
-                }*/
                 redisKey = client_id+"_"+service_name+"_"+redisClient.getObject(username);
                 /*更新之前的session为被踢下线*/
                 mapRedis.put("status",3);
@@ -120,7 +113,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                 mapRedis.put("info","有效");
                 mapRedis.put("redis_key",redis_key);
                 mapRedis.put("redis_value",redis_value);
-                Cookie cookie = new Cookie(redisKey,session_id);
+                Cookie cookie = new Cookie(username,session_id);
                 if(null != domain && "" != domain)
                 {
                     cookie.setDomain(domain);
@@ -186,11 +179,9 @@ public class RedisSessionController   extends BaseControllerUtil {
         String access_token=request.getParameter("access_token");
         String service_name = request.getParameter("service_name");
         String session_id=request.getParameter("session_id");
-        String redis_key = request.getParameter("redis_key");
-        String redis_value=request.getParameter("redis_value");
-        log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key+"redis_value:"+redis_value);
+        log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name);
         Map<String ,Object> map=new HashMap<String,Object>();
-        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name,redis_key,redis_value))){
+        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name))){
             paraMandaChkAndReturn(3, response,"必传参数中有空值");
             return;
         }
