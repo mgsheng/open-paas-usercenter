@@ -75,15 +75,15 @@ public class RedisSessionController   extends BaseControllerUtil {
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
         }else{
+            String strUrl = "http://" + request.getServerName() //服务器地址
+                    + ":"
+                    + request.getServerPort()           //端口号
+                    + request.getContextPath()      //项目名称
+                    + request.getServletPath()      //请求页面或其他地址
+                    + "?" + (request.getQueryString()); //参数
+            String domain = getDomain(strUrl);
             if(null == redisClient.getObject(username+"_"+session_id)){
                 Cookie cookie = new Cookie(redisKey,session_id);
-                String strUrl = "http://" + request.getServerName() //服务器地址
-                        + ":"
-                        + request.getServerPort()           //端口号
-                        + request.getContextPath()      //项目名称
-                        + request.getServletPath()      //请求页面或其他地址
-                        + "?" + (request.getQueryString()); //参数
-                String domain = getDomain(strUrl);
                 if(null != domain && "" != domain)
                 {
                     cookie.setDomain(domain);
@@ -120,13 +120,6 @@ public class RedisSessionController   extends BaseControllerUtil {
                 mapRedis.put("redis_key",redis_key);
                 mapRedis.put("redis_value",redis_value);
                 Cookie cookie = new Cookie(redisKey,session_id);
-                String strUrl = "http://" + request.getServerName() //服务器地址
-                        + ":"
-                        + request.getServerPort()           //端口号
-                        + request.getContextPath()      //项目名称
-                        + request.getServletPath()      //请求页面或其他地址
-                        + "?" + (request.getQueryString()); //参数
-                String domain = getDomain(strUrl);
                 if(null != domain && "" != domain)
                 {
                     cookie.setDomain(domain);
