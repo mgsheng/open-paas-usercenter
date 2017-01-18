@@ -130,7 +130,6 @@ public class RedisSessionController   extends BaseControllerUtil {
         String redis_value=request.getParameter("redis_value");
         log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key+"redis_value:"+redis_value);
         Map<String ,Object> map=new HashMap<String,Object>();
-        Map<String ,Object> mapRedis=new HashMap<String,Object>();
         if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name,redis_key,redis_value))){
             paraMandaChkAndReturn(3, response,"必传参数中有空值");
             return;
