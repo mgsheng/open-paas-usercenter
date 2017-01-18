@@ -89,7 +89,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                     cookie.setDomain(domain);
                 }
                 /*第一次保存设置为有效的session*/
-                redisClient.setObject(username+"_"+session_id,service_name);
+                redisClient.setObject(username+"_"+session_id,session_id);
                 mapRedis.put("status",1);
                 mapRedis.put("info","有效");
                 mapRedis.put("redis_key",redis_key);
@@ -104,7 +104,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                         sessionid = cookieSingle.getValue();
                     }
                 }
-                redisKey = client_id+"_"+service_name+"_"+sessionid;
+                redisKey = client_id+"_"+service_name+"_"+redisClient.getObject(username+"_"+session_id);
                 /*更新之前的session为被踢下线*/
                 mapRedis.put("status",3);
                 mapRedis.put("info","被踢下线");
@@ -115,7 +115,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                 /*将最新的session数据设置为有效的数据*/
                 mapRedis=new HashMap<String,Object>();
                 redisKey = client_id+"_"+service_name+"_"+session_id;
-                redisClient.setObject(username+"_"+session_id,service_name);
+                redisClient.setObject(username+"_"+session_id,session_id);
                 mapRedis.put("status",1);
                 mapRedis.put("info","有效");
                 mapRedis.put("redis_key",redis_key);
