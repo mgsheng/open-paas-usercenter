@@ -84,7 +84,6 @@ public class RedisSessionController   extends BaseControllerUtil {
                 redisClient.setObject(redisKey,mapRedis);
             }else{
                 /*获取上次的sessionid*/
-
                 String sessionid = null;
                 Cookie[] cookies = request.getCookies();
                 for (Cookie cookieSingle : cookies){
@@ -147,7 +146,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                 return;
             }
         }
-        String redisKey = client_id+""+service_name+""+session_id;
+        String redisKey = client_id+"_"+service_name+"_"+session_id;
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
         }else{
