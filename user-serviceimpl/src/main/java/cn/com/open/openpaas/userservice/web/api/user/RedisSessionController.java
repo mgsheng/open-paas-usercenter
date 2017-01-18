@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by jh on 2017/1/18.
+ * 基于redis的单点登录
  */
 @Controller
 @RequestMapping("/redis/")
