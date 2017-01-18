@@ -127,7 +127,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                 }
                 redisClient.setObject(redisKey,mapRedis);
             }
-            map=new HashMap<String,Object>();
+            map.clear();
             map.put("status",1);
             writeSuccessJson(response,map);
         }
@@ -169,7 +169,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
         }else{
-            map=new HashMap<String,Object>();
+            map.clear();
             map.put("status",1);
             map.put("redisValue",redisClient.getObject(redisKey));
             writeSuccessJson(response,map);
@@ -220,7 +220,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                     cookieSingle.setMaxAge(-1);
                 }
             }
-            map=new HashMap<String,Object>();
+            map.clear();
             map.put("status",1);
             writeSuccessJson(response,map);
         }
