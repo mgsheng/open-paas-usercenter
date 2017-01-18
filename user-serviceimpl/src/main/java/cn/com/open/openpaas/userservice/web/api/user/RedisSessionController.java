@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * »ùÓÚredisµÄµ¥µãµÇÂ¼
+ * ï¿½ï¿½ï¿½ï¿½redisï¿½Äµï¿½ï¿½ï¿½ï¿½Â¼
  */
 @Controller
 @RequestMapping("/redis/")
@@ -37,7 +37,7 @@ public class RedisSessionController   extends BaseControllerUtil {
     @Autowired
     private RedisClientTemplate redisClient;
     /**
-     * redis±£´æ½Ó¿Ú
+     * redisä¿å­˜æ¥å£
      * @return Json
      */
     @RequestMapping(value = "saveRedis",method = RequestMethod.POST)
@@ -53,7 +53,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         Map<String ,Object> map=new HashMap<String,Object>();
         Map<String ,Object> mapRedis=new HashMap<String,Object>();
         if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name))){
-            paraMandaChkAndReturn(3, response,"±Ø´«²ÎÊıÖĞÓĞ¿ÕÖµ");
+            paraMandaChkAndReturn(3, response,"å¿…ä¼ å‚æ•°ä¸­æœ‰ç©ºå€¼");
             return;
         }
         App app = (App) redisClient.getObject(RedisConstant.APP_INFO+client_id);
@@ -66,21 +66,21 @@ public class RedisSessionController   extends BaseControllerUtil {
         if(map.get("status").equals("1")){
             Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
             if(!hmacSHA1Verification){
-                paraMandaChkAndReturn(4, response,"ÈÏÖ¤Ê§°Ü");
+                paraMandaChkAndReturn(4, response,"è®¤è¯å¤±è´¥");
                 return;
             }
         }
         String redisKey = client_id+"_"+service_name+"_"+session_id;
 
+        String strUrl = "http://" + request.getServerName()
+                + ":"
+                + request.getServerPort()
+                + request.getContextPath()
+                + request.getServletPath()
+                + "?" + (request.getQueryString());
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
         }else{
-            String strUrl = "http://" + request.getServerName() //·şÎñÆ÷µØÖ·
-                    + ":"
-                    + request.getServerPort()           //¶Ë¿ÚºÅ
-                    + request.getContextPath()      //ÏîÄ¿Ãû³Æ
-                    + request.getServletPath()      //ÇëÇóÒ³Ãæ»òÆäËûµØÖ·
-                    + "?" + (request.getQueryString()); //²ÎÊı
             String domain = getDomain(strUrl);
             if(null == redisClient.getObject(username+"_"+session_id)){
                 Cookie cookie = new Cookie(redisKey,session_id);
@@ -88,15 +88,15 @@ public class RedisSessionController   extends BaseControllerUtil {
                 {
                     cookie.setDomain(domain);
                 }
-                /*´ËÓÃ»§µÚÒ»´ÎµÇÂ½*/
+                /*ç¬¬ä¸€æ¬¡ä¿å­˜è®¾ç½®ä¸ºæœ‰æ•ˆçš„session*/
                 redisClient.setObject(username+"_"+session_id,service_name);
                 mapRedis.put("status",1);
-                mapRedis.put("info","ÓĞĞ§");
+                mapRedis.put("info","æœ‰æ•ˆ");
                 mapRedis.put("redis_key",redis_key);
                 mapRedis.put("redis_value",redis_value);
                 redisClient.setObject(redisKey,mapRedis);
             }else{
-                /*»ñÈ¡ÉÏ´ÎµÄsessionid*/
+                /*è·å–ä¸Šæ¬¡çš„sessionid*/
                 String sessionid = null;
                 Cookie[] cookies = request.getCookies();
                 for (Cookie cookieSingle : cookies){
@@ -105,18 +105,18 @@ public class RedisSessionController   extends BaseControllerUtil {
                     }
                 }
                 redisKey = client_id+"_"+service_name+"_"+sessionid;
-                /*´ËÓÃ»§ÔÙ´ÎµÇÂ½ ½«Ö®Ç°µÄ×´Ì¬ÉèÖÃÎª3*/
+                /*æ›´æ–°ä¹‹å‰çš„sessionä¸ºè¢«è¸¢ä¸‹çº¿*/
                 mapRedis.put("status",3);
-                mapRedis.put("info","±»ÌßÏÂÏß");
+                mapRedis.put("info","è¢«è¸¢ä¸‹çº¿");
                 mapRedis.put("redis_key",redis_key);
                 mapRedis.put("redis_value",redis_value);
                 redisClient.del(redisKey);
                 redisClient.setObject(redisKey,mapRedis);
-                /*½«×îĞÂ×´Ì¬ÉèÖÃÎªÓĞĞ§*/
+                /*å°†æœ€æ–°çš„sessionæ•°æ®è®¾ç½®ä¸ºæœ‰æ•ˆçš„æ•°æ®*/
                 mapRedis=new HashMap<String,Object>();
                 redisClient.setObject(username+"_"+session_id,service_name);
                 mapRedis.put("status",1);
-                mapRedis.put("info","ÓĞĞ§");
+                mapRedis.put("info","æœ‰æ•ˆ");
                 mapRedis.put("redis_key",redis_key);
                 mapRedis.put("redis_value",redis_value);
                 Cookie cookie = new Cookie(redisKey,session_id);
@@ -133,7 +133,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         return;
     }
     /**
-     * Redis»ñÈ¡½Ó¿Ú
+     * Redisè·å–æ¥å£
      * @return Json
      */
     @RequestMapping(value = "getRedis",method = RequestMethod.POST)
@@ -147,7 +147,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key+"redis_value:"+redis_value);
         Map<String ,Object> map=new HashMap<String,Object>();
         if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name,redis_key,redis_value))){
-            paraMandaChkAndReturn(3, response,"±Ø´«²ÎÊıÖĞÓĞ¿ÕÖµ");
+            paraMandaChkAndReturn(3, response,"å¿…ä¼ å‚æ•°ä¸­æœ‰ç©ºå€¼");
             return;
         }
         App app = (App) redisClient.getObject(RedisConstant.APP_INFO+client_id);
@@ -160,7 +160,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         if(map.get("status").equals("1")){
             Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
             if(!hmacSHA1Verification){
-                paraMandaChkAndReturn(4, response,"ÈÏÖ¤Ê§°Ü");
+                paraMandaChkAndReturn(4, response,"è®¤è¯å¤±è´¥");
                 return;
             }
         }
@@ -176,7 +176,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         return;
     }
     /**
-     * RedisÉ¾³ı½Ó¿Ú
+     * Redisåˆ é™¤æ¥å£
      * @return Json
      */
     @RequestMapping(value = "delRedis",method = RequestMethod.POST)
@@ -190,7 +190,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key+"redis_value:"+redis_value);
         Map<String ,Object> map=new HashMap<String,Object>();
         if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name,redis_key,redis_value))){
-            paraMandaChkAndReturn(3, response,"±Ø´«²ÎÊıÖĞÓĞ¿ÕÖµ");
+            paraMandaChkAndReturn(3, response,"å¿…ä¼ å‚æ•°ä¸­æœ‰ç©ºå€¼");
             return;
         }
         App app = (App) redisClient.getObject(RedisConstant.APP_INFO+client_id);
@@ -203,7 +203,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         if(map.get("status").equals("1")){
             Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
             if(!hmacSHA1Verification){
-                paraMandaChkAndReturn(4, response,"ÈÏÖ¤Ê§°Ü");
+                paraMandaChkAndReturn(4, response,"è®¤è¯å¤±è´¥");
                 return;
             }
         }
@@ -226,7 +226,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         return;
     }
     /**
-     * ¸ù¾İURL»ñÈ¡domain
+     * æ ¹æ®URLè·å–È¡domain
      * @param url
      * @return
      */
