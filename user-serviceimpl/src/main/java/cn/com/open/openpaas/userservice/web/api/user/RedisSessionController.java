@@ -97,14 +97,14 @@ public class RedisSessionController   extends BaseControllerUtil {
                 redisClient.setObject(redisKey,mapRedis);
             }else{
                 /*获取上次的sessionid*/
-                String sessionid = null;
+               /* String sessionid = null;
                 Cookie[] cookies = request.getCookies();
                 for (Cookie cookieSingle : cookies){
                     if(cookieSingle.getName().equals(redisKey)){
                         sessionid = cookieSingle.getValue();
                     }
                 }
-                redisKey = client_id+"_"+service_name+"_"+sessionid;
+                redisKey = client_id+"_"+service_name+"_"+sessionid;*/
                 /*更新之前的session为被踢下线*/
                 mapRedis.put("status",3);
                 mapRedis.put("info","被踢下线");
