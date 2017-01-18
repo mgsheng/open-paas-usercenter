@@ -35,7 +35,7 @@ public class RedisSessionController   extends BaseControllerUtil {
     @Autowired
     private RedisClientTemplate redisClient;
     /**
-     * 用户登录接口(通过用户名-密码)
+     * redis保存接口
      * @return Json
      */
     @RequestMapping(value = "saveRedis",method = RequestMethod.POST)
@@ -124,7 +124,6 @@ public class RedisSessionController   extends BaseControllerUtil {
         String client_id=request.getParameter("client_id");
         String access_token=request.getParameter("access_token");
         String service_name = request.getParameter("service_name");
-        String username=request.getParameter("username");
         String session_id=request.getParameter("session_id");
         String redis_key = request.getParameter("redis_key");
         String redis_value=request.getParameter("redis_value");
