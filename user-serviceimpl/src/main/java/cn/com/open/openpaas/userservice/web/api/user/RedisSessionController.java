@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 基于redis的单点登录
@@ -74,7 +76,18 @@ public class RedisSessionController   extends BaseControllerUtil {
             writeErrorJson(response,map);
         }else{
             if(null == redisClient.getObject(username+"_"+session_id)){
-                new Cookie(redisKey,session_id);
+                Cookie cookie = new Cookie(redisKey,session_id);
+                String strUrl = "http://" + request.getServerName() //服务器地址
+                        + ":"
+                        + request.getServerPort()           //端口号
+                        + request.getContextPath()      //项目名称
+                        + request.getServletPath()      //请求页面或其他地址
+                        + "?" + (request.getQueryString()); //参数
+                String domain = getDomain(strUrl);
+                if(null != domain && "" != domain)
+                {
+                    cookie.setDomain(domain);
+                }
                 /*此用户第一次登陆*/
                 redisClient.setObject(username+"_"+session_id,service_name);
                 mapRedis.put("status",1);
@@ -106,7 +119,18 @@ public class RedisSessionController   extends BaseControllerUtil {
                 mapRedis.put("info","有效");
                 mapRedis.put("redis_key",redis_key);
                 mapRedis.put("redis_value",redis_value);
-                new Cookie(redisKey,session_id);
+                Cookie cookie = new Cookie(redisKey,session_id);
+                String strUrl = "http://" + request.getServerName() //服务器地址
+                        + ":"
+                        + request.getServerPort()           //端口号
+                        + request.getContextPath()      //项目名称
+                        + request.getServletPath()      //请求页面或其他地址
+                        + "?" + (request.getQueryString()); //参数
+                String domain = getDomain(strUrl);
+                if(null != domain && "" != domain)
+                {
+                    cookie.setDomain(domain);
+                }
                 redisClient.setObject(redisKey,mapRedis);
             }
             map.put("status",1);
@@ -155,6 +179,25 @@ public class RedisSessionController   extends BaseControllerUtil {
             writeSuccessJson(response,map);
         }
         return;
+    }
+    /**
+     * 根据URL获取domain
+     * @param url
+     * @return
+     */
+    public static String getDomain(String url){
+
+        String domainUrl = null;
+        if (url == null) {
+            return null;
+        } else {
+            Pattern p = Pattern.compile("(?<=http://|\\.)[^.]*?\\.(com|cn|net|org|biz|info|cc|tv)",Pattern.CASE_INSENSITIVE);
+            Matcher matcher = p.matcher(url);
+            while(matcher.find()){
+                domainUrl = matcher.group();
+            }
+            return domainUrl;
+        }
     }
 
 }
