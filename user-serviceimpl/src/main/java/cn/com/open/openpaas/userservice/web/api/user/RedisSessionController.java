@@ -38,6 +38,10 @@ public class RedisSessionController   extends BaseControllerUtil {
     private RedisClientTemplate redisClient;
     /**
      * redis保存接口
+     * username：sessionid键值对存储到redis
+     * 存储sessionid 相应数据库到redis
+     * 根据username获取sessionid 判断是否存在session
+     * 存在则踢下线，并将最新数据更新为有效数据
      * @return Json
      */
     @RequestMapping(value = "saveRedis",method = RequestMethod.POST)
