@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * ����redis�ĵ����¼
+ * 基于redis的单点登录
  */
 @Controller
 @RequestMapping("/redis/")
