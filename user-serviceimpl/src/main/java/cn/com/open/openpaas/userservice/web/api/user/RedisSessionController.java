@@ -183,6 +183,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         String access_token=request.getParameter("access_token");
         String service_name = request.getParameter("service_name");
         String session_id=request.getParameter("session_id");
+        String username=request.getParameter("username");
         log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name);
         Map<String ,Object> map=new HashMap<String,Object>();
         if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name))){
@@ -211,7 +212,7 @@ public class RedisSessionController   extends BaseControllerUtil {
             Cookie[] cookies = request.getCookies();
 
             for (Cookie cookieSingle : cookies){
-                if(cookieSingle.getName().equals(redisKey)){
+                if(cookieSingle.getName().equals(username)){
                     cookieSingle.setMaxAge(-1);
                 }
             }
