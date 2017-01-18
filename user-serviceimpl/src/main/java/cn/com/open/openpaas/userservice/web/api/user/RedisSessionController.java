@@ -52,7 +52,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key+"redis_value:"+redis_value);
         Map<String ,Object> map=new HashMap<String,Object>();
         Map<String ,Object> mapRedis=new HashMap<String,Object>();
-        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name,redis_key,redis_value))){
+        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name))){
             paraMandaChkAndReturn(3, response,"必传参数中有空值");
             return;
         }
@@ -212,6 +212,13 @@ public class RedisSessionController   extends BaseControllerUtil {
             writeErrorJson(response,map);
         }else{
             redisClient.del(redisKey);
+            Cookie[] cookies = request.getCookies();
+
+            for (Cookie cookieSingle : cookies){
+                if(cookieSingle.getName().equals(redisKey)){
+                    cookieSingle.setMaxAge(-1);
+                }
+            }
             map=new HashMap<String,Object>();
             map.put("status",1);
             writeSuccessJson(response,map);
