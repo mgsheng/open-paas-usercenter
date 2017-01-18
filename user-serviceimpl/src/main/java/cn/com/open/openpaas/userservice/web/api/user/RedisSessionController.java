@@ -68,7 +68,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                 return;
             }
         }
-        String redisKey = client_id+""+service_name+""+session_id;
+        String redisKey = client_id+"_"+service_name+"_"+session_id;
 
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
@@ -91,7 +91,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                         sessionid = cookieSingle.getValue();
                     }
                 }
-                redisKey = client_id+""+service_name+""+sessionid;
+                redisKey = client_id+"_"+service_name+"_"+sessionid;
                 /*此用户再次登陆 将之前的状态设置为3*/
                 mapRedis.put("status",3);
                 mapRedis.put("info","被踢下线");
