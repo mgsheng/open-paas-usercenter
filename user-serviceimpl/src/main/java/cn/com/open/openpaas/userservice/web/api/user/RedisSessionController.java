@@ -206,10 +206,10 @@ public class RedisSessionController   extends BaseControllerUtil {
             }
         }
         String redisKey = client_id+"_"+service_name+"_"+session_id;
+        redisClient.del(redisKey);
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
         }else{
-            redisClient.del(redisKey);
             map.put("status",1);
             writeSuccessJson(response,map);
         }
