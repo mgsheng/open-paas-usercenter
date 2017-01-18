@@ -114,6 +114,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                 redisClient.setObject(redisKey,mapRedis);
                 /*将最新的session数据设置为有效的数据*/
                 mapRedis=new HashMap<String,Object>();
+                redisKey = client_id+"_"+service_name+"_"+session_id;
                 redisClient.setObject(username+"_"+session_id,service_name);
                 mapRedis.put("status",1);
                 mapRedis.put("info","有效");
