@@ -174,6 +174,48 @@ public class RedisSessionController   extends BaseControllerUtil {
         return;
     }
     /**
+     * Redis删除接口
+     * @return Json
+     */
+    @RequestMapping(value = "delRedis",method = RequestMethod.POST)
+    public void delRedis(HttpServletRequest request,HttpServletResponse response) {
+        String client_id=request.getParameter("client_id");
+        String access_token=request.getParameter("access_token");
+        String service_name = request.getParameter("service_name");
+        String session_id=request.getParameter("session_id");
+        String redis_key = request.getParameter("redis_key");
+        String redis_value=request.getParameter("redis_value");
+        log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key+"redis_value:"+redis_value);
+        Map<String ,Object> map=new HashMap<String,Object>();
+        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name,redis_key,redis_value))){
+            paraMandaChkAndReturn(3, response,"必传参数中有空值");
+            return;
+        }
+        App app = (App) redisClient.getObject(RedisConstant.APP_INFO+client_id);
+        if(app==null)
+        {
+            app=appService.findIdByClientId(client_id);
+            redisClient.setObject(RedisConstant.APP_INFO+client_id, app);
+        }
+        map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
+        if(map.get("status").equals("1")){
+            Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
+            if(!hmacSHA1Verification){
+                paraMandaChkAndReturn(4, response,"认证失败");
+                return;
+            }
+        }
+        String redisKey = client_id+"_"+service_name+"_"+session_id;
+        if(map.get("status")=="0"){
+            writeErrorJson(response,map);
+        }else{
+            redisClient.del(redisKey);
+            map.put("status",1);
+            writeSuccessJson(response,map);
+        }
+        return;
+    }
+    /**
      * 根据URL获取domain
      * @param url
      * @return
