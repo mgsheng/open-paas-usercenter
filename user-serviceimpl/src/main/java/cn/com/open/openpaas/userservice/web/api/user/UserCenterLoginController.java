@@ -1,28 +1,5 @@
 package cn.com.open.openpaas.userservice.web.api.user;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
@@ -40,6 +17,20 @@ import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 /**
  *  用户登录接口(通过用户名-密码)
@@ -371,13 +362,13 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					redisMap.put("user",JSON.toJSONString(user));
 					redisClient.setObject(redisKey,redisMap);
 					if(null != rvalue && "" != rvalue){
-						redisMap.clear();
-						redisMap.put("status",3);
-						redisMap.put("info","被踢下线");
-						redisMap.put("guid",map.get("guid"));
-						redisMap.put("user",JSON.toJSONString(user));
 						redisKey = client_id+"_userService_"+rvalue;
-						redisClient.setObject(redisKey,redisMap);
+						net.sf.json.JSONObject jsonObject= net.sf.json.JSONObject.fromObject(redisClient.getObject(redisKey));
+						jsonObject.put("status",3);
+						jsonObject.put("info","被踢下线");
+						jsonObject.put("redis_key",jsonObject.get("redis_key"));
+						jsonObject.put("redis_value",jsonObject.get("redis_value"));
+						redisClient.setObject(redisKey,jsonObject);
 					}
 					redisClient.setObject(username,session.getId());
 				}
