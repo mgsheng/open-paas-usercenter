@@ -866,17 +866,6 @@ public class UserInterfaceController {
         }
         @RequestMapping(value = "verifySession", method = RequestMethod.POST)
         public String verifySession(HttpServletRequest request,String clientId,String accessToken) throws Exception {
-
-			Cookie[] cookies = request.getCookies();//这样便可以获取一个cookie数组
-			String data = "";
-			for (Cookie cookie:cookies)
-			{
-				if(cookie.getName().equals("test"))
-				{
-					data = cookie.getValue();
-				}
-			}
-			System.out.println("cookie:"+data);
 			String key=map.get(clientId);
       	  	 String signature="";
       	  	 String timestamp="";
