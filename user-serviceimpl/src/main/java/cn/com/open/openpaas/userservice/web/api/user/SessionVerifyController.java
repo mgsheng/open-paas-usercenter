@@ -42,8 +42,9 @@ public class SessionVerifyController  extends BaseController{
     public void userCenterVerifySession(HttpServletRequest request,HttpServletResponse response) {
     	String client_id=request.getParameter("client_id");
     	String access_token=request.getParameter("access_token");
-    	log.info("client_id:"+client_id);
-        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token))){
+		String jsessionId=request.getParameter("jsessionId");
+    	log.info("client_id:"+client_id+"access_token:"+access_token+"access_token:"+access_token);
+        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,jsessionId))){
             paraMandaChkAndReturn(3, response,"必传参数有空值");
             return;
         }
@@ -66,17 +67,32 @@ public class SessionVerifyController  extends BaseController{
 			Object o = session.getAttribute(userserviceDev.getSingle_sign_user());
 			if(o!=null){
 				User user = (User) o;
-				AppUser appUser = appUserService.findByCidAUid(app.getId(), user.getId());
-				map.put("userName", user.getUsername());
-				map.put("guid", user.guid());
-				map.put("phone", user.getPhone());
-				map.put("email", user.getEmail());	
-				if(appUser!=null){
-					map.put("sourceId", appUser.sourceId());
+				/*从redis读取用户信息*/
+				String redisKey = client_id+"_userService_"+jsessionId;
+				Map<String,Object> redisValue = (Map<String, Object>) redisClient.getObject(redisKey);
+				/*如果存在sessionId 则返回相应的数据 否则提示相应的信息验证失败*/
+				if(null != redisValue){
+					String status = redisValue.get("status").toString();
+					if(!status.equals("1")){
+						paraMandaChkAndReturn(6, response,"您已被踢下线");
+						return;
+					}
+
+					AppUser appUser = appUserService.findByCidAUid(app.getId(), user.getId());
+					map.put("userName", user.getUsername());
+					map.put("guid", user.guid());
+					map.put("phone", user.getPhone());
+					map.put("email", user.getEmail());
+					if(appUser!=null){
+						map.put("sourceId", appUser.sourceId());
+					}else{
+						map.put("sourceId", "");
+					}
+					map.put("appId", app.getId());
 				}else{
-					map.put("sourceId", "");
+					paraMandaChkAndReturn(5, response,"session验证失败");
+					return;
 				}
-				map.put("appId", app.getId());
 				//map.put("verifyValue", "success");
 			}else{
 				//map.clear();

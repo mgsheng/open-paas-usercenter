@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -358,6 +359,31 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    		    //将登录成功用户存入session中
 	    		    HttpSession session = request.getSession();
 	    		    session.setAttribute(userserviceDev.getSingle_sign_user(), user);
+					map.put("jsessionId", session.getId());
+					/*写入redis*/
+					String redisKey = client_id+"_userService_"+session.getId();
+					Object rvalue = redisClient.getObject(username);
+					if(null == rvalue){
+						map.put("status",1);
+						map.put("info","有效");
+						redisClient.setObject(redisKey,map);
+					}else{
+						map.put("status",1);
+						map.put("info","有效");
+						redisClient.setObject(redisKey,map);
+						map.put("status",3);
+						map.put("info","被踢下线");
+						redisKey = client_id+"_userService_"+redisClient.getObject(username);
+						redisClient.del(redisKey);
+						redisClient.setObject(redisKey,map);
+					}
+					redisClient.setObject(username,session.getId());
+					/*跨域cookie*/
+					request.setAttribute("header","P3P: CP=\"CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR\"");
+					Cookie cookie = new Cookie(username,session.getId());
+					cookie.setDomain("");
+					cookie.setPath("/");
+					response.addCookie(cookie);
 				}
 				//没有符合条件的用户，则返回错误消息
 				else{

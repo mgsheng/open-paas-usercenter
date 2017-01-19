@@ -40,8 +40,9 @@ public class SessionDestoryController  extends BaseController{
     public void userCenterDelSession(HttpServletRequest request,HttpServletResponse response) {
     	String client_id=request.getParameter("client_id");
     	String access_token=request.getParameter("access_token");
-    	log.info("client_id:"+client_id);
-        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token))){
+		String jsessionId=request.getParameter("jsessionId");
+		log.info("client_id:"+client_id+"access_token:"+access_token+"access_token:"+access_token);
+        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,jsessionId))){
             paraMandaChkAndReturn(3, response,"必传参数有空值");
             return;
         }
@@ -62,6 +63,10 @@ public class SessionDestoryController  extends BaseController{
 			}
 			HttpSession session = request.getSession();
 			session.removeAttribute(userserviceDev.getSingle_sign_user());
+			/*删除redis中的值*/
+			/*从redis读取用户信息*/
+			String redisKey = client_id+"_userService_"+jsessionId;
+			redisClient.del(redisKey);
 			map.clear();
 			map.put("status","1");
 		}
