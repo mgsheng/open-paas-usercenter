@@ -110,33 +110,4 @@ public class SessionVerifyController  extends BaseController{
     	}
         return;
     }
-	/**
-	 * 将Json对象转换成Map
-	 *
-	 * @param jsonString
-	 *            json对象
-	 * @return Map对象
-	 * @throws JSONException
-	 */
-	public static Map<String,Object> toMap(String jsonString) throws  IOException {
-		HashMap<String,Object> result =
-				new ObjectMapper().readValue(jsonString, HashMap.class);
-		return result;
-		/*JSONObject jsonObject = JSONObject.parseObject(jsonString);
-
-		Map result = new HashMap();
-		Iterator iterator = (Iterator) jsonObject.entrySet();
-		String key = null;
-		Object value = null;
-
-		while (iterator.hasNext()) {
-
-			key = (String) iterator.next();
-			value = jsonObject.get(key);
-			result.put(key, value);
-
-		}
-		return result;*/
-
-	}
 }
