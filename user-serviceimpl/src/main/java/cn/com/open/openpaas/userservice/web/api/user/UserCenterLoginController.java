@@ -368,8 +368,6 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					redisMap.put("status",1);
 					redisMap.put("info","有效");
 					redisMap.put("guid",map.get("guid"));
-					redisMap.put("phone",map.get("phone"));
-					redisMap.put("email",map.get("email"));
 					redisMap.put("user",JSON.toJSONString(user));
 					redisClient.setObject(redisKey,redisMap);
 					if(null != rvalue && "" != rvalue){
@@ -377,8 +375,6 @@ public class UserCenterLoginController extends BaseControllerUtil {
 						redisMap.put("status",3);
 						redisMap.put("info","被踢下线");
 						redisMap.put("guid",map.get("guid"));
-						redisMap.put("phone",map.get("phone"));
-						redisMap.put("email",map.get("email"));
 						redisMap.put("user",JSON.toJSONString(user));
 						redisKey = client_id+"_userService_"+rvalue;
 						redisClient.setObject(redisKey,redisMap);
