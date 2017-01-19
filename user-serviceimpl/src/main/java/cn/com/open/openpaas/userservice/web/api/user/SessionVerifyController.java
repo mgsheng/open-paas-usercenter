@@ -60,11 +60,11 @@ public class SessionVerifyController  extends BaseController{
 		}
 		
 		if(map.get("status").equals("1")){
-			/*Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
+			Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
 			if(!hmacSHA1Verification){
 				paraMandaChkAndReturn(4, response,"认证失败");
 				return;
-			}*/
+			}
 			/*从redis读取用户信息*/
 			String redisKey = client_id+"_userService_"+jsessionId;
 			Map<String,Object> redisValue = (Map<String, Object>) redisClient.getObject(redisKey);
