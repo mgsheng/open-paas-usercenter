@@ -379,10 +379,10 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					}
 					redisClient.setObject(username,session.getId());
 					/*跨域cookie*/
-					request.setAttribute("header","P3P: CP=\"CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR\"");
 					Cookie cookie = new Cookie(username,session.getId());
 					cookie.setDomain("");
 					cookie.setPath("/");
+					response.addHeader("Access-Control-Allow-Origin","*");
 					response.addCookie(cookie);
 				}
 				//没有符合条件的用户，则返回错误消息
