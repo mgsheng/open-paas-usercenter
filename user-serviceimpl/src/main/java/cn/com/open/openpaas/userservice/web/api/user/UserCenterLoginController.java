@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -358,32 +359,31 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    		    map.put("infoList", allInfoList);
 	    		    //将登录成功用户存入session中
 	    		    HttpSession session = request.getSession();
-	    		    session.setAttribute(userserviceDev.getSingle_sign_user(), user);
+	    		    /*session.setAttribute(userserviceDev.getSingle_sign_user(), user);*/
 					map.put("jsessionId", session.getId());
 					/*写入redis*/
 					String redisKey = client_id+"_userService_"+session.getId();
-					Object rvalue = redisClient.getObject(username);
-					if(null == rvalue){
-						map.put("status",1);
-						map.put("info","有效");
-						redisClient.setObject(redisKey,map);
-					}else{
-						map.put("status",1);
-						map.put("info","有效");
-						redisClient.setObject(redisKey,map);
-						map.put("status",3);
-						map.put("info","被踢下线");
-						redisKey = client_id+"_userService_"+redisClient.getObject(username);
-						redisClient.del(redisKey);
-						redisClient.setObject(redisKey,map);
+					String rvalue = redisClient.getString(username);
+					Map<String,Object> redisMap = new HashMap<String, Object>();
+					redisMap.put("status",1);
+					redisMap.put("info","有效");
+					redisMap.put("guid",map.get("guid"));
+					redisMap.put("phone",map.get("phone"));
+					redisMap.put("email",map.get("email"));
+					redisMap.put("user",JSON.toJSONString(user));
+					redisClient.setObject(redisKey,redisMap);
+					if(null != rvalue && "" != rvalue){
+						redisMap.clear();
+						redisMap.put("status",3);
+						redisMap.put("info","被踢下线");
+						redisMap.put("guid",map.get("guid"));
+						redisMap.put("phone",map.get("phone"));
+						redisMap.put("email",map.get("email"));
+						redisMap.put("user",JSON.toJSONString(user));
+						redisKey = client_id+"_userService_"+rvalue;
+						redisClient.setObject(redisKey,redisMap);
 					}
 					redisClient.setObject(username,session.getId());
-					/*跨域cookie*/
-					Cookie cookie = new Cookie(username,session.getId());
-					cookie.setDomain("");
-					cookie.setPath("/");
-					response.addHeader("Access-Control-Allow-Origin","*");
-					response.addCookie(cookie);
 				}
 				//没有符合条件的用户，则返回错误消息
 				else{

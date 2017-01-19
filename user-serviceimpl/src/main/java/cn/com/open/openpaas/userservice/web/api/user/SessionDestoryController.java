@@ -62,19 +62,12 @@ public class SessionDestoryController  extends BaseController{
 				paraMandaChkAndReturn(4, response,"认证失败");
 				return;
 			}
-			HttpSession session = request.getSession();
-			session.removeAttribute(userserviceDev.getSingle_sign_user());
+			/*HttpSession session = request.getSession();
+			session.removeAttribute(userserviceDev.getSingle_sign_user());*/
 			/*删除redis中的值*/
 			/*从redis读取用户信息*/
 			String redisKey = client_id+"_userService_"+jsessionId;
 			redisClient.del(redisKey);
-			Cookie[] cookies = request.getCookies();//这样便可以获取一个cookie数组
-			String data = "";
-			for (Cookie cookie:cookies){
-				if(cookie.getValue().equals(jsessionId)){
-					cookie.setMaxAge(-1);
-				}
-			}
 			map.clear();
 			map.put("status","1");
 		}

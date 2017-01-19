@@ -77,7 +77,6 @@ public class RedisSessionController   extends BaseControllerUtil {
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
         }else{
-            redisKey = client_id+"_"+service_name+"_"+session_id;
             mapRedis.put("status",1);
             mapRedis.put("info","有效");
             mapRedis.put("redis_key",redis_key);

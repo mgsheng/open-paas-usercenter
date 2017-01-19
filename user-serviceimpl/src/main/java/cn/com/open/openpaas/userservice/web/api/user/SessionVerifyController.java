@@ -1,13 +1,15 @@
 package cn.com.open.openpaas.userservice.web.api.user;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,7 @@ public class SessionVerifyController  extends BaseController{
      * @return Json
      */
     @RequestMapping("verify")
-    public void userCenterVerifySession(HttpServletRequest request,HttpServletResponse response) {
+    public void userCenterVerifySession(HttpServletRequest request,HttpServletResponse response) throws IOException {
     	String client_id=request.getParameter("client_id");
     	String access_token=request.getParameter("access_token");
 		String jsessionId=request.getParameter("jsessionId");
@@ -58,37 +60,36 @@ public class SessionVerifyController  extends BaseController{
 		}
 		
 		if(map.get("status").equals("1")){
-			Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
+			/*Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
 			if(!hmacSHA1Verification){
 				paraMandaChkAndReturn(4, response,"认证失败");
 				return;
-			}
-			HttpSession session = request.getSession();
-			Object o = session.getAttribute(userserviceDev.getSingle_sign_user());
-			if(o!=null){
-				User user = (User) o;
-				/*从redis读取用户信息*/
-				String redisKey = client_id+"_userService_"+jsessionId;
-				Map<String,Object> redisValue = (Map<String, Object>) redisClient.getObject(redisKey);
+			}*/
+			/*从redis读取用户信息*/
+			String redisKey = client_id+"_userService_"+jsessionId;
+			Map<String,Object> redisValue = (Map<String, Object>) redisClient.getObject(redisKey);
+			/*HttpSession session = request.getSession();
+			Object o = session.getAttribute(userserviceDev.getSingle_sign_user());*/
+			if(null != redisValue && redisValue.size()>0){
 				/*如果存在sessionId 则返回相应的数据 否则提示相应的信息验证失败*/
 				if(null != redisValue){
-					String status = redisValue.get("status").toString();
-					if(!status.equals("1")){
-						paraMandaChkAndReturn(6, response,"您已被踢下线");
-						return;
-					}
+					Object userObj = redisValue.get("user");
+					if(null != userObj)
+					{
+						Map<String,Object> user = new ObjectMapper().readValue(userObj.toString(), HashMap.class);
 
-					AppUser appUser = appUserService.findByCidAUid(app.getId(), user.getId());
-					map.put("userName", user.getUsername());
-					map.put("guid", user.guid());
-					map.put("phone", user.getPhone());
-					map.put("email", user.getEmail());
-					if(appUser!=null){
-						map.put("sourceId", appUser.sourceId());
-					}else{
-						map.put("sourceId", "");
+						AppUser appUser = appUserService.findByCidAUid(app.getId(), Integer.parseInt(user.get("id").toString()));
+						map.put("userName", user.get("username"));
+						map.put("guid", redisValue.get("guid"));
+						map.put("phone", user.get("phone"));
+						map.put("email", user.get("email"));
+						if(appUser!=null){
+							map.put("sourceId", appUser.sourceId());
+						}else{
+							map.put("sourceId", "");
+						}
+						map.put("appId", app.getId());
 					}
-					map.put("appId", app.getId());
 				}else{
 					paraMandaChkAndReturn(5, response,"session验证失败");
 					return;
@@ -109,4 +110,33 @@ public class SessionVerifyController  extends BaseController{
     	}
         return;
     }
+	/**
+	 * 将Json对象转换成Map
+	 *
+	 * @param jsonString
+	 *            json对象
+	 * @return Map对象
+	 * @throws JSONException
+	 */
+	public static Map<String,Object> toMap(String jsonString) throws  IOException {
+		HashMap<String,Object> result =
+				new ObjectMapper().readValue(jsonString, HashMap.class);
+		return result;
+		/*JSONObject jsonObject = JSONObject.parseObject(jsonString);
+
+		Map result = new HashMap();
+		Iterator iterator = (Iterator) jsonObject.entrySet();
+		String key = null;
+		Object value = null;
+
+		while (iterator.hasNext()) {
+
+			key = (String) iterator.next();
+			value = jsonObject.get(key);
+			result.put(key, value);
+
+		}
+		return result;*/
+
+	}
 }
