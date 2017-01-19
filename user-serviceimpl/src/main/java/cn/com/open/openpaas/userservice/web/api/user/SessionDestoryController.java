@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -67,6 +68,13 @@ public class SessionDestoryController  extends BaseController{
 			/*从redis读取用户信息*/
 			String redisKey = client_id+"_userService_"+jsessionId;
 			redisClient.del(redisKey);
+			Cookie[] cookies = request.getCookies();//这样便可以获取一个cookie数组
+			String data = "";
+			for (Cookie cookie:cookies){
+				if(cookie.getValue().equals(jsessionId)){
+					cookie.setMaxAge(-1);
+				}
+			}
 			map.clear();
 			map.put("status","1");
 		}
