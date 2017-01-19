@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -103,6 +104,10 @@ public class UserInterfaceController {
     @Value("#{properties['aes-key']}")
     
     final static String  SEPARATOR = "&";
+	@Value("#{properties['get-redis-uri']}")
+	private String getRedisUri;
+	@Value("#{properties['save-redis-uri']}")
+	private String saveRedisUri;
     private Map<String,String> map=LoadPopertiesFile.loadProperties();
     
       /**
@@ -860,8 +865,19 @@ public class UserInterfaceController {
             return "usercenter/user_center_verify_session";
         }
         @RequestMapping(value = "verifySession", method = RequestMethod.POST)
-        public String verifySession(String clientId,String accessToken) throws Exception {
-        	String key=map.get(clientId);
+        public String verifySession(HttpServletRequest request,String clientId,String accessToken) throws Exception {
+
+			Cookie[] cookies = request.getCookies();//这样便可以获取一个cookie数组
+			String data = "";
+			for (Cookie cookie:cookies)
+			{
+				if(cookie.getName().equals("test"))
+				{
+					data = cookie.getValue();
+				}
+			}
+			System.out.println("cookie:"+data);
+			String key=map.get(clientId);
       	  	 String signature="";
       	  	 String timestamp="";
       	  	 String signatureNonce="";
@@ -1001,4 +1017,94 @@ public class UserInterfaceController {
 			 String temp_params = sb.toString();  
 			return sb.toString().substring(0, temp_params.length()-1);
 		}
+	/**
+	 *
+	 *Redis获取接口
+	 */
+	@RequestMapping(value = "getRedis", method = RequestMethod.GET)
+	public String getRedis(Model model) {
+		model.addAttribute("getRedisUri", getRedisUri);
+		return "usercenter/user_center_getredis";
+	}
+	@RequestMapping(value = "getRedis", method = RequestMethod.POST)
+	public String getRedis(String clientId,String accessToken,String serviceName,String sessionId,String redisKey,String redisValue,Model model) throws Exception {
+		String key=map.get(clientId);
+		String signature="";
+		String timestamp="";
+		String signatureNonce="";
+		if(key!=null){
+			timestamp=DateTools.getSolrDate(new Date());
+			StringBuilder encryptText = new StringBuilder();
+			signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
+			encryptText.append(clientId);
+			encryptText.append(SEPARATOR);
+			encryptText.append(accessToken);
+			encryptText.append(SEPARATOR);
+			encryptText.append(serviceName);
+			encryptText.append(SEPARATOR);
+			encryptText.append(sessionId);
+			encryptText.append(SEPARATOR);
+			encryptText.append(redisKey);
+			encryptText.append(SEPARATOR);
+			encryptText.append(redisValue);
+			encryptText.append(SEPARATOR);
+			encryptText.append(timestamp);
+			encryptText.append(SEPARATOR);
+			encryptText.append(signatureNonce);
+			signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
+			signature=HMacSha1.getNewResult(signature);
+		}
+		/*final String fullUri =getRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+		LOG.debug("Send to user-service-server URL: {}", fullUri);
+		return "redirect:" + fullUri;*/
+		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
+		LOG.debug("Send to user-service-server URL: {}", data);
+
+		model.addAttribute("getRedisUri", getRedisUri);
+		return "usercenter/user_center_getredis";
+	}
+	/**
+	 *
+	 *Redis保存接口
+	 */
+	@RequestMapping(value = "saveRedis", method = RequestMethod.GET)
+	public String saveRedis(Model model) {
+		model.addAttribute("saveRedisUri", saveRedisUri);
+		return "usercenter/user_center_saveredis";
+	}
+	@RequestMapping(value = "saveRedis", method = RequestMethod.POST)
+	public String saveRedis(String clientId,String accessToken,String serviceName,String sessionId,String redisKey,String redisValue,Model model) throws Exception {
+		String key=map.get(clientId);
+		String signature="";
+		String timestamp="";
+		String signatureNonce="";
+		if(key!=null){
+			timestamp=DateTools.getSolrDate(new Date());
+			StringBuilder encryptText = new StringBuilder();
+			signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
+			encryptText.append(clientId);
+			encryptText.append(SEPARATOR);
+			encryptText.append(accessToken);
+			encryptText.append(SEPARATOR);
+			encryptText.append(serviceName);
+			encryptText.append(SEPARATOR);
+			encryptText.append(sessionId);
+			encryptText.append(SEPARATOR);
+			encryptText.append(redisKey);
+			encryptText.append(SEPARATOR);
+			encryptText.append(redisValue);
+			encryptText.append(SEPARATOR);
+			encryptText.append(timestamp);
+			encryptText.append(SEPARATOR);
+			encryptText.append(signatureNonce);
+			signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
+			signature=HMacSha1.getNewResult(signature);
+		}
+		/*final String fullUri =saveRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;*/
+		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
+		LOG.debug("Send to user-service-server URL: {}", data);
+
+		model.addAttribute("saveRedisUri", saveRedisUri);
+		return "usercenter/user_center_saveredis";
+	}
 }

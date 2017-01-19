@@ -219,6 +219,7 @@ user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_dev_login_c
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_getInfoList.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_getPasswordRule.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_getUserInfo.jsp -text
+user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_getredis.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_login.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_modipwd.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_password.jsp -text
@@ -227,6 +228,7 @@ user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_resetpwd.js
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_retrievepwd.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_retrievepwd_norole.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_saveInfo.jsp -text
+user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_saveredis.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_searchPwd.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_validate_login.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_verify1.jsp -text

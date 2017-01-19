@@ -130,6 +130,12 @@
          <li>
             <p><a href="verifyAutoLogin">verifyAutoLogin</a> <br/>单点登录测试页面</p>
         </li>
+        <li>
+            <p><a href="saveRedis">saveRedis</a> <br/>Redis保存接口</p>
+        </li>
+        <li>
+            <p><a href="getRedis">getRedis</a> <br/>Redis获取接口</p>
+        </li>
     </ul>
 </div>
 </body>
