@@ -97,10 +97,9 @@ public class RedisSessionController   extends BaseControllerUtil {
         String access_token=request.getParameter("access_token");
         String service_name = request.getParameter("service_name");
         String redis_key = request.getParameter("redis_key");/*单点登录key值为jsessionid*/
-        String redis_value=request.getParameter("redis_value");
-        log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key+"redis_value:"+redis_value);
+        log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key);
         Map<String ,Object> map=new HashMap<String,Object>();
-        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name,redis_key,redis_value))){
+        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name,redis_key))){
             paraMandaChkAndReturn(3, response,"必传参数中有空值");
             return;
         }
