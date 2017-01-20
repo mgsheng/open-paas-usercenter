@@ -127,8 +127,8 @@
             alert("请输入accessToken");
             return;
         }
-        if(getRedisUri==''){
-            alert("请输入getRedisUri");
+        if(saveRedisUri==''){
+            alert("请输入saveRedisUri");
             return;
         }
         if(serviceName==''){
@@ -143,7 +143,6 @@
             alert("请输入redisValue");
             return;
         }
-        alert(${contextPath});
         $.post("${contextPath}/userCenterReg/getSignature",
             {
                 clientId:clientId,

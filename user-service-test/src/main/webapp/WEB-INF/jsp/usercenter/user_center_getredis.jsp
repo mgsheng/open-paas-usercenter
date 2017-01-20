@@ -71,17 +71,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">redis_value</label>
-
-                        <div class="col-sm-10">
-                            <input type="text" name="redisValue" class="form-control"
-                                   size="50" ng-model="redisValue"/>
-
-                            <p class="help-block">客户端从Oauth Server 获得访问的redis_value<font color="red">(必传)</font></p>
-                        </div>
-                    </div>
-
                     <div class="well well-sm">
                         <span class="text-muted">最终发给 spring-oauth-server的 URL:</span>
                         <br/>
@@ -117,7 +106,6 @@
         var getRedisUri=$("input[name='getRedisUri']").val();
         var serviceName=$("input[name='serviceName']").val();
         var redisKey=$("input[name='redisKey']").val();
-        var redisValue=$("input[name='redisValue']").val();
         if(clientId==''){
             alert("请输入clientId");
             return;
@@ -138,24 +126,19 @@
             alert("请输入redisKey");
             return;
         }
-        if(redisValue==''){
-            alert("请输入redisValue");
-            return;
-        }
         $.post("${contextPath}/userCenterReg/getSignature",
             {
                 clientId:clientId,
                 accessToken:accessToken,
                 serviceName:serviceName,
                 redisKey:redisKey,
-                redisValue:redisValue
             },
             function(data){
                 if(data.flag){
                     var signature=data.signature;
                     var timestamp=data.timestamp;
                     var signatureNonce=data.signatureNonce;
-                    var regUri=getRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+                    var regUri=getRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
                     $("#regUri").html(regUri);
                 }
                 else{
