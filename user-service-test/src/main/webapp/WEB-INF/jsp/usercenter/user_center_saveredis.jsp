@@ -156,7 +156,7 @@
                     var signature=data.signature;
                     var timestamp=data.timestamp;
                     var signatureNonce=data.signatureNonce;
-                    var regUri=saveRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+                    var regUri=saveRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
                     $("#regUri").html(regUri);
                 }
                 else{

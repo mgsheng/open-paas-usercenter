@@ -138,7 +138,7 @@
                     var signature=data.signature;
                     var timestamp=data.timestamp;
                     var signatureNonce=data.signatureNonce;
-                    var regUri=getRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+                    var regUri=getRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
                     $("#regUri").html(regUri);
                 }
                 else{
