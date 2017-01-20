@@ -1066,7 +1066,7 @@ public class UserInterfaceController {
 		return "usercenter/user_center_saveredis";
 	}
 	@RequestMapping(value = "saveRedis", method = RequestMethod.POST)
-	public String saveRedis(String clientId,String accessToken,String serviceName,String redisKey,String redisValue,Model model) throws Exception {
+	public String saveRedis(String clientId,String accessToken,String serviceName,String redisKey,String redisValue,String sessionTime,Model model) throws Exception {
 		String key=map.get(clientId);
 		String signature="";
 		String timestamp="";
@@ -1085,6 +1085,8 @@ public class UserInterfaceController {
 			encryptText.append(SEPARATOR);
 			encryptText.append(redisValue);
 			encryptText.append(SEPARATOR);
+			encryptText.append(sessionTime);
+			encryptText.append(SEPARATOR);
 			encryptText.append(timestamp);
 			encryptText.append(SEPARATOR);
 			encryptText.append(signatureNonce);
@@ -1092,7 +1094,7 @@ public class UserInterfaceController {
 			signature=HMacSha1.getNewResult(signature);
 		}
 		/*final String fullUri =saveRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;*/
-		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
+		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&session_time="+sessionTime+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
 		LOG.debug("Send to user-service-server URL: {}", data);
 
 		model.addAttribute("saveRedisUri", saveRedisUri);

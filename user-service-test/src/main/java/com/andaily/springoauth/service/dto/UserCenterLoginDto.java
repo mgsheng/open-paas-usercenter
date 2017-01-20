@@ -37,6 +37,7 @@ public class UserCenterLoginDto implements Serializable {
     
     private String password;
     private String pwdtype;
+	private String sessionTime;
 
 
     public UserCenterLoginDto() {
@@ -130,6 +131,14 @@ public class UserCenterLoginDto implements Serializable {
 		this.pwdtype = pwdtype;
 	}
 
+	public String getSessionTime() {
+		return sessionTime;
+	}
+
+	public void setSessionTime(String sessionTime) {
+		this.sessionTime = sessionTime;
+	}
+
 	public String getFullUri() throws UnsupportedEncodingException {
         return String.format("%s?client_id=%s&access_token=%s&grant_type=%s&scope=%s&source_id=%s", userCenterLoginUri, client_id, access_token, grant_type, scope, source_id);
     }
@@ -137,6 +146,6 @@ public class UserCenterLoginDto implements Serializable {
         return String.format("%s?client_id=%s&access_token=%s&grant_type=%s&scope=%s&username=%s&password=%s", userCenterPasswordUri, client_id, access_token, grant_type, scope, username,password);
     }
 	public String getAESFullUri(String signature,String timestamp,String signatureNonce) throws UnsupportedEncodingException {
-        return String.format("%s?client_id=%s&access_token=%s&grant_type=%s&scope=%s&username=%s&password=%s&pwdtype=%s&signature=%s&timestamp=%s&signatureNonce=%s", userCenterPasswordUri, client_id, access_token, grant_type, scope, username,password,pwdtype,signature,timestamp,signatureNonce);
+        return String.format("%s?client_id=%s&access_token=%s&grant_type=%s&scope=%s&username=%s&password=%s&session_time=%s&pwdtype=%s&signature=%s&timestamp=%s&signatureNonce=%s", userCenterPasswordUri, client_id, access_token, grant_type, scope, username,password,sessionTime,pwdtype,signature,timestamp,signatureNonce);
     }
 }

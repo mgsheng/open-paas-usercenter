@@ -97,6 +97,17 @@
                                 <p class="help-block">用户中心用户密码</p>
                             </div>
                         </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">session_time</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" name="sessionTime" class="form-control"
+                                   size="50" ng-model="sessionTime"/>
+
+                            <p class="help-block">有效登录时间<font color="red">(可选)</font></p>
+                        </div>
+                    </div>
                         
 
                     <div class="well well-sm">
@@ -143,6 +154,7 @@
 	   			var password=$("input[name='password']").val();
 	   			var userCenterPasswordUri=$("input[name='userCenterPasswordUri']").val();
 	   			var pwdtype=$("#pwdtype").val();
+                var sessionTime=$("input[name='sessionTime']").val();
 				if(clientId==''){
 				    alert("请输入clientId");
 					return;
@@ -174,7 +186,7 @@
 	   					    var timestamp=data.timestamp;
 	   					    var signatureNonce=data.signatureNonce;
 	   					    var pwd=data.password;
-	   					    var regUri=userCenterPasswordUri+"?"+"grant_type="+grantType+"&scope="+scope+"&client_id="+clientId+"&access_token="+accessToken+"&username="+username+"&password="+pwd+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce+"&pwdtype="+pwdtype;
+	   					    var regUri=userCenterPasswordUri+"?"+"grant_type="+grantType+"&scope="+scope+"&client_id="+clientId+"&access_token="+accessToken+"&username="+username+"&password="+pwd+"&session_time="+sessionTime+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce+"&pwdtype="+pwdtype;
 	   						$("#regUri").html(regUri);
 	   					}
 	   					else{

@@ -57,7 +57,7 @@
                             <input type="text" name="serviceName" class="form-control"
                                    size="50" ng-model="serviceName"/>
 
-                            <p class="help-block">客户端从Oauth Server 获得访问的service_name<font color="red">(必传)</font></p>
+                            <p class="help-block">服务名称（用户服务固定值为userService）<font color="red">(必传)</font></p>
                         </div>
                     </div>
 
@@ -68,7 +68,7 @@
                             <input type="text" name="redisKey" class="form-control"
                                    size="50" ng-model="redisKey"/>
 
-                            <p class="help-block">客户端从Oauth Server 获得访问的redis_key<font color="red">(必传)</font></p>
+                            <p class="help-block">key值  (单点登录key值为jsessionid)<font color="red">(必传)</font></p>
                         </div>
                     </div>
 
@@ -80,6 +80,17 @@
                                    size="50" ng-model="redisValue"/>
 
                             <p class="help-block">客户端从Oauth Server 获得访问的redis_value<font color="red">(必传)</font></p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">session_time</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" name="sessionTime" class="form-control"
+                                   size="50" ng-model="sessionTime"/>
+
+                            <p class="help-block">有效登录时间<font color="red">(可选)</font></p>
                         </div>
                     </div>
 
@@ -119,6 +130,7 @@
         var serviceName=$("input[name='serviceName']").val();
         var redisKey=$("input[name='redisKey']").val();
         var redisValue=$("input[name='redisValue']").val();
+        var sessionTime=$("input[name='sessionTime']").val();
         if(clientId==''){
             alert("请输入clientId");
             return;
@@ -149,6 +161,7 @@
                 accessToken:accessToken,
                 serviceName:serviceName,
                 redisKey:redisKey,
+                sessionTime:sessionTime,
                 redisValue:redisValue
             },
             function(data){
@@ -156,7 +169,7 @@
                     var signature=data.signature;
                     var timestamp=data.timestamp;
                     var signatureNonce=data.signatureNonce;
-                    var regUri=saveRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
+                    var regUri=saveRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&session_time="+sessionTime+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
                     $("#regUri").html(regUri);
                 }
                 else{
