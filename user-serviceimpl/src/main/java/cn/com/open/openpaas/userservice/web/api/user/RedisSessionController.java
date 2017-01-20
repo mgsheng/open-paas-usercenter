@@ -49,8 +49,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         String client_id=request.getParameter("client_id");
         String access_token=request.getParameter("access_token");
         String service_name = request.getParameter("service_name");
-        String session_id=request.getParameter("session_id");
-        String redis_key = request.getParameter("redis_key");
+        String redis_key = request.getParameter("redis_key");/*单点登录key值为jsessionid*/
         String redis_value=request.getParameter("redis_value");
         log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key+"redis_value:"+redis_value);
         Map<String ,Object> map=new HashMap<String,Object>();
@@ -73,15 +72,15 @@ public class RedisSessionController   extends BaseControllerUtil {
                 return;
             }
         }
-        String redisKey = client_id+"_"+service_name+"_"+session_id;
+        /*业务数据rediskey 单点登录格式为{”status”:1, ”info”:”有效”, ” businessData”:{业务数据}.}*/
+        String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+redis_key;
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
         }else{
             mapRedis.put("status",1);
             mapRedis.put("info","有效");
-            mapRedis.put("redis_key",redis_key);
-            mapRedis.put("redis_value",redis_value);
-            redisClient.setObject(redisKey,mapRedis);
+            mapRedis.put("businessData",redis_value);
+            redisClient.setObject(bussinessRedisKey,mapRedis);
             map.clear();
             map.put("status",1);
             writeSuccessJson(response,map);
@@ -97,12 +96,11 @@ public class RedisSessionController   extends BaseControllerUtil {
         String client_id=request.getParameter("client_id");
         String access_token=request.getParameter("access_token");
         String service_name = request.getParameter("service_name");
-        String session_id=request.getParameter("session_id");
-        String redis_key = request.getParameter("redis_key");
+        String redis_key = request.getParameter("redis_key");/*单点登录key值为jsessionid*/
         String redis_value=request.getParameter("redis_value");
         log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key+"redis_value:"+redis_value);
         Map<String ,Object> map=new HashMap<String,Object>();
-        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name,session_id,redis_key,redis_value))){
+        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,service_name,redis_key,redis_value))){
             paraMandaChkAndReturn(3, response,"必传参数中有空值");
             return;
         }
@@ -120,13 +118,14 @@ public class RedisSessionController   extends BaseControllerUtil {
                 return;
             }
         }
-        String redisKey = client_id+"_"+service_name+"_"+session_id;
+        /*业务数据rediskey*/
+        String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+redis_key;
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
         }else{
             map.clear();
             map.put("status",1);
-            map.put("redisValue",redisClient.getObject(redisKey));
+            map.put("redisValue",redisClient.getObject(bussinessRedisKey));
             writeSuccessJson(response,map);
         }
         return;

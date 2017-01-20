@@ -353,23 +353,23 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    		    /*session.setAttribute(userserviceDev.getSingle_sign_user(), user);*/
 					map.put("jsessionId", session.getId());
 					/*写入redis*/
-					String redisKey = client_id+"_userService_"+session.getId();
-					String rvalue = redisClient.getString(username);
+					String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+session.getId();
+					String bussinessSessionId = redisClient.getString(username);
 					Map<String,Object> redisMap = new HashMap<String, Object>();
 					redisMap.put("status",1);
 					redisMap.put("info","有效");
 					redisMap.put("guid",map.get("guid"));
 					redisMap.put("user",JSON.toJSONString(user));
-					redisClient.setObject(redisKey,redisMap);
-					if(null != rvalue && "" != rvalue){
+					redisClient.setObject(localRedisKey,redisMap);
+					if(null != bussinessSessionId && "" != bussinessSessionId){
+						/*业务数据更新为 被踢下线*/
 						Map<String,Object> redisMaps = new HashMap<String, Object>();
-						redisKey = client_id+"_userService_"+rvalue;
-						net.sf.json.JSONObject jsonObject= net.sf.json.JSONObject.fromObject(redisClient.getObject(redisKey));
+						String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+bussinessSessionId;
+						net.sf.json.JSONObject jsonObject= net.sf.json.JSONObject.fromObject(redisClient.getObject(bussinessRedisKey));
 						redisMaps.put("status",3);
 						redisMaps.put("info","被踢下线");
-						redisMaps.put("redis_key",jsonObject.get("redis_key"));
-						redisMaps.put("redis_value",jsonObject.get("redis_value"));
-						redisClient.setObject(redisKey, JSON.toJSONString(redisMaps));
+						redisMaps.put("businessData",jsonObject.get("businessData"));
+						redisClient.setObject(bussinessRedisKey, JSON.toJSONString(redisMaps));
 					}
 					redisClient.setObject(username,session.getId());
 				}
