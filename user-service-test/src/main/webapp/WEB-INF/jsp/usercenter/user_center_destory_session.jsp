@@ -117,7 +117,7 @@
 	   					    var signature=data.signature;
 	   					    var timestamp=data.timestamp;
 	   					    var signatureNonce=data.signatureNonce;
-	   					    var regUri=destorySessionUri+"?client_id="+clientId+"&access_token="+accessToken+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
+	   					    var regUri=destorySessionUri+"?client_id="+clientId+"&access_token="+accessToken+"&jsessionId="+sessionId+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
 	   						$("#regUri").html(regUri);
 	   					}
 	   					else{
