@@ -15,6 +15,7 @@ allprojects{
   }
   
   dependencies {
+	  compile group: 'commons-lang', name: 'commons-lang', version: '2.5'
      compile 'javax.mail:mail:1.4.1',
      	     'opensymphony:sitemesh:2.4',
      	     'org.aspectj:aspectjrt:1.6.10',
@@ -62,7 +63,9 @@ allprojects{
      	     'cglib:cglib:2.2.2',
      	     'org.apache.directory.studio:org.dom4j.dom4j:1.6.1',
      	     'org.apache.httpcomponents:httpclient:4.3.1',
-     	     'commons-lang:commons-lang:2.6',
+     	     'commons-lang:commons-lang:2.5',
+			 'commons-collections:commons-collections:3.2.1',
+			 'commons-beanutils:commons-beanutils:1.8.0',
      	     'org.apache.kafka:kafka_2.10:0.8.0',
      	     'org.bouncycastle:bcprov-jdk16:1.45',
      	     'com.baidu.disconf:disconf-client:2.6.33',
