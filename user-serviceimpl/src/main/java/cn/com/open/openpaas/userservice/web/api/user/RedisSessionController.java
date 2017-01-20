@@ -71,18 +71,18 @@ public class RedisSessionController   extends BaseControllerUtil {
                 paraMandaChkAndReturn(4, response,"认证失败");
                 return;
             }
-        }
-        /*业务数据rediskey 单点登录格式为{”status”:1, ”info”:”有效”, ” businessData”:{业务数据}.}*/
-        String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+redis_key;
-        if(map.get("status")=="0"){
-            writeErrorJson(response,map);
-        }else{
+            /*业务数据rediskey 单点登录格式为{”status”:1, ”info”:”有效”, ” businessData”:{业务数据}.}*/
+            String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+redis_key;
             mapRedis.put("status",1);
             mapRedis.put("info","有效");
             mapRedis.put("businessData",redis_value);
             redisClient.setObject(bussinessRedisKey,mapRedis);
             map.clear();
             map.put("status",1);
+        }
+        if(map.get("status")=="0"){
+            writeErrorJson(response,map);
+        }else{
             writeSuccessJson(response,map);
         }
         return;
@@ -117,15 +117,15 @@ public class RedisSessionController   extends BaseControllerUtil {
                 paraMandaChkAndReturn(4, response,"认证失败");
                 return;
             }
-        }
-        /*业务数据rediskey*/
-        String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+redis_key;
-        if(map.get("status")=="0"){
-            writeErrorJson(response,map);
-        }else{
+            /*业务数据rediskey*/
+            String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+redis_key;
             map.clear();
             map.put("status",1);
             map.put("redisValue",redisClient.getObject(bussinessRedisKey));
+        }
+        if(map.get("status")=="0"){
+            writeErrorJson(response,map);
+        }else{
             writeSuccessJson(response,map);
         }
         return;
