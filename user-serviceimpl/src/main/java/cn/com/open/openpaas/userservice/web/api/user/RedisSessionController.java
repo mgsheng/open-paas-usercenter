@@ -6,6 +6,7 @@ import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class RedisSessionController   extends BaseControllerUtil {
         String service_name = request.getParameter("service_name");
         String redis_key = request.getParameter("redis_key");/*单点登录key值为jsessionid*/
         String redis_value=request.getParameter("redis_value");
+        String sessionTime=request.getParameter("session_time");/*有效时间，默认是分钟，如果为空则默认30分钟*/
         log.info("client_id:"+client_id+"access_token:"+access_token+"service_name:"+service_name+"redis_key:"+redis_key+"redis_value:"+redis_value);
         Map<String ,Object> map=new HashMap<String,Object>();
         Map<String ,Object> mapRedis=new HashMap<String,Object>();
@@ -76,7 +78,12 @@ public class RedisSessionController   extends BaseControllerUtil {
             mapRedis.put("status",1);
             mapRedis.put("info","有效");
             mapRedis.put("businessData",redis_value);
-            redisClient.setObjectByTime(bussinessRedisKey,mapRedis,30*60);
+            if(null == sessionTime || "" == sessionTime || "0" == sessionTime){
+			    /*默认sessiontime 30分钟*/
+                sessionTime = "30";
+            }
+            mapRedis.put("sessiontime",sessionTime);
+            redisClient.setObjectByTime(bussinessRedisKey,mapRedis,Integer.parseInt(sessionTime)*60);
             map.clear();
             map.put("status",1);
         }
@@ -118,10 +125,20 @@ public class RedisSessionController   extends BaseControllerUtil {
             }
             /*业务数据rediskey*/
             String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+redis_key;
+            Object bussinessRedisValue = redisClient.getObject(bussinessRedisKey);
             map.clear();
             map.put("status",1);
-            map.put("redisValue",redisClient.getObject(bussinessRedisKey));
-            redisClient.setObjectByTime(bussinessRedisKey,redisClient.getObject(bussinessRedisKey),30*60);
+            map.put("redisValue",bussinessRedisValue);
+            int sessionTime = 30;/*默认sessionTime 30分钟*/
+            if(null != bussinessRedisValue){
+                net.sf.json.JSONObject jsonObjectBussiness= net.sf.json.JSONObject.fromObject(redisClient.getObject(bussinessRedisKey));
+                /*获取用户自定义sessiontime*/
+                Object sessionBussinessTime = jsonObjectBussiness.get("sessiontime");
+                if(null != sessionBussinessTime && "" != sessionBussinessTime && "0" != sessionBussinessTime){
+                    sessionTime = (int)sessionBussinessTime;
+                }
+            }
+            redisClient.setObjectByTime(bussinessRedisKey,redisClient.getObject(bussinessRedisKey),sessionTime*60);
         }
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
