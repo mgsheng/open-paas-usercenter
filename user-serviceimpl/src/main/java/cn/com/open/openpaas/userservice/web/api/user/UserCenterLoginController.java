@@ -362,13 +362,14 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					redisMap.put("user",JSON.toJSONString(user));
 					redisClient.setObject(redisKey,redisMap);
 					if(null != rvalue && "" != rvalue){
+						Map<String,Object> redisMaps = new HashMap<String, Object>();
 						redisKey = client_id+"_userService_"+rvalue;
 						net.sf.json.JSONObject jsonObject= net.sf.json.JSONObject.fromObject(redisClient.getObject(redisKey));
-						jsonObject.put("status",3);
-						jsonObject.put("info","被踢下线");
-						jsonObject.put("redis_key",jsonObject.get("redis_key"));
-						jsonObject.put("redis_value",jsonObject.get("redis_value"));
-						redisClient.setObject(redisKey,jsonObject);
+						redisMaps.put("status",3);
+						redisMaps.put("info","被踢下线");
+						redisMaps.put("redis_key",jsonObject.get("redis_key"));
+						redisMaps.put("redis_value",jsonObject.get("redis_value"));
+						redisClient.setObject(redisKey, JSON.toJSONString(redisMaps));
 					}
 					redisClient.setObject(username,session.getId());
 				}
