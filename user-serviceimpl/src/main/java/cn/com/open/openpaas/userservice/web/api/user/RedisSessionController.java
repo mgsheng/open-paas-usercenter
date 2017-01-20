@@ -76,7 +76,7 @@ public class RedisSessionController   extends BaseControllerUtil {
             mapRedis.put("status",1);
             mapRedis.put("info","有效");
             mapRedis.put("businessData",redis_value);
-            redisClient.setObject(bussinessRedisKey,mapRedis);
+            redisClient.setObjectByTime(bussinessRedisKey,mapRedis,30*60);
             map.clear();
             map.put("status",1);
         }
@@ -121,6 +121,7 @@ public class RedisSessionController   extends BaseControllerUtil {
             map.clear();
             map.put("status",1);
             map.put("redisValue",redisClient.getObject(bussinessRedisKey));
+            redisClient.setObjectByTime(bussinessRedisKey,redisClient.getObject(bussinessRedisKey),30*60);
         }
         if(map.get("status")=="0"){
             writeErrorJson(response,map);
