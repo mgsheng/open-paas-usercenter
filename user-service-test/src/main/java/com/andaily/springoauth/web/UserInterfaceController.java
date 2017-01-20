@@ -865,7 +865,7 @@ public class UserInterfaceController {
             return "usercenter/user_center_verify_session";
         }
         @RequestMapping(value = "verifySession", method = RequestMethod.POST)
-        public String verifySession(HttpServletRequest request,String clientId,String accessToken) throws Exception {
+        public String verifySession(String clientId,String accessToken,String sessionId) throws Exception {
 			String key=map.get(clientId);
       	  	 String signature="";
       	  	 String timestamp="";
@@ -878,13 +878,15 @@ public class UserInterfaceController {
 	  			encryptText.append(SEPARATOR);
 	  		 	encryptText.append(accessToken);
 	  		 	encryptText.append(SEPARATOR);
+				 encryptText.append(sessionId);
+				 encryptText.append(SEPARATOR);
 	  		 	encryptText.append(timestamp);
 	  		 	encryptText.append(SEPARATOR);
 	  		 	encryptText.append(signatureNonce);
 	  			signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
 	  			signature=HMacSha1.getNewResult(signature);
 	   	   	 }
-	       	 final String fullUri =verifySessionUri+"?client_id="+clientId+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+	       	 final String fullUri =verifySessionUri+"?client_id="+clientId+"&access_token="+accessToken+"&jsessionId="+sessionId+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
 	            LOG.debug("Send to user-service-server URL: {}", fullUri);
 	            return "redirect:" + fullUri;
        }
@@ -899,7 +901,7 @@ public class UserInterfaceController {
             return "usercenter/user_center_destory_session";
         }
         @RequestMapping(value = "destorySession", method = RequestMethod.POST)
-        public String destorySession(String clientId,String accessToken) throws Exception {
+        public String destorySession(String clientId,String accessToken,String sessionId) throws Exception {
         	String key=map.get(clientId);
       	  	 String signature="";
       	  	 String timestamp="";
@@ -912,13 +914,15 @@ public class UserInterfaceController {
 			encryptText.append(SEPARATOR);
 		 	encryptText.append(accessToken);
 		 	encryptText.append(SEPARATOR);
+			 encryptText.append(sessionId);
+			 encryptText.append(SEPARATOR);
 		 	encryptText.append(timestamp);
 		 	encryptText.append(SEPARATOR);
 		 	encryptText.append(signatureNonce);
 			signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
 			signature=HMacSha1.getNewResult(signature);
    	   	 }
-       	 final String fullUri =destorySessionUri+"?client_id="+clientId+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+       	 final String fullUri =destorySessionUri+"?client_id="+clientId+"&access_token="+accessToken+"&access_token="+accessToken+"&jsessionId="+sessionId+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
             LOG.debug("Send to user-service-server URL: {}", fullUri);
             return "redirect:" + fullUri;
        } 
@@ -986,7 +990,6 @@ public class UserInterfaceController {
      
      /**
 		 * 生成加密串
-		 * @param characterEncoding
 		 * @param parameters
 		 * @return
 		 */
@@ -1013,10 +1016,11 @@ public class UserInterfaceController {
 	@RequestMapping(value = "getRedis", method = RequestMethod.GET)
 	public String getRedis(Model model) {
 		model.addAttribute("getRedisUri", getRedisUri);
+		model.addAttribute("data", null);
 		return "usercenter/user_center_getredis";
 	}
 	@RequestMapping(value = "getRedis", method = RequestMethod.POST)
-	public String getRedis(String clientId,String accessToken,String serviceName,String sessionId,String redisKey,String redisValue,Model model) throws Exception {
+	public String getRedis(String clientId,String accessToken,String serviceName,String redisKey,String redisValue,Model model) throws Exception {
 		String key=map.get(clientId);
 		String signature="";
 		String timestamp="";
@@ -1030,8 +1034,6 @@ public class UserInterfaceController {
 			encryptText.append(accessToken);
 			encryptText.append(SEPARATOR);
 			encryptText.append(serviceName);
-			encryptText.append(SEPARATOR);
-			encryptText.append(sessionId);
 			encryptText.append(SEPARATOR);
 			encryptText.append(redisKey);
 			encryptText.append(SEPARATOR);
@@ -1046,10 +1048,11 @@ public class UserInterfaceController {
 		/*final String fullUri =getRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
 		LOG.debug("Send to user-service-server URL: {}", fullUri);
 		return "redirect:" + fullUri;*/
-		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
+		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
 		LOG.debug("Send to user-service-server URL: {}", data);
 
 		model.addAttribute("getRedisUri", getRedisUri);
+		model.addAttribute("data", data);
 		return "usercenter/user_center_getredis";
 	}
 	/**
@@ -1059,10 +1062,11 @@ public class UserInterfaceController {
 	@RequestMapping(value = "saveRedis", method = RequestMethod.GET)
 	public String saveRedis(Model model) {
 		model.addAttribute("saveRedisUri", saveRedisUri);
+		model.addAttribute("data", null);
 		return "usercenter/user_center_saveredis";
 	}
 	@RequestMapping(value = "saveRedis", method = RequestMethod.POST)
-	public String saveRedis(String clientId,String accessToken,String serviceName,String sessionId,String redisKey,String redisValue,Model model) throws Exception {
+	public String saveRedis(String clientId,String accessToken,String serviceName,String redisKey,String redisValue,Model model) throws Exception {
 		String key=map.get(clientId);
 		String signature="";
 		String timestamp="";
@@ -1077,8 +1081,6 @@ public class UserInterfaceController {
 			encryptText.append(SEPARATOR);
 			encryptText.append(serviceName);
 			encryptText.append(SEPARATOR);
-			encryptText.append(sessionId);
-			encryptText.append(SEPARATOR);
 			encryptText.append(redisKey);
 			encryptText.append(SEPARATOR);
 			encryptText.append(redisValue);
@@ -1090,10 +1092,11 @@ public class UserInterfaceController {
 			signature=HMacSha1.getNewResult(signature);
 		}
 		/*final String fullUri =saveRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;*/
-		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
+		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
 		LOG.debug("Send to user-service-server URL: {}", data);
 
 		model.addAttribute("saveRedisUri", saveRedisUri);
+		model.addAttribute("data", data);
 		return "usercenter/user_center_saveredis";
 	}
 }

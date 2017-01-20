@@ -48,6 +48,17 @@
                             <p class="help-block">客户端从Oauth Server 获得访问的token <font color="red">(必传)</font></p>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">session_id</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" name="sessionId" class="form-control"
+                                   size="50" ng-model="sessionId"/>
+
+                            <p class="help-block">客户端从Oauth Server 获得访问的session_id<font color="red">(必传)</font></p>
+                        </div>
+                    </div>
 					
                       <div class="well well-sm">
                         <span class="text-muted">最终发给 spring-oauth-server的 URL:</span>
@@ -81,6 +92,7 @@
      function btnSubmit(){
 				var clientId=$("input[name='clientId']").val();
 	   			var accessToken=$("input[name='accessToken']").val();
+                var sessionId=$("input[name='sessionId']").val();
 	   			var destorySessionUri=$("input[name='destorySessionUri']").val();
 				if(clientId==''){
 				    alert("请输入clientId");
@@ -90,10 +102,15 @@
 				    alert("请输入accessToken");
 					return;
 				}
+                 if(sessionId==''){
+                     alert("请输入sessionId");
+                     return;
+                 }
 				$.post("${contextPath}/userCenterReg/getSignature",
 					{
 					clientId:clientId,
 					accessToken:accessToken,
+                        sessionId:sessionId,
 					},
 	   				function(data){
 	   					if(data.flag){

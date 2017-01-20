@@ -7,7 +7,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>verifySession(interface)</title>
+    <title>saveRedis(interface)</title>
     <script src="${contextPath}/js/jquery-1.7.1.min.js"></script>
 </head>
 <body>
@@ -20,6 +20,7 @@
 
             <form action="saveRedis" method="post" class="form-horizontal">
                 <input type="hidden" name="saveRedisUri" value="${saveRedisUri}"/>
+                <div>${data}</div>
 
                 <a href="javascript:void(0);" ng-click="showParams()">显示请求参数</a>
 
@@ -57,17 +58,6 @@
                                    size="50" ng-model="serviceName"/>
 
                             <p class="help-block">客户端从Oauth Server 获得访问的service_name<font color="red">(必传)</font></p>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">session_id</label>
-
-                        <div class="col-sm-10">
-                            <input type="text" name="sessionId" class="form-control"
-                                   size="50" ng-model="sessionId"/>
-
-                            <p class="help-block">客户端从Oauth Server 获得访问的session_id<font color="red">(必传)</font></p>
                         </div>
                     </div>
 
@@ -127,7 +117,6 @@
         var accessToken=$("input[name='accessToken']").val();
         var saveRedisUri=$("input[name='saveRedisUri']").val();
         var serviceName=$("input[name='serviceName']").val();
-        var sessionId=$("input[name='sessionId']").val();
         var redisKey=$("input[name='redisKey']").val();
         var redisValue=$("input[name='redisValue']").val();
         if(clientId==''){
@@ -146,10 +135,6 @@
             alert("请输入serviceName");
             return;
         }
-        if(sessionId==''){
-            alert("请输入sessionId");
-            return;
-        }
         if(redisKey==''){
             alert("请输入redisKey");
             return;
@@ -158,12 +143,12 @@
             alert("请输入redisValue");
             return;
         }
+        alert(${contextPath});
         $.post("${contextPath}/userCenterReg/getSignature",
             {
                 clientId:clientId,
                 accessToken:accessToken,
                 serviceName:serviceName,
-                sessionId:sessionId,
                 redisKey:redisKey,
                 redisValue:redisValue
             },
@@ -172,7 +157,7 @@
                     var signature=data.signature;
                     var timestamp=data.timestamp;
                     var signatureNonce=data.signatureNonce;
-                    var regUri=saveRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+                    var regUri=saveRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
                     $("#regUri").html(regUri);
                 }
                 else{
