@@ -135,7 +135,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                 /*获取用户自定义sessiontime*/
                 Object sessionBussinessTime = jsonObjectBussiness.get("sessiontime");
                 if(null != sessionBussinessTime && "" != sessionBussinessTime && "0" != sessionBussinessTime){
-                    sessionTime = (int)sessionBussinessTime;
+                    sessionTime = Integer.parseInt(sessionBussinessTime.toString());
                 }
             }
             redisClient.setObjectByTime(bussinessRedisKey,redisClient.getObject(bussinessRedisKey),sessionTime*60);
