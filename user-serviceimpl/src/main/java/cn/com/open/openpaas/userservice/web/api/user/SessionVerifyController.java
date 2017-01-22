@@ -80,16 +80,18 @@ public class SessionVerifyController  extends BaseController{
 
 						if(null != user && user.size()>0){
 							AppUser appUser = appUserService.findByCidAUid(app.getId(), Integer.parseInt(user.get("id").toString()));
-							map.put("userName", user.get("username"));
-							map.put("guid", redisValue.get("guid"));
-							map.put("phone", user.get("phone"));
-							map.put("email", user.get("email"));
-							if(appUser!=null){
-								map.put("sourceId", appUser.sourceId());
-							}else{
-								map.put("sourceId", "");
+							if(null != appUser){
+								map.put("userName", user.get("username"));
+								map.put("guid", redisValue.get("guid"));
+								map.put("phone", user.get("phone"));
+								map.put("email", user.get("email"));
+								if(appUser!=null){
+									map.put("sourceId", appUser.sourceId());
+								}else{
+									map.put("sourceId", "");
+								}
+								map.put("appId", app.getId());
 							}
-							map.put("appId", app.getId());
 						}
 					}
 				}else{
