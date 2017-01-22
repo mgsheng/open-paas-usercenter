@@ -1048,7 +1048,7 @@ public class UserInterfaceController {
 		/*final String fullUri =getRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
 		LOG.debug("Send to user-service-server URL: {}", fullUri);
 		return "redirect:" + fullUri;*/
-		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
+		String data = sendPost(getRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
 		LOG.debug("Send to user-service-server URL: {}", data);
 
 		model.addAttribute("getRedisUri", getRedisUri);
