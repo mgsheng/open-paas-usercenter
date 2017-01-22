@@ -72,13 +72,13 @@ public class SessionVerifyController  extends BaseController{
 			Object o = session.getAttribute(userserviceDev.getSingle_sign_user());*/
 			if(null != redisValue && redisValue.size()>0){
 				/*如果存在sessionId 则返回相应的数据 否则提示相应的信息验证失败*/
-				if(null != redisValue){
+				if(null != redisValue && redisValue.size()>0){
 					Object userObj = redisValue.get("user");
 					if(null != userObj)
 					{
 						Map<String,Object> user = new ObjectMapper().readValue(userObj.toString(), HashMap.class);
 
-						if(null != user && user.size()>0){
+						if(null != user && user.size()>0 && null != app){
 							AppUser appUser = appUserService.findByCidAUid(app.getId(), Integer.parseInt(user.get("id").toString()));
 							map.put("userName", user.get("username"));
 							map.put("guid", redisValue.get("guid"));
