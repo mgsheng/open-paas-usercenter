@@ -356,27 +356,28 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					/*写入redis*/
 					String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+session.getId();
 					String bussinessSessionId = redisClient.getObject(username).toString();
-					Map<String,Object> redisMap = new HashMap<String, Object>();
-					redisMap.put("status",1);
-					redisMap.put("info","有效");
-					redisMap.put("guid",map.get("guid"));
-					redisMap.put("user",JSON.toJSONString(user));
+					Map<String,Object> localRedisMap = new HashMap<String, Object>();
+					localRedisMap.put("status",1);
+					localRedisMap.put("info","有效");
+					localRedisMap.put("guid",map.get("guid"));
+					localRedisMap.put("user",JSON.toJSONString(user));
 					if(null == sessionTime || "" == sessionTime || "0" == sessionTime){
 					    /*默认sessiontime 30分钟*/
                         sessionTime = "30";
                     }
-                    redisMap.put("sessiontime",sessionTime);
-                    redisClient.setObjectByTime(localRedisKey,redisMap,Integer.parseInt(sessionTime)*60);
+					localRedisMap.put("sessiontime",sessionTime);
+                    redisClient.setObjectByTime(localRedisKey,localRedisMap,Integer.parseInt(sessionTime)*60);
 					if(null != bussinessSessionId && "" != bussinessSessionId){
 						/*业务数据更新为 被踢下线*/
-						Map<String,Object> redisMaps = new HashMap<String, Object>();
+						Map<String,Object> businessRedisMaps = new HashMap<String, Object>();
 						String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+bussinessSessionId;
 						net.sf.json.JSONObject jsonObjectBussiness= net.sf.json.JSONObject.fromObject(redisClient.getObject(bussinessRedisKey));
-						if(jsonObjectBussiness.size()>0){
-							redisMaps.put("status",3);
-							redisMaps.put("info","被踢下线");
-							redisMaps.put("businessData",jsonObjectBussiness.get("businessData"));
-							redisClient.setObjectByTime(bussinessRedisKey, JSON.toJSONString(redisMaps),Integer.parseInt(sessionTime)*60);
+						if(null != jsonObjectBussiness && jsonObjectBussiness.size()>0){
+							businessRedisMaps.put("status",3);
+							businessRedisMaps.put("info","被踢下线");
+							businessRedisMaps.put("businessData",jsonObjectBussiness.get("businessData"));
+							businessRedisMaps.put("sessiontime",jsonObjectBussiness.get("sessiontime"));
+							redisClient.setObjectByTime(bussinessRedisKey, JSON.toJSONString(businessRedisMaps),Integer.parseInt(sessionTime)*60);
 						}
 					}
 					redisClient.setObject(username,session.getId());

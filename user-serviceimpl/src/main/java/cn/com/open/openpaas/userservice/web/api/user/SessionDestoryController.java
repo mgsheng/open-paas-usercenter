@@ -65,7 +65,10 @@ public class SessionDestoryController  extends BaseController{
 			/*HttpSession session = request.getSession();
 			session.removeAttribute(userserviceDev.getSingle_sign_user());*/
 			/*删除redis中的值*/
-			/*从redis读取用户信息*/
+			/*删除业务redis*/
+			String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+jsessionId;
+			redisClient.del(bussinessRedisKey);
+			/*从本地redis读取用户信息*/
 			String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+jsessionId;
 			redisClient.del(localRedisKey);
 			map.clear();
