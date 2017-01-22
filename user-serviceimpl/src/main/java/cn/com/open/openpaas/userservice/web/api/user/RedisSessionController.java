@@ -132,7 +132,7 @@ public class RedisSessionController   extends BaseControllerUtil {
             if(null != bussinessRedisValue){
                 int sessionTime = 30;/*默认sessionTime 30分钟*/
                 net.sf.json.JSONObject jsonObjectBussiness= net.sf.json.JSONObject.fromObject(bussinessRedisValue);
-                if(null != jsonObjectBussiness){
+                if(null != jsonObjectBussiness && jsonObjectBussiness.size()>0){
                     /*获取用户自定义sessiontime*/
                     Object sessionBussinessTime = jsonObjectBussiness.get("sessiontime");
                     if(null != sessionBussinessTime && "" != sessionBussinessTime && "0" != sessionBussinessTime){
