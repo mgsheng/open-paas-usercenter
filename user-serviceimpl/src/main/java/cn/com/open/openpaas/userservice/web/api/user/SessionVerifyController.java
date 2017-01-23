@@ -67,7 +67,10 @@ public class SessionVerifyController  extends BaseController{
 			}
 			/*从redis读取用户信息*/
 			String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+jsessionId;
-			Map<String,Object> redisValue = (Map<String, Object>) redisClient.getObject(localRedisKey);
+			Map<String,Object> redisValue = null;
+			if(redisClient.existKey(localRedisKey)){
+				redisValue = (Map<String, Object>) redisClient.getObject(localRedisKey);
+			}
 			/*HttpSession session = request.getSession();
 			Object o = session.getAttribute(userserviceDev.getSingle_sign_user());*/
 			if(null != redisValue && redisValue.size()>0){
