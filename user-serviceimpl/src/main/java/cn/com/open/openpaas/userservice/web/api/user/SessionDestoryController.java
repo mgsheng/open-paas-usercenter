@@ -1,27 +1,21 @@
 package cn.com.open.openpaas.userservice.web.api.user;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import cn.com.open.openpaas.userservice.app.app.model.App;
+import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
+import cn.com.open.openpaas.userservice.web.BaseController;
+import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.com.open.openpaas.userservice.app.app.model.App;
-import cn.com.open.openpaas.userservice.app.domain.model.AbstractDomain;
-import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
-import cn.com.open.openpaas.userservice.app.user.model.User;
-import cn.com.open.openpaas.userservice.dev.UserserviceDev;
-import cn.com.open.openpaas.userservice.web.BaseController;
-import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 
@@ -70,7 +64,22 @@ public class SessionDestoryController  extends BaseController{
 			redisClient.del(bussinessRedisKey);
 			/*从本地redis读取用户信息*/
 			String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+jsessionId;
+			/*删除存储用户sessionId的redis*/
+			Map<String,Object> localRedisValues = (Map<String, Object>) redisClient.getObject(localRedisKey);
+			if(null != localRedisValues && localRedisValues.size()>0){
+				Object userObj = localRedisValues.get("user");
+				if(null != userObj){
+					net.sf.json.JSONObject jsonObjectLocal= net.sf.json.JSONObject.fromObject(userObj);
+					if(null != jsonObjectLocal && jsonObjectLocal.size()>0){
+						if(null != jsonObjectLocal.get("username")){
+							redisClient.del(jsonObjectLocal.get("username").toString());
+						}
+					}
+				}
+			}
+			/*删除本地sessionid的数据*/
 			redisClient.del(localRedisKey);
+
 			map.clear();
 			map.put("status","1");
 		}
