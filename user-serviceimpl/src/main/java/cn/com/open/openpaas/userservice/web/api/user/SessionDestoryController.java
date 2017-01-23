@@ -71,7 +71,7 @@ public class SessionDestoryController  extends BaseController{
 				if(null != userObj){
 					net.sf.json.JSONObject jsonObjectLocal= net.sf.json.JSONObject.fromObject(userObj);
 					if(null != jsonObjectLocal && jsonObjectLocal.size()>0){
-						if(null != jsonObjectLocal.get("username")){
+						if(null != jsonObjectLocal.get("username") && "" != jsonObjectLocal.get("username")){
 							redisClient.del(jsonObjectLocal.get("username").toString());
 						}
 					}
