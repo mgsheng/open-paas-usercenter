@@ -355,7 +355,11 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					map.put("jsessionId", session.getId());
 					/*写入redis*/
 					String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+session.getId();
-					String bussinessSessionId = redisClient.getObject(username).toString();
+					Object bussinessSessionId = null;
+					/*是否存在 存储sessionid的 username*/
+					if(redisClient.existKey(username)){
+						bussinessSessionId = redisClient.getObject(username);
+					}
 					Map<String,Object> localRedisMap = new HashMap<String, Object>();
 					localRedisMap.put("status",1);
 					localRedisMap.put("info","有效");
@@ -371,8 +375,13 @@ public class UserCenterLoginController extends BaseControllerUtil {
 						/*业务数据更新为 被踢下线*/
 						Map<String,Object> businessRedisMaps = new HashMap<String, Object>();
 						String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+bussinessSessionId;
-						if(null != redisClient.getObject(bussinessRedisKey)){
-							net.sf.json.JSONObject jsonObjectBussiness= net.sf.json.JSONObject.fromObject(redisClient.getObject(bussinessRedisKey));
+						Object businessRedisValue = null;
+						/*是否存在业务数据的key*/
+						if(redisClient.existKey(bussinessRedisKey)){
+							businessRedisValue = redisClient.getObject(bussinessRedisKey);
+						}
+						if(null != businessRedisValue){
+							net.sf.json.JSONObject jsonObjectBussiness= net.sf.json.JSONObject.fromObject(businessRedisValue);
 							if(null != jsonObjectBussiness && jsonObjectBussiness.size()>0){
 								businessRedisMaps.put("status",3);
 								businessRedisMaps.put("info","被踢下线");

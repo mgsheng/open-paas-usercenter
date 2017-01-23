@@ -58,27 +58,34 @@ public class SessionDestoryController  extends BaseController{
 			}
 			/*HttpSession session = request.getSession();
 			session.removeAttribute(userserviceDev.getSingle_sign_user());*/
-			/*删除redis中的值*/
 			/*删除业务redis*/
 			String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+jsessionId;
-			redisClient.del(bussinessRedisKey);
+            if (redisClient.existKey(bussinessRedisKey)) {
+                /*存在则删除*/
+                redisClient.del(bussinessRedisKey);
+            }
 			/*从本地redis读取用户信息*/
 			String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+jsessionId;
-			/*删除存储用户sessionId的redis*/
-			Map<String,Object> localRedisValues = (Map<String, Object>) redisClient.getObject(localRedisKey);
-			if(null != localRedisValues && localRedisValues.size()>0){
-				Object userObj = localRedisValues.get("user");
-				if(null != userObj){
-					net.sf.json.JSONObject jsonObjectLocal= net.sf.json.JSONObject.fromObject(userObj);
-					if(null != jsonObjectLocal && jsonObjectLocal.size()>0){
-						if(null != jsonObjectLocal.get("username") && "" != jsonObjectLocal.get("username")){
-							redisClient.del(jsonObjectLocal.get("username").toString());
-						}
-					}
-				}
-			}
-			/*删除本地sessionid的数据*/
-			redisClient.del(localRedisKey);
+            if (redisClient.existKey(localRedisKey)) {
+                /*删除存储用户sessionId的redis*/
+                Map<String,Object> localRedisValues = (Map<String, Object>) redisClient.getObject(localRedisKey);
+                if(null != localRedisValues && localRedisValues.size()>0){
+                    Object userObj = localRedisValues.get("user");
+                    if(null != userObj){
+                        net.sf.json.JSONObject jsonObjectLocal= net.sf.json.JSONObject.fromObject(userObj);
+                        if(null != jsonObjectLocal && jsonObjectLocal.size()>0){
+                            Object userNameValue = jsonObjectLocal.get("username");
+                            if(null != userNameValue && "" != userNameValue){
+                                if(redisClient.existKey(userNameValue.toString())){
+                                    redisClient.del(userNameValue.toString());
+                                }
+                            }
+                        }
+                    }
+                }
+			    /*删除本地sessionid的数据*/
+                redisClient.del(localRedisKey);
+            }
 
 			map.clear();
 			map.put("status","1");

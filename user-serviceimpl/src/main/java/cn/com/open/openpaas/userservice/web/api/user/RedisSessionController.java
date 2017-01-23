@@ -125,7 +125,11 @@ public class RedisSessionController   extends BaseControllerUtil {
             }
             /*业务数据rediskey*/
             String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+redis_key;
-            Object bussinessRedisValue = redisClient.getObject(bussinessRedisKey);
+            Object bussinessRedisValue = null;
+            /*判断是否存在key 否则是报错*/
+            if(redisClient.existKey(bussinessRedisKey)){
+                bussinessRedisValue = redisClient.getObject(bussinessRedisKey);
+            }
             map.clear();
             map.put("status",1);
             map.put("redisValue",bussinessRedisValue);
@@ -139,6 +143,7 @@ public class RedisSessionController   extends BaseControllerUtil {
                         sessionTime = Integer.parseInt(sessionBussinessTime.toString());
                     }
                 }
+                /*当redis value 无数据 则不刷新时间*/
                 redisClient.setObjectByTime(bussinessRedisKey,bussinessRedisValue,sessionTime*60);
             }
         }

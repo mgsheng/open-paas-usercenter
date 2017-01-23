@@ -105,6 +105,14 @@ public class RedisClientTemplate {
 		        }
 	            return obj;
 	     }
+	     /*是否存在key键*/
+	     public boolean existKey(String key){
+			 ShardedJedis shardedJedis = redisDataSource.getRedisClient();
+			 if (shardedJedis == null) {
+				 return false;
+			 }
+			 return shardedJedis.exists(key);
+		 }
 	     
 	      /**delete a key**/
 	      public boolean del(String key)
