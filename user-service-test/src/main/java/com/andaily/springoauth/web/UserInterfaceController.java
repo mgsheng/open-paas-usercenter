@@ -878,8 +878,6 @@ public class UserInterfaceController {
 	  			encryptText.append(SEPARATOR);
 	  		 	encryptText.append(accessToken);
 	  		 	encryptText.append(SEPARATOR);
-				 encryptText.append(sessionId);
-				 encryptText.append(SEPARATOR);
 	  		 	encryptText.append(timestamp);
 	  		 	encryptText.append(SEPARATOR);
 	  		 	encryptText.append(signatureNonce);
@@ -914,8 +912,6 @@ public class UserInterfaceController {
 			encryptText.append(SEPARATOR);
 		 	encryptText.append(accessToken);
 		 	encryptText.append(SEPARATOR);
-			 encryptText.append(sessionId);
-			 encryptText.append(SEPARATOR);
 		 	encryptText.append(timestamp);
 		 	encryptText.append(SEPARATOR);
 		 	encryptText.append(signatureNonce);
@@ -1033,12 +1029,6 @@ public class UserInterfaceController {
 			encryptText.append(SEPARATOR);
 			encryptText.append(accessToken);
 			encryptText.append(SEPARATOR);
-			encryptText.append(serviceName);
-			encryptText.append(SEPARATOR);
-			encryptText.append(redisKey);
-			encryptText.append(SEPARATOR);
-			encryptText.append(redisValue);
-			encryptText.append(SEPARATOR);
 			encryptText.append(timestamp);
 			encryptText.append(SEPARATOR);
 			encryptText.append(signatureNonce);
@@ -1078,14 +1068,6 @@ public class UserInterfaceController {
 			encryptText.append(clientId);
 			encryptText.append(SEPARATOR);
 			encryptText.append(accessToken);
-			encryptText.append(SEPARATOR);
-			encryptText.append(serviceName);
-			encryptText.append(SEPARATOR);
-			encryptText.append(redisKey);
-			encryptText.append(SEPARATOR);
-			encryptText.append(redisValue);
-			encryptText.append(SEPARATOR);
-			encryptText.append(sessionTime);
 			encryptText.append(SEPARATOR);
 			encryptText.append(timestamp);
 			encryptText.append(SEPARATOR);
