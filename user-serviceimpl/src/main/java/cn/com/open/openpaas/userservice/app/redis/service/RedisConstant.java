@@ -13,4 +13,6 @@ public class RedisConstant {
  public static final String USER_SERVICE="_userService_";
  /*本地key userservice+jsessionid+jsessionvalue*/
  public static final String USER_SERVICE_JSESSIONID="userService_jsessionid_";
+ /*本地cookie redis 名称*/
+ public static final String USER_SERVICE_COOKIENAME="cookie_username";
 }

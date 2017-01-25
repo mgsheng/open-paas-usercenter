@@ -504,6 +504,7 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/oauth/Oa
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ApiCommonController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/AutoLoginController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/CheckTokenController.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/CookieController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/ModiPwdController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/RedisSessionController.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/user/SessionDestoryController.java -text

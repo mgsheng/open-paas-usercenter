@@ -1,14 +1,12 @@
 package cn.com.open.openpaas.userservice.web.api.user;
 
-import java.io.IOException;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
+import cn.com.open.openpaas.userservice.app.app.model.App;
+import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
+import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
+import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
+import cn.com.open.openpaas.userservice.web.BaseController;
+import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,17 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.com.open.openpaas.userservice.app.app.model.App;
-import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
-import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
-import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
-import cn.com.open.openpaas.userservice.app.user.model.User;
-import cn.com.open.openpaas.userservice.dev.UserserviceDev;
-import cn.com.open.openpaas.userservice.web.BaseController;
-import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 
+ *
  */
 @Controller
 @RequestMapping("/user/session")
