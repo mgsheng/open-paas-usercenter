@@ -403,7 +403,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 						/*删除原有的数据*/
 						cookieValue = "";
 						for (String value:cookieValues){
-							if(null != value && !value.split("_")[0].equals(username)){
+							if(null != value && value.split("_")[0].length()==3 && !value.split("_")[0].equals(username)){
 								cookieValue += value+",";
 							}
 						}

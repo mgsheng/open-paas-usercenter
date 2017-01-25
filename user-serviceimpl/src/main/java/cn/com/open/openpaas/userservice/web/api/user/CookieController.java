@@ -44,27 +44,37 @@ public class CookieController extends BaseController {
             String cookieValue = redisClient.getObject(RedisConstant.USER_SERVICE_COOKIENAME).toString();
             cookieValues = cookieValue.split(",");
             for (String cookie : cookieValues) {
+                if (null != cookie && "" != "") {
                  /*cookie开始时间*/
-                String initDate = cookie.split("_")[2];
-                long second = diffDate(initDate, (new Date()).toString(), "second");
+                    int cookieLength = cookie.split("_").length;
 
 					/*生成本domain下username的cookie*/
-                if (cookie.split("_")[0].equals(username)) {
-						/*cookie未过期，second>500， 500标示多久cookie过期，需要设置时间,过期数据将被删除*/
-                    if (second > 60*30) {
-                        Cookie redisCookie = new Cookie(cookie.split("_")[0], cookie.split("_")[1]);
-                        redisCookie.setPath("/");
-                        response.addCookie(redisCookie);
-						/*刷新cookie初始时间*/
-                        cookieNewRedis += cookie.split("_")[0] + "_" + cookie.split("_")[1] + "_" + new Date() + ",";
+                    if (cookieLength == 3 && cookie.split("_")[0].equals(username)) {
+                        String initDate = cookie.split("_")[2];
+                        long second = 0;
+                        if (null != initDate && "" != initDate) {
+                            second = diffDate(initDate, (new Date()).toString(), "second");
+                        }
+
+                        /*cookie未过期，second>500， 500标示多久cookie过期，需要设置时间,过期数据将被删除*/
+                        if (second > 60 * 30) {
+                            Cookie redisCookie = new Cookie(cookie.split("_")[0], cookie.split("_")[1]);
+                            redisCookie.setPath("/");
+                            response.addCookie(redisCookie);
+                        /*刷新cookie初始时间*/
+                            cookieNewRedis += cookie.split("_")[0] + "_" + cookie.split("_")[1] + "_" + new Date() + ",";
+                        }
+
+                    } else {
+
+                        cookieNewRedis += cookie + ",";
                     }
-                } else {
-                    cookieNewRedis += cookie + ",";
+
+                    if (cookieNewRedis.length() > 0) {
+                        cookieNewRedis = cookieNewRedis.substring(0, cookieNewRedis.length() - 1);
+                    }
+                    redisClient.setObject(RedisConstant.USER_SERVICE_COOKIENAME, cookieNewRedis);
                 }
-                if (cookieNewRedis.length() > 0) {
-                    cookieNewRedis = cookieNewRedis.substring(0, cookieNewRedis.length() - 1);
-                }
-                redisClient.setObject(RedisConstant.USER_SERVICE_COOKIENAME, cookieNewRedis);
             }
         }
     }
