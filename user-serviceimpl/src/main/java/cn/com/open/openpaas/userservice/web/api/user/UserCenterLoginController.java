@@ -392,7 +392,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 							}
 						}
 					}
-					redisClient.setObject(username,session.getId());
+					redisClient.setObjectByTime(username,session.getId(),Integer.parseInt(sessionTime)*60);
 					Cookie cookie = new Cookie(username,session.getId());
 					cookie.setPath("/");
 					response.addCookie(cookie);
