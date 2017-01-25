@@ -43,13 +43,16 @@ public class CookieController   extends BaseController {
         	 cookieValues = cookieValue.split(",");
         	for (String cookie : cookieValues){
         	 	/*判断是否过期*/
-        	 	String initDate = cookie.split("_")[1];
+        	 	String initDate = cookie.split("_")[2];
 				long second = diffDate(initDate,(new Date()).toString(),"second");
 				/*cookie未过期，second>0， 0标示多久cookie过期，需要设置时间,过期数据将被删除*/
-				if(second>0 && cookie.split("_")[0].equals(username)){
-					Cookie redisCookie = new Cookie(cookie.split("_")[0],cookie.split("_")[1]);
-					redisCookie.setPath("/");
-					response.addCookie(redisCookie);
+				if(second>0){
+					/*生成本domain下username的cookie*/
+					if(cookie.split("_")[0].equals(username)){
+						Cookie redisCookie = new Cookie(cookie.split("_")[0],cookie.split("_")[1]);
+						redisCookie.setPath("/");
+						response.addCookie(redisCookie);
+					}
 					cookieNewRedis += cookie.split("_")[0]+"_"+cookie.split("_")[1]+"_"+new Date()+",";
 				}
 				if(cookieNewRedis.length()>0){
