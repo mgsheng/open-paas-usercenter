@@ -52,8 +52,11 @@ public class CookieController   extends BaseController {
 						Cookie redisCookie = new Cookie(cookie.split("_")[0],cookie.split("_")[1]);
 						redisCookie.setPath("/");
 						response.addCookie(redisCookie);
+						/*刷新cookie初始时间*/
+						cookieNewRedis += cookie.split("_")[0]+"_"+cookie.split("_")[1]+"_"+new Date()+",";
+					}else{
+						cookieNewRedis += cookie+",";
 					}
-					cookieNewRedis += cookie.split("_")[0]+"_"+cookie.split("_")[1]+"_"+new Date()+",";
 				}
 				if(cookieNewRedis.length()>0){
 					cookieNewRedis = cookieNewRedis.substring(0,cookieNewRedis.length()-1);
