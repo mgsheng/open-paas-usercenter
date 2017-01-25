@@ -42,7 +42,7 @@ public class CookieController   extends BaseController {
         	String cookieValue = redisClient.getObject(RedisConstant.USER_SERVICE_COOKIENAME).toString();
         	 cookieValues = cookieValue.split(",");
         	for (String cookie : cookieValues){
-        	 	/*判断是否过期*/
+        	 	/*cookie开始时间*/
         	 	String initDate = cookie.split("_")[2];
 				long second = diffDate(initDate,(new Date()).toString(),"second");
 				/*cookie未过期，second>0， 0标示多久cookie过期，需要设置时间,过期数据将被删除*/
