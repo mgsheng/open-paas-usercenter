@@ -51,7 +51,7 @@ public class CookieController extends BaseController {
 					/*生成本domain下username的cookie*/
                 if (cookie.split("_")[0].equals(username)) {
 						/*cookie未过期，second>500， 500标示多久cookie过期，需要设置时间,过期数据将被删除*/
-                    if (second > 500) {
+                    if (second > 60*30) {
                         Cookie redisCookie = new Cookie(cookie.split("_")[0], cookie.split("_")[1]);
                         redisCookie.setPath("/");
                         response.addCookie(redisCookie);
