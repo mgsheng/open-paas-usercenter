@@ -45,8 +45,8 @@ public class CookieController   extends BaseController {
         	 	/*cookie开始时间*/
         	 	String initDate = cookie.split("_")[2];
 				long second = diffDate(initDate,(new Date()).toString(),"second");
-				/*cookie未过期，second>0， 0标示多久cookie过期，需要设置时间,过期数据将被删除*/
-				if(second>0){
+				/*cookie未过期，second>500， 500标示多久cookie过期，需要设置时间,过期数据将被删除*/
+				if(second>500){
 					/*生成本domain下username的cookie*/
 					if(cookie.split("_")[0].equals(username)){
 						Cookie redisCookie = new Cookie(cookie.split("_")[0],cookie.split("_")[1]);
