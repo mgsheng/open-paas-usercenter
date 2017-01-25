@@ -69,8 +69,7 @@ allprojects{
      	     'org.apache.kafka:kafka_2.10:0.8.0',
      	     'org.bouncycastle:bcprov-jdk16:1.45',
      	     'com.baidu.disconf:disconf-client:2.6.33',
-     	     'net.sf.ezmorph:ezmorph:1.0.6',
-			 'org.ebaysf.web:cors-filter:1.0.1'
+     	     'net.sf.ezmorph:ezmorph:1.0.6'
      	     
   }
   
