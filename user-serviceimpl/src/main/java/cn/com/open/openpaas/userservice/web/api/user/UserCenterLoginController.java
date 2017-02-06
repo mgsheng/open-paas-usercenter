@@ -393,30 +393,10 @@ public class UserCenterLoginController extends BaseControllerUtil {
 						}
 					}
 					redisClient.setObjectByTime(username,session.getId(),Integer.parseInt(sessionTime)*60);
+					response.addHeader("P3P","CP=\"CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR\"");
 					Cookie cookie = new Cookie(username,session.getId());
 					cookie.setPath("/");
 					response.addCookie(cookie);
-					/*将cookie需要保存的值，以及时间拼成一个字符串，写入redis，时间辨别是否cookie过期*/
-					if(redisClient.existKey(RedisConstant.USER_SERVICE_COOKIENAME)){
-						String cookieValue = redisClient.getObject(RedisConstant.USER_SERVICE_COOKIENAME).toString();
-						String[] cookieValues = cookieValue.split(",");
-						/*删除原有的数据*/
-						cookieValue = "";
-						for (String value:cookieValues){
-							if(null != value && value.split("_")[0].length()==3 && !value.split("_")[0].equals(username)){
-								cookieValue += value+",";
-							}
-						}
-						if(null != cookieValue && "" != cookieValue){
-							cookieValue = cookieValue.substring(0,cookieValue.length()-1);
-							cookieValue = cookieValue+","+username+"_"+session.getId()+"_"+new Date();
-						}else {
-							cookieValue = username+"_"+session.getId()+"_"+new Date();
-						}
-						redisClient.setObject(RedisConstant.USER_SERVICE_COOKIENAME,cookieValue);
-					}else{
-						redisClient.setObject(RedisConstant.USER_SERVICE_COOKIENAME,username+"_"+session.getId()+"_"+new Date());
-					}
 				}
 				//没有符合条件的用户，则返回错误消息
 				else{

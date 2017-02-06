@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 /**
+ * 废除
  * 基于cookie跨域的单点登录
  * 用户请求cookie 之后，生成相应的domain下的cookie进行操作
  */
