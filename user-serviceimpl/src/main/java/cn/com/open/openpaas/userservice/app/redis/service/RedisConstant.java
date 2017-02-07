@@ -15,4 +15,6 @@ public class RedisConstant {
  public static final String USER_SERVICE_JSESSIONID="userService_jsessionid_";
  /*本地cookie redis 名称*/
  public static final String USER_SERVICE_COOKIENAME="cookie_username";
+ 
+ public static final String SSO_USER_CHECK="sso_user_check_";
 }
