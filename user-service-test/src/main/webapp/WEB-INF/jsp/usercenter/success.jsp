@@ -20,11 +20,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-   <script src="http://localhost:8080/spring-oauth-client/common/status/?singleSignUser=${singleSignUser}"></script>
+   <script src="http://localhost:8080/spring-oauth-client/common/status?singleSignUser=${singleSignUser}"></script>
   </head>
   
   <body>
    login success!<br>
+   data:${data}
+  <br>
    sessionId:${singleSignUser}
   </body>
 </html>
