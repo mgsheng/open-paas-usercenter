@@ -18,6 +18,7 @@ import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,6 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -39,7 +39,7 @@ import java.util.*;
 @RequestMapping("/user/")
 public class UserCenterLoginController extends BaseControllerUtil {
 	private static final Logger log = LoggerFactory.getLogger(UserCenterLoginController.class);
-
+	
 	 @Autowired
 	 private UserService userService;
 	 @Autowired
@@ -92,14 +92,14 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					paraMandaChkAndReturn(7, response,"认证失败");
 					return;
 				}
-					try {
+					try { 
 						if(password!=null&&password.length()>0)
 						{
 							password=AESUtil.decrypt(password, app.getAppsecret()).trim();
 						}
 					} catch (Exception e1) {
 						e1.printStackTrace();
-					}
+					}	
 				//检查异常表中是否存在（不存在也不会有错误信息，再继续按普通用户查）
 				boolean isCache = false;
 				boolean isUser = false;
@@ -180,7 +180,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					boolean isLink = false;//是否有其他用户关联
 					String pid = "";
 					boolean pwdTimeout = true;//true没超时 false超时
-
+				
 					if(isCache){
 						map.put("userName", userCache.username());
 						map.put("cardNo", userCache.cardNo()==null?"":userCache.cardNo());
@@ -282,7 +282,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					}
 					map.put("pwdRule",pwdRoleCode);
 					map.put("pwdMsg",pwdRoleMsg);
-
+					
 					List<Map<String,String>> allInfoList= new LinkedList<Map<String,String>>();;
 					List<Map<String,String>> infoList= null;
 	    		    Map<String,String> appMap = null;
@@ -324,7 +324,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 				    		    		flag=true;
 				    		    	}
 				    		    }
-								//添加App应用集合，且当前用户在各App中sourceId
+								//添加App应用集合，且当前用户在各App中sourceId 
 								allInfoList.addAll(infoList);
 							}
 						}
@@ -353,7 +353,6 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    		    HttpSession session = request.getSession();
 	    		    /*session.setAttribute(userserviceDev.getSingle_sign_user(), user);*/
 					map.put("jsessionId", session.getId());
-
 					/*写入redis*/
 					String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+session.getId();
 					Object bussinessSessionId = null;
@@ -366,7 +365,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					localRedisMap.put("info","有效");
 					localRedisMap.put("guid",map.get("guid"));
 					localRedisMap.put("user",JSON.toJSONString(user));
-					if(null == sessionTime || "" == sessionTime || "0" == sessionTime){
+					if(null == sessionTime || "".equals(sessionTime)   || "0".equals(sessionTime)||"null".equals(sessionTime) ){
 					    /*默认sessiontime 30分钟*/
                         sessionTime = "30";
                     }
@@ -393,10 +392,6 @@ public class UserCenterLoginController extends BaseControllerUtil {
 						}
 					}
 					redisClient.setObjectByTime(username,session.getId(),Integer.parseInt(sessionTime)*60);
-					response.addHeader("P3P","CP=\"CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR\"");
-					Cookie cookie = new Cookie(username,session.getId());
-					cookie.setPath("/");
-					response.addCookie(cookie);
 				}
 				//没有符合条件的用户，则返回错误消息
 				else{
