@@ -19,6 +19,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -387,13 +389,21 @@ public class UserInterfaceController {
        * @return
        */
       @RequestMapping(value = "userCenterPassword", method = RequestMethod.GET)
-      public String password(Model model) {
+      public String password(Model model,HttpServletRequest request, HttpServletResponse response) {
+//        	 Cookie cookie[]=request.getCookies();
+//           	 for (Cookie c:cookie) {
+//    			if(c.getName().equals("singleSignUser"))	
+//    			{
+//    			 	model.addAttribute("singleSignUser", c.getValue());
+//    			    return "usercenter/success";
+//    			}
+//    			}
     	model.addAttribute("userCenterPasswordUri", userCenterPasswordUri);
         return "usercenter/user_center_password";
       }
         
       @RequestMapping(value = "userCenterPassword", method = RequestMethod.POST)
-      public String password(UserCenterLoginDto userCenterLoginDto) throws Exception {
+      public String password(Model model,UserCenterLoginDto userCenterLoginDto,HttpServletResponse res) throws Exception {
     
     	  String key=map.get(userCenterLoginDto.getClient_id());
     	  String fullUri ="";
@@ -421,8 +431,14 @@ public class UserInterfaceController {
 	      	}
 	      	fullUri=userCenterLoginDto.getAESFullUri(result,timestamp,signatureNonce);
           LOG.debug("Send to Oauth-Server URL: {}", fullUri);
-
-          return "redirect:" + fullUri;
+      	String data = sendPost(fullUri,"");
+      	JSONObject a=JSONObject.fromObject(data);
+      	System.out.println(data);
+      	Cookie c=new  Cookie("singleSignUser", (String) a.get("jsessionId"));
+      	c.setMaxAge(-1);
+      	res.addCookie(c);
+    	model.addAttribute("singleSignUser",	data);
+        return "usercenter/success";
       }
 
      /**
@@ -865,7 +881,15 @@ public class UserInterfaceController {
             return "usercenter/user_center_verify_session";
         }
         @RequestMapping(value = "verifySession", method = RequestMethod.POST)
-        public String verifySession(String clientId,String accessToken,String sessionId) throws Exception {
+        public String verifySession(String clientId,String accessToken,String sessionId,HttpServletRequest request) throws Exception {
+        	sessionId="error";
+        	Cookie cookie[]= request.getCookies();
+        	for (Cookie c:cookie) {
+    			if(c.getName().equals("singleSignUser"))	
+    			{
+    				sessionId=c.getValue();
+    			}
+    			}
 			String key=map.get(clientId);
       	  	 String signature="";
       	  	 String timestamp="";
@@ -927,9 +951,18 @@ public class UserInterfaceController {
          * 单点登录测试
          */
         @RequestMapping(value = "testSingleSign", method = RequestMethod.GET)
-        public String testSingleSign(Model model) {
+        public String testSingleSign(Model model,HttpServletRequest request) {
+       	 Cookie cookie[]=request.getCookies();
+       	 for (Cookie c:cookie) {
+			if(c.getName().equals("singleSignUser"))	
+			{
+			 	model.addAttribute("singleSignUser", c.getValue());
+			    return "usercenter/success";
+			}
+			}
           	//model.addAttribute("verifySessionUri", verifySessionUri);
           	model.addAttribute("userCenterPasswordUri", userCenterPasswordUri);
+          	
            return "usercenter/test_single_sign";
         }
         
