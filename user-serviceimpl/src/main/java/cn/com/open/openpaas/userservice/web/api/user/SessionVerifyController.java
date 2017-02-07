@@ -7,6 +7,7 @@ import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.BaseController;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
+import net.sf.json.JSONObject;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,12 +64,13 @@ public class SessionVerifyController  extends BaseController{
 			}
 			/*从redis读取用户信息*/
 			String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+jsessionId;
-			Map<String,Object> redisValue = null;
+			JSONObject redisValue = null;
 			if(redisClient.existKey(localRedisKey)){
-				redisValue = (Map<String, Object>) redisClient.getObject(localRedisKey);
+				Object objLocalRedisKeyValue = redisClient.getObject(localRedisKey);
+				if(null != objLocalRedisKeyValue){
+					redisValue=JSONObject.fromObject(objLocalRedisKeyValue);
+				}
 			}
-			/*HttpSession session = request.getSession();
-			Object o = session.getAttribute(userserviceDev.getSingle_sign_user());*/
 			if(null != redisValue && redisValue.size()>0){
 				/*如果存在sessionId 则返回相应的数据 否则提示相应的信息验证失败*/
 				if(null != redisValue && redisValue.size()>0){

@@ -356,9 +356,11 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					/*写入redis*/
 					String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+session.getId();
 					Object bussinessSessionId = null;
-					/*是否存在 存储sessionid的 username*/
-					if(redisClient.existKey(username)){
-						bussinessSessionId = redisClient.getObject(username);
+					/*username 在redis 中的名称 RedisConstant.SSO_USER_CHECK+username*/
+					String redisUserName = RedisConstant.SSO_USER_CHECK+username;
+					/*是否存在 存储sessionid的 redisUserName*/
+					if(redisClient.existKey(redisUserName)){
+						bussinessSessionId = redisClient.getObject(redisUserName);
 					}
 					Map<String,Object> localRedisMap = new HashMap<String, Object>();
 					localRedisMap.put("status",1);
@@ -370,7 +372,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
                         sessionTime = "30";
                     }
 					localRedisMap.put("sessiontime",sessionTime);
-                    redisClient.setObjectByTime(localRedisKey,localRedisMap,Integer.parseInt(sessionTime)*60);
+                    redisClient.setObjectByTime(localRedisKey,JSON.toJSONString(localRedisMap),Integer.parseInt(sessionTime)*60);
 					if(null != bussinessSessionId && "" != bussinessSessionId){
 						/*业务数据更新为 被踢下线*/
 						Map<String,Object> businessRedisMaps = new HashMap<String, Object>();
@@ -391,7 +393,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 							}
 						}
 					}
-					redisClient.setObjectByTime(username,session.getId(),Integer.parseInt(sessionTime)*60);
+					redisClient.setObjectByTime(redisUserName,session.getId(),Integer.parseInt(sessionTime)*60);
 				}
 				//没有符合条件的用户，则返回错误消息
 				else{

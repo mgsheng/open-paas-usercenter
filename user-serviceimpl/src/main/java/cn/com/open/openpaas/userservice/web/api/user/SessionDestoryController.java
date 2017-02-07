@@ -5,6 +5,7 @@ import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.BaseController;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,17 +68,25 @@ public class SessionDestoryController  extends BaseController{
 			/*从本地redis读取用户信息*/
 			String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+jsessionId;
             if (redisClient.existKey(localRedisKey)) {
-                /*删除存储用户sessionId的redis*/
-                Map<String,Object> localRedisValues = (Map<String, Object>) redisClient.getObject(localRedisKey);
-                if(null != localRedisValues && localRedisValues.size()>0){
-                    Object userObj = localRedisValues.get("user");
-                    if(null != userObj){
-                        net.sf.json.JSONObject jsonObjectLocal= net.sf.json.JSONObject.fromObject(userObj);
-                        if(null != jsonObjectLocal && jsonObjectLocal.size()>0){
-                            Object userNameValue = jsonObjectLocal.get("username");
-                            if(null != userNameValue && "" != userNameValue){
-                                if(redisClient.existKey(userNameValue.toString())){
-                                    redisClient.del(userNameValue.toString());
+                /*取值*/
+                Object objLocalRedisKeyValue = redisClient.getObject(localRedisKey);
+                if(null != objLocalRedisKeyValue){
+                    /*获取json值*/
+                    JSONObject localRedisValues= JSONObject.fromObject(objLocalRedisKeyValue);
+                    /*删除存储用户sessionId的redis*/
+                    if(null != localRedisValues){
+                        if(null != localRedisValues && localRedisValues.size()>0){
+                            Object userObj = localRedisValues.get("user");
+                            if(null != userObj){
+                                net.sf.json.JSONObject jsonObjectLocal= net.sf.json.JSONObject.fromObject(userObj);
+                                if(null != jsonObjectLocal && jsonObjectLocal.size()>0){
+                                    Object userNameValue = jsonObjectLocal.get("username");
+                                    if(null != userNameValue && "" != userNameValue){
+                                        String redisUserName = RedisConstant.SSO_USER_CHECK+userNameValue;
+                                        if(redisClient.existKey(redisUserName)){
+                                            redisClient.del(redisUserName);
+                                        }
+                                    }
                                 }
                             }
                         }
