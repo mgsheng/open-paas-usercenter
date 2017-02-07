@@ -9,18 +9,15 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.andaily.forLoad.web.HttpTools;
-import com.andaily.springoauth.tools.MonitorInfo;
-import com.andaily.springoauth.tools.MonitorTools;
 
 @Controller
 public class ApiCommonController {
-
+	   @Value("#{properties['SSO_DOMAIN_LIST']}")
+	    private String SSO_DOMAIN_LIST;
 	/**
 	 * 获取服务器状态
 	 * @param request
@@ -34,7 +31,7 @@ public class ApiCommonController {
 	     {
 	        Cookie _USER=new Cookie("singleSignUser",user);
   	     _USER.setPath("/");
-  	     _USER.setDomain("10.96.5.211");
+  	     _USER.setDomain(SSO_DOMAIN_LIST);
   	    _USER.setMaxAge(-1);
   	     response.addCookie(_USER);
   	     }

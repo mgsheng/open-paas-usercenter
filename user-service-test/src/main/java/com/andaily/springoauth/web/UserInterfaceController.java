@@ -437,7 +437,8 @@ public class UserInterfaceController {
       	Cookie c=new  Cookie("singleSignUser", (String) a.get("jsessionId"));
       	c.setMaxAge(-1);
       	res.addCookie(c);
-    	model.addAttribute("singleSignUser",	data);
+      	model.addAttribute("data",	data);
+    	model.addAttribute("singleSignUser",	 (String) a.get("jsessionId"));
         return "usercenter/success";
       }
 
