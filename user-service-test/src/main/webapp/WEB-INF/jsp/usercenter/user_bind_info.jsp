@@ -16,7 +16,7 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <div ng-controller="AuthorizationCodeCtrl" class="col-md-10">
+        <div ng-controller="AuthorizationCodeCtrl" class="col-md-10" >
             <!-- <form action="userCenterReg" method="post" class="form-horizontal"> -->
             <form action="bindUserInfo" method="post" class="form-horizontal">
                 <input type="hidden" name="bindUserInfo" value="${bindUserInfo}"/>
