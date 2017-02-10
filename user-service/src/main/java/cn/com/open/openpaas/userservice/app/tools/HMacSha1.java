@@ -17,7 +17,7 @@ public class HMacSha1 {
     		 PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
     		// String a=	 passwordEncoder.encodePassword("abc123", null);
     		 String data="sdfsdfesdfsfd";
-			String a= HmacSHA1Encrypt("a014d6d5ca534a9eb90126c9a326d6a9&7a81a91b-1996-4ed9-99f1-5c1ab95b4122&2016-04-14T01:46:08Z&874714","945fa18c666a4e0097809f6727bc6997");
+			String a= HmacSHA1Encrypt("appId=8&businessType=1&goodsName=学历缴费&merchantId=10003&outTradeNo=1000100037257329&parameter=R=6;S=01;U=10001;L=C0201001;O=346;&paymentChannel=10001&paymentType=ALIPAY&signatureNonce=396790&timestamp=2016-09-20T09:57:06Z&totalFee=1&userId=1475","67d73cec5d6b4c8a8a9883748f4066fe");
 			System.out.println(a);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

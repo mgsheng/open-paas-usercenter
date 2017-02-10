@@ -379,6 +379,9 @@ user-service/src/main/java/cn/com/open/openpaas/userservice/app/infrastructure/m
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/infrastructure/model/PasswordHandler.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/log/model/LogMonitor.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/log/service/LogMonitorService.java -text
+user-service/src/main/java/cn/com/open/openpaas/userservice/app/logic/SendEmailLogicService.java -text
+user-service/src/main/java/cn/com/open/openpaas/userservice/app/logic/UserLogicService.java -text
+user-service/src/main/java/cn/com/open/openpaas/userservice/app/logic/UserProblemLogicService.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/oauth/model/OauthClientDetails.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/oauth/model/OauthClientDetailsDto.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/oauth/service/OauthService.java -text
@@ -418,6 +421,7 @@ user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/model/UserC
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/model/UserContectRepository.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/model/UserDetail.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/model/UserDetailRepository.java -text
+user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/model/UserDict.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/model/UserEducation.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/model/UserEducationRepository.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/model/UserFamily.java -text
@@ -435,7 +439,9 @@ user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/model/UserW
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserActivatedHisService.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserActivatedService.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserCacheService.java -text
+user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserDictService.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserLoadDetailService.java -text
+user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserProblemService.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserService.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/useractivated/model/UserActivated.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/useractivated/model/UserActivatedHis.java -text

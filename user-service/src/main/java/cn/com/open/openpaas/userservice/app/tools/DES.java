@@ -100,10 +100,10 @@ public class DES {
     public static void main(String[] args) throws Exception {
         String source = "123456";
         System.out.println("原文: " + source);
-        String key = "9ebada02676c4ccbbbdaeae27362896b";
+        String key = "34b0771839444ec093347ddd1e178ba1";
         String encryptData = encrypt(source, key);
         System.out.println("加密后: " + encryptData);
-        String decryptData = decrypt(encryptData,  key);
+        String decryptData = decrypt("xpDvZSedJmh6kM4Swf433aniHhSaJbap7gkKUxhSAZR5/Obn76tkpc5wUMnmPmgLfWtaMis49lsk3Fh3Qa0pvGQ/3OZgs+H5JD+BbLeVOxUoPLGr1lGWQbRATf2plfH3",  key);
         System.out.println("解密后: " + decryptData);
     }
 }

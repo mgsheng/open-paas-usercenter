@@ -69,10 +69,10 @@ public class DESUtil {
     public static void main(String[] args) throws Exception {
         String source = "123456";
         System.out.println("原文: " + source);
-        String key = "9ebada02";
+        String key = "945fa18c666a4e0097809f6727bc6997";
         String encryptData = encrypt(source, key);
         System.out.println("加密后: " + encryptData);
-        String decryptData = decrypt(encryptData,  key);
+        String decryptData = decrypt("dy4rrJ+MfIh7+qZdIlDgJ9oRR++Al9pBuElUDJNM7rVf8mXo0WXqTgOrYZIgT+3UIEmfkugoTpwO0+KzADA9ymVbV0YKTXm54M73YFDIYJyMIh08j6TfXNSHKWxJd1liXWZx2xysee0Wvr9GTjWtEw==",  key);
         System.out.println("解密后: " + decryptData);
     }
 

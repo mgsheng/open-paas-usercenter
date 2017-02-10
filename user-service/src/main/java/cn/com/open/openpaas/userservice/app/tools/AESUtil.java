@@ -85,12 +85,12 @@ public class AESUtil {
 			return iv;
 		}
 	  public static void main(String[] args) {
-	      String data = "4321abcd";
-	      String key = "3f1853bfc53f42129789712998c0724f";
+	      String data = "a1111111";
+	      String key = "67d73cec5d6b4c8a8a9883748f4066fe";
 	     try {
 			String a= encrypt(data,key);
 			System.out.println(a);
-			String b=decrypt("S7L1ZDaer2fLrWteq9UcGS7d5lT3kaj19ZL4dzPM16M+YuhTH8CH+3+rNRwDggip",key);
+			String b=decrypt("eiWBoX/811/tsvuY4XZwlw==",key);
 			System.out.println(b);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

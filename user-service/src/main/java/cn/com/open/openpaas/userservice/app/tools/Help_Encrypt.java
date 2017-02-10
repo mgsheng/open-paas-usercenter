@@ -9,8 +9,8 @@ import org.apache.commons.lang.StringUtils;
 
 
 public class Help_Encrypt {
-	private static String IV_KEY ="";   //OPEN2012
-	private static String PASSWORD_CRYPT_KEY ="";   //OPEN2012
+	private static String IV_KEY ="OPEN2012";   //OPEN2012
+	private static String PASSWORD_CRYPT_KEY ="OPEN2012";   //OPEN2012
 	
 	//解密数据     
 	public static String decrypt(String message,String key) throws Exception {     
@@ -87,7 +87,7 @@ public class Help_Encrypt {
 	private static String IV_KEY(){
 		if(StringUtils.isBlank(IV_KEY)){
 			try {
-				IV_KEY = PropertiesTool.getAppPropertieByKey("encrypt-iv-key");
+				IV_KEY = PropertiesTool.getAppPropertieByKey("encrypt.iv.key");
 //				System.out.println("IV_KEY"+IV_KEY);
 			} catch (Exception e) {
 				IV_KEY = "OPEN2012";
@@ -105,7 +105,7 @@ public class Help_Encrypt {
 	private static String PASSWORD_CRYPT_KEY(){
 		if(StringUtils.isBlank(PASSWORD_CRYPT_KEY)){
 			try {
-				PASSWORD_CRYPT_KEY = PropertiesTool.getAppPropertieByKey("encrypt-password-crypt-key");
+				PASSWORD_CRYPT_KEY = PropertiesTool.getAppPropertieByKey("encrypt.password.crypt.key");
 //				System.out.println("PASSWORD_CRYPT_KEY"+PASSWORD_CRYPT_KEY);
 			} catch (Exception e) {
 				PASSWORD_CRYPT_KEY = "OPEN2012";
@@ -116,11 +116,10 @@ public class Help_Encrypt {
 	}
 	
 	public static void main(String[] args) throws Exception {     
-	    String value="123456";     
+	    String value="zhangyingxin1";     
 	    System.out.println("加密数据:"+value);   
 	    System.out.println("密码为:"+"OPEN2012");   
-	    String a=encrypt(value);  
-	    a="E0878FCBEE4DB0A6";
+	    String a=encrypt(value);     
 	    System.out.println("加密后的数据为:"+a);     
 	    String b=decrypt(a);
 	    System.out.println(b);
