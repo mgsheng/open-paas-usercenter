@@ -459,6 +459,22 @@
 			<artifactId>bcprov-jdk16</artifactId>
 			<version>1.45</version>
 		</dependency>
+		<!-- webservice -->
+		<dependency>
+			<groupId>org.glassfish.metro</groupId>
+			<artifactId>webservices-extra-api</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>webservices-rt</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.metro</groupId>
+			<artifactId>webservices-extra</artifactId>
+			<version>2.2</version>
+		</dependency>
 	</dependencies>
 
 
