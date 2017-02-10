@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.open.openpaas.userservice.app.infrastructure.mybatis.UserDictRepositoryMyBatis">
+
+    <resultMap type="UserDict" id="userDictMap">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <select id="getById" parameterType="int" resultMap="userDictMap">
+        select * from user_dict where id=#{id}
+    </select>
+    
+    
+    <select id="findListByType" parameterType="int" resultMap="userDictMap">
+         select * from user_dict where type = #{type}
+	</select>
+
+</mapper>

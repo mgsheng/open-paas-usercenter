@@ -115,6 +115,12 @@
 	   						if(data.errorCode=='invalid_phone'){
 	   							jQuery('#phone_error').html('无效手机号');
 	   						}
+	   						else if(data.errorCode=='invalid_name'){
+	   							jQuery('#phone_error').html('手机号未绑定用户');
+	   						}
+	   						else if(data.errorCode=='invalid_stat'){
+	   							jQuery('#phone_error').html('账户已封停');
+	   						}
 	   						else if(data.errorCode=='no_phone'){
 	   							jQuery('#phone_error').html('该手机号不存在');
 	   						}

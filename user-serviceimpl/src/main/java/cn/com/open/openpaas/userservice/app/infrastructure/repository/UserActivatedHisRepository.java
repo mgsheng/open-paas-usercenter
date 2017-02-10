@@ -16,6 +16,7 @@ public interface UserActivatedHisRepository extends Repository {
 	UserActivatedHis getByCode(String code);
 	List<UserActivatedHis> getByCodeAndUserId(@Param("code")String code,@Param("userId")String userId);
 	List<UserActivatedHis> getByCodeAndPhone(@Param("code")String code,@Param("phone")String phone);
+	List<UserActivatedHis> getByCodeAndEmail(@Param("code")String code,@Param("email")String email);
 	void save(UserActivatedHis userActivatedHis);
 
 }

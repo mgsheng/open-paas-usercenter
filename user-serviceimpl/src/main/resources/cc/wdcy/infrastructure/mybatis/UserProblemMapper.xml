@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.open.openpaas.userservice.app.infrastructure.mybatis.UserProblemRepositoryMyBatis">
+
+    <resultMap type="UserProblem" id="userProblemMap">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="problemId" column="problem_id"/>
+        <result property="answer" column="answer"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <insert id="save" parameterType="UserProblem" useGeneratedKeys="true" keyProperty="id">
+        insert into user_problem(user_id,problem_id,answer,create_time)
+        values
+        (#{userId},#{problemId},#{answer},#{createTime})
+    </insert>
+
+    <select id="getById" parameterType="int" resultMap="userProblemMap">
+        SELECT * FROM user_problem where id=#{id}
+    </select>
+    
+   <select id="getByUserIdAndProblemId" resultMap="userProblemMap">
+        SELECT * FROM user_problem where user_id=#{userId, jdbcType=INTEGER} and problem_id=#{problemId, jdbcType=INTEGER}
+    </select> 
+    
+    <select id="findListByUserId" parameterType="int" resultMap="userProblemMap">
+         select * from user_problem where user_id = #{userId}
+	</select>
+	
+    <delete id="delete" parameterType="int">
+        DELETE FROM user_problem where id=#{id}
+    </delete>
+    
+    <delete id="deleteByUserId" parameterType="int">
+        DELETE FROM user_problem where user_id=#{userId}
+    </delete>
+
+    <update id="update" parameterType="UserProblem" flushCache="true">
+        update user_problem set
+        <if test="user_id!=null and user_id>0">
+            user_id = #{userId}
+        </if>
+        <if test="problem_id!=null and problem_id>0">
+        problem_id = #{problemId},
+        </if>
+        <if test="answer!=null and answer!=''">
+        answer = #{answer},
+        </if>
+        where id = #{id}
+    </update>
+
+</mapper>

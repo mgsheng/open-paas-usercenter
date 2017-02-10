@@ -13,9 +13,15 @@
         <typeAlias alias="Privilege" type="cn.com.open.openpaas.userservice.app.user.model.Privilege"/>
         <typeAlias alias="OauthClientDetails" type="cn.com.open.openpaas.userservice.app.oauth.model.OauthClientDetails"/>
 		<typeAlias alias="AppUser" type="cn.com.open.openpaas.userservice.app.appuser.model.AppUser"/> 
-	<typeAlias alias="App" type="cn.com.open.openpaas.userservice.app.app.model.App"/>
-	<typeAlias alias="LogMonitor" type="cn.com.open.openpaas.userservice.app.log.model.LogMonitor"/> 
-	<typeAlias alias="UserCache" type="cn.com.open.openpaas.userservice.app.user.model.UserCache"/> 
+	    <typeAlias alias="App" type="cn.com.open.openpaas.userservice.app.app.model.App"/>
+	    <typeAlias alias="LogMonitor" type="cn.com.open.openpaas.userservice.app.log.model.LogMonitor"/> 
+	    <typeAlias alias="UserCache" type="cn.com.open.openpaas.userservice.app.user.model.UserCache"/> 
+	    
+	    <typeAlias alias="UserDict" type="cn.com.open.openpaas.userservice.app.user.model.UserDict"/> 
+	    <typeAlias alias="UserProblem" type="cn.com.open.openpaas.userservice.app.user.model.UserProblem"/> 
+	    <typeAlias alias="UserActivatedHis" type="cn.com.open.openpaas.userservice.app.useractivated.model.UserActivatedHis"/> 
+	    <typeAlias alias="UserActivated" type="cn.com.open.openpaas.userservice.app.useractivated.model.UserActivated"/> 
+	    <typeAlias alias="UserLoadDetail" type="cn.com.open.openpaas.userservice.app.user.model.UserLoadDetail"/> 
 		
 		
     </typeAliases>
@@ -27,6 +33,11 @@
 		<mapper resource="cc/wdcy/infrastructure/mybatis/AppMapper.xml"/>
 		<mapper resource="cc/wdcy/infrastructure/mybatis/LogMonitorMapper.xml"/>
 		<mapper resource="cc/wdcy/infrastructure/mybatis/UserCacheMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserActivatedMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserProblemMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserActivatedHisMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserDictMapper.xml"/>
+		<mapper resource="cc/wdcy/infrastructure/mybatis/UserLoadDetailMapper.xml"/>
 		<!-- <mapper resource="cc/wdcy/infrastructure/mybatis/IndexImagesMapper.xml"/>
 		
 		<mapper resource="cc/wdcy/infrastructure/mybatis/UserStatisticsMapper.xml"/>

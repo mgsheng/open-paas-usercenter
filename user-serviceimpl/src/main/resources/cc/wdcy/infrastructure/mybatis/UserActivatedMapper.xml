@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.open.openpaas.userservice.app.infrastructure.mybatis.UserActivatedRepositoryMyBatis">
+
+    <resultMap type="UserActivated" id="userActivatedMap">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="code" column="code"/>
+        <result property="userType" column="user_type"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+   	<select id="findByCode" resultMap="userActivatedMap" parameterType="String">
+         select * from user_activated
+         where code = #{code}
+	</select>
+	<select id="findByUserActivated" resultMap="userActivatedMap" parameterType="UserActivated">
+         select * from user_activated
+         where 1=1
+         <if test="userId != 0" >
+        	and user_id = #{userId} 
+         </if>
+         <if test="userType != 0" >
+        	and user_type = #{userType} 
+         </if>
+         <if test="email != null and email !=''" >
+         	and email = #{email} 
+         </if>
+         <if test="code != null and code !=''" >
+         	and code = #{code} 
+         </if>
+         <if test="phone != null and phone !=''" >
+         	and phone = #{phone} 
+         </if>
+         order by create_time desc
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from user_activated
+		where id = #{id}
+	</delete>
+	<delete id="deleteByCodeAndPhone" >
+		delete from user_activated
+		where code = #{code}
+		and phone = #{phone} 
+	</delete>
+	<insert id="save" parameterType="UserActivated" useGeneratedKeys="true" keyProperty="id">
+        insert into user_activated(user_id,email,phone,code,user_type,create_time)
+        values
+        (#{userId},#{email},#{phone},#{code},#{userType},#{createTime})
+    </insert>
+    <update id="updateUserActivated" parameterType="UserActivated">
+        update user_activated set
+        code = #{code},
+        phone = #{phone},
+        user_type = #{userType},
+        user_id = #{userId},
+        create_time = #{createTime}
+        where id = #{id}
+    </update>
+    
+</mapper>

@@ -63,7 +63,6 @@
 			$(".complete").click(function () {
 				jQuery('.input-len').removeClass('frm_error');
 				jQuery('#pwd_new_error').html('');
-				
 				if ($("#pwd_new").val($("#pwd_new").val()) == "") {
 					jQuery('#pwd_new').addClass('frm_error');
 					jQuery('#pwd_new_error').html('请输入密码');
@@ -88,7 +87,7 @@
 				}
 				else{
 					$.post("${pageContext.request.contextPath}/dev/user/reset_password",
-						{code:'${code}',phone:'${phone}',password:jQuery('#pwd_new').val(),type:'${type}'},
+						{code:'${code}',phone:'${phone}',email:'${email}',password:jQuery('#pwd_new').val(),type:'${type}'},
 		   				function(data){
 		   				//console.log(data);
 		   					if(data.flag){

@@ -38,7 +38,7 @@ public class AutoLoginController {
         return null==str||str.isEmpty()||"".equals(str.trim());
     }
 	 /**
-     * 验证自动登录地址（不需要验证密码规则）
+     * 自动登录
      * @param request
      * @param response
      */

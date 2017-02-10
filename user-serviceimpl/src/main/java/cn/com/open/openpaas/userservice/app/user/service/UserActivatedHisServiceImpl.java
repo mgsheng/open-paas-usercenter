@@ -15,60 +15,43 @@ import cn.com.open.openpaas.userservice.app.useractivated.model.UserActivatedHis
 @Service("userActivatedHisService")
 public class UserActivatedHisServiceImpl implements UserActivatedHisService {
 
-	@Override
-	public UserActivatedHis getByCode(String code) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<UserActivatedHis> getByCodeAndUserId(String code, String userId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<UserActivatedHis> getByCodeAndPhone(String code, String phone) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Boolean save(UserActivatedHis userActivatedHis) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-//    @Autowired
-//    private UserActivatedHisRepository userActivatedHisRepository;
+	 @Autowired
+	    private UserActivatedHisRepository userActivatedHisRepository;
 
 
-//	@Override
-//	public UserActivatedHis getByCode(String code) {
-//		return userActivatedHisRepository.getByCode(code);
-//	}
-//
-//	@Override
-//	public Boolean save(UserActivatedHis userActivatedHis){
-//		try{
-//			userActivatedHisRepository.save(userActivatedHis);
-//			return true;
-//		}catch(Exception e){
-//			return false;
-//		}
-//	}
-//
-//	@Override
-//	public  List<UserActivatedHis>  getByCodeAndUserId(String code, String userId) {
-//		// TODO Auto-generated method stub
-//		return userActivatedHisRepository.getByCodeAndUserId(code,userId);
-//	}
+		@Override
+		public UserActivatedHis getByCode(String code) {
+			return userActivatedHisRepository.getByCode(code);
+		}
 
-//	@Override
-//	public List<UserActivatedHis> getByCodeAndPhone(String code, String phone) {
-//		// TODO Auto-generated method stub
-//		return userActivatedHisRepository.getByCodeAndPhone(code,phone);
-//	}
+		@Override
+		public Boolean save(UserActivatedHis userActivatedHis){
+			try{
+				userActivatedHisRepository.save(userActivatedHis);
+				return true;
+			}catch(Exception e){
+				return false;
+			}
+		}
+
+		@Override
+		public  List<UserActivatedHis>  getByCodeAndUserId(String code, String userId) {
+			// TODO Auto-generated method stub
+			return userActivatedHisRepository.getByCodeAndUserId(code,userId);
+		}
+
+		@Override
+		public List<UserActivatedHis> getByCodeAndPhone(String code, String phone) {
+			// TODO Auto-generated method stub
+			return userActivatedHisRepository.getByCodeAndPhone(code,phone);
+		}
+
+		@Override
+		public List<UserActivatedHis> getByCodeAndEmail(String code, String email) {
+			// TODO Auto-generated method stub
+			return userActivatedHisRepository.getByCodeAndEmail(code, email);
+		}
+
 
 
 }
