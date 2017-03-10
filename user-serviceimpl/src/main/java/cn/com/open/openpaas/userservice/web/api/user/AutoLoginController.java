@@ -1,5 +1,6 @@
 package cn.com.open.openpaas.userservice.web.api.user;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,14 +38,16 @@ public class AutoLoginController {
     private boolean nullEmptyBlankJudge(String str){
         return null==str||str.isEmpty()||"".equals(str.trim());
     }
-	 /**
+	 /** 
      * 自动登录
      * @param request
      * @param response
+	 * @throws UnsupportedEncodingException 
      */
      @RequestMapping("login")
-     public String  autoLogin(HttpServletRequest request,HttpServletResponse response,Model model) {
-         String secret= request.getParameter("secret");
+     public String  autoLogin(HttpServletRequest request,HttpServletResponse response,Model model) throws UnsupportedEncodingException {
+         String secret=request.getParameter("secret");
+         //String goodsName=new String(request.getParameter("goodsName").getBytes("iso-8859-1"),"utf-8");
          String app_id= request.getParameter("app_id");
          String desApp_id= request.getParameter("desApp_id");
          String desAddress= request.getParameter("desAddress");
@@ -55,6 +58,8 @@ public class AutoLoginController {
          String desAppKey="";
          String desAppSecert="";
          String secertDesAddress="";
+         String studentCode="";
+         String realName="";
          if(nullEmptyBlankJudge(app_id)&&nullEmptyBlankJudge(desApp_id)){
 //        	 model.addAttribute("message", "appId 为空");
 //             model.addAttribute("error", "1");
@@ -76,6 +81,12 @@ public class AutoLoginController {
     				    time=sercret[1];
     				    salt=sercret[3];
     				    secertDesAddress=sercret[4];
+    				    if(sercret.length==6){
+    				    	studentCode=sercret[5];
+    				    }
+    				    if(sercret.length==7){
+    				    	 realName=sercret[6];
+    				    }
     				    long timeSub = 0;
     				    String nowTime=DateTools.dateToString(new Date(),"yyyyMMddHHmmss");
     				    	if(!nullEmptyBlankJudge(time)){
@@ -113,7 +124,7 @@ public class AutoLoginController {
 //        				             return "redirect:oauth_error"; 
     				    		  return "redirect:"+desAddress;
     				    		 }else{
-    				    			 String mcSercrt=app_id+"#"+user.username()+"#"+user.email()+"#"+user.phone()+"#"+user.guid()+"#"+time+"#"+desAppKey+"#"+salt+"#"+desAddress;
+    				    			 String mcSercrt=app_id+"#"+user.username()+"#"+user.email()+"#"+user.phone()+"#"+user.guid()+"#"+time+"#"+desAppKey+"#"+salt+"#"+desAddress+"#"+studentCode+"#"+realName;
     				    			 String sendMcSercret=DES.encrypt(mcSercrt, desAppSecert);
     				    			 sendMcSercret=DES.getNewSecert(sendMcSercret);
     				    			 if(!nullEmptyBlankJudge(desAddress)){
