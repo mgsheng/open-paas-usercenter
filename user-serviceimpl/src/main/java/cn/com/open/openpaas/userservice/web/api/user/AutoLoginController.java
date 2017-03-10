@@ -81,11 +81,9 @@ public class AutoLoginController {
     				    time=sercret[1];
     				    salt=sercret[3];
     				    secertDesAddress=sercret[4];
-    				    if(sercret.length==6){
-    				    	studentCode=sercret[5];
-    				    }
     				    if(sercret.length==7){
-    				    	 realName=sercret[6];
+    				    	studentCode=sercret[5];
+    				    	realName=sercret[6];
     				    }
     				    long timeSub = 0;
     				    String nowTime=DateTools.dateToString(new Date(),"yyyyMMddHHmmss");
