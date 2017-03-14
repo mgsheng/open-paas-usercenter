@@ -1,6 +1,5 @@
 
 allprojects{
-  version='1.0.0.RELEASE'
   apply plugin: 'java'
   
   compileJava {
@@ -13,7 +12,16 @@ allprojects{
        url "http://maven.open.com.cn/repository/maven-public/"
     }
   }
-  
+  tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+configurations.all {
+   resolutionStrategy {
+       force 'org.springframework:spring-jdbc:3.0.6.RELEASE'
+   }
+}
+
   dependencies {
 	  compile group: 'commons-lang', name: 'commons-lang', version: '2.5'
      compile 'javax.mail:mail:1.4.1',
