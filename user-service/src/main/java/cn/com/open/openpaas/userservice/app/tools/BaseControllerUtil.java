@@ -31,7 +31,6 @@ import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
 public class BaseControllerUtil {
-	
 	/**
 	 * 
 	 * 检验参数是否为空
@@ -380,11 +379,14 @@ public class BaseControllerUtil {
 	   	 User user=null;
 	   	 if(username!=null&&!"null".equals(username.toLowerCase())){
 	   	 List<User> userList =userList=userService.findByPhone(username);
-	   	 for(int i=0;i<userList.size();i++){
-	   		 if(!userList.get(i).getUsername().equals(username)){
-	   			 user= userList.get(i);
-	   		 }
-	   	 }}
+	   	 if(userList!=null){
+		   	 for(int i=0;i<userList.size();i++){
+		   		 if(!userList.get(i).getUsername().equals(username)){
+		   			 user= userList.get(i);
+		   		 }
+		   	 }}
+	   	 }
+
 	   	return user;
 	   } 
 	   
