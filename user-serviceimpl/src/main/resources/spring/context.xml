@@ -25,6 +25,8 @@
     <context:component-scan base-package="cn.com.open.openpaas.userservice.app.appuser.service"/>
      <context:component-scan base-package="cn.com.open.openpaas.userservice.app.logic"/>
     <context:component-scan base-package="cn.com.open.openpaas.userservice.app.kafka"/>
+    <context:component-scan base-package="cn.com.open.openpaas.userservice.web.api.user"/>
+
     <!-- property configuration -->
     <bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
