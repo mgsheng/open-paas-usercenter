@@ -378,7 +378,7 @@ public class BaseControllerUtil {
 	    public User  checkUserByphone(String username,UserService userService){
 	   	 User user=null;
 	   	 if(username!=null&&!"null".equals(username.toLowerCase())){
-	   	 List<User> userList =userList=userService.findByPhone(username);
+	   	 List<User> userList=userService.findByPhone(username);
 	   	 if(userList!=null){
 		   	 for(int i=0;i<userList.size();i++){
 		   		 if(!userList.get(i).getUsername().equals(username)){
