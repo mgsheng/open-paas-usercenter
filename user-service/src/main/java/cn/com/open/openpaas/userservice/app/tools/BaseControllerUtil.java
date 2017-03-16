@@ -389,12 +389,19 @@ public class BaseControllerUtil {
 	   } 
 	   
 	    public Map<String,Object> checkClientIdOrToken(String client_id,String access_token,App app,DefaultTokenServices tokenServices){
-	    	Map<String,Object> map=new HashMap<String,Object>();
+			OAuth2AccessToken accessToken=   tokenServices.readAccessToken(access_token);
+		  	Map<String,Object> map=new HashMap<String,Object>();
+			if(accessToken==null)
+			{
+				map.put("status", "0");
+	    		map.put("error_code", "4");//client_id错误
+	    		map.put("errMsg","accessToken错误");
+	    		return map;
+			}
 	    	if(client_id==null || client_id.length()==0){
 	    		map.put("status", "0");
 	    		map.put("error_code", "1");//client_id错误
 	    	}else{
-				OAuth2AccessToken accessToken=   tokenServices.readAccessToken(access_token);
 				if(app==null){//client_id错误
 					map.put("status", "0");
 		    		map.put("error_code", "1");//client_id错误
