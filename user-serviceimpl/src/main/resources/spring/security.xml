@@ -32,7 +32,7 @@
     </http>
 
 	<!--user http configuration-->
-    <http pattern="/user/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
+  <!--  <http pattern="/user/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
           access-decision-manager-ref="oauth2AccessDecisionManager">
         <anonymous enabled="false"/>
 
@@ -40,7 +40,7 @@
 
 		<custom-filter ref="userResourceServer" before="PRE_AUTH_FILTER"/>
         <access-denied-handler ref="oauth2AccessDeniedHandler"/>
-    </http>
+    </http>-->
 
     <!--unity http configuration-->
     <http pattern="/unity/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
