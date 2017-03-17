@@ -12,8 +12,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>3.1.1.RELEASE</spring.version>
-		<spring.security.version>3.1.0.RELEASE</spring.security.version>
+		<spring.version>3.2.6.RELEASE</spring.version>
+		<spring.security.version>3.2.0.RELEASE</spring.security.version>
 		<aspectj.version>1.6.10</aspectj.version>
 		<mybatis.version>3.2.1</mybatis.version>
 
@@ -264,6 +264,11 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>3.2.0.RELEASE</version>
+		</dependency>
 		<!--spring security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -474,6 +479,11 @@
 			<groupId>org.glassfish.metro</groupId>
 			<artifactId>webservices-extra</artifactId>
 			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
 		</dependency>
 	</dependencies>
 
