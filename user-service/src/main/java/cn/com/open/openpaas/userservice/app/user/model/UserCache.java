@@ -191,8 +191,18 @@ public class UserCache{
 		        	}	
 	    		}
 	    	}
+			// md5加密方式验证
+			else if (StringUtils.isNotBlank(password)
+					&& pwdtype.equals("MD5_20")) {
+				if (this.md5Password != null && !"".equals(this.md5Password)) {
+					if (this.md5Password.equals(MD5
+							.Md5_20(customPassword(password)))) {
+						return true;
+					}
+				}
+			}
 	    	//sha1_password 密码验证
-	    	if(StringUtils.isNotBlank(password)&&pwdtype.equals("SHA1")){
+	    	else	if(StringUtils.isNotBlank(password)&&pwdtype.equals("SHA1")){
 	    		if(this.sha1Password!=null&&!"".equals(this.sha1Password)){
 	    			 PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
 	        		 password=passwordEncoder.encodePassword(password, null);
