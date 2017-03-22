@@ -14,68 +14,64 @@ import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
 import cn.com.open.openpaas.userservice.app.tools.MD5;
 import cn.com.open.openpaas.userservice.app.tools.StringTool;
 
-
 /**
  * 
  */
 public class User extends AbstractDomain {
 
-
 	private static final long serialVersionUID = 1L;
-	
-	public static String STATUS_INACTIVE = "0";	//未激活
-	public static String STATUS_ENABLE = "1";	//正常
-	public static String STATUS_DISABLED = "2";	//封停
-	
-	//证件类型
-	public static int IDENTIFYTYPE_ID = 1;			//身份证
-	public static int IDENTIFYTYPE_MILITARYID = 2;	//军官证
-	public static int IDENTIFYTYPE_HKID = 3;		//港澳台证
-	public static int IDENTIFYTYPE_PASSPORT = 4;	//护照
-	public static int IDENTIFYTYPE_OTHER = 5;		//其他
-	
-	public static int ACTIVATION_NO = 0;	//激活状态：未激活【用于邮箱、手机等验证】
-	public static int ACTIVATION_YES = 1;	//激活状态：激活【用于邮箱、手机等验证】
-	
+
+	public static String STATUS_INACTIVE = "0"; // 未激活
+	public static String STATUS_ENABLE = "1"; // 正常
+	public static String STATUS_DISABLED = "2"; // 封停
+
+	// 证件类型
+	public static int IDENTIFYTYPE_ID = 1; // 身份证
+	public static int IDENTIFYTYPE_MILITARYID = 2; // 军官证
+	public static int IDENTIFYTYPE_HKID = 3; // 港澳台证
+	public static int IDENTIFYTYPE_PASSPORT = 4; // 护照
+	public static int IDENTIFYTYPE_OTHER = 5; // 其他
+
+	public static int ACTIVATION_NO = 0; // 激活状态：未激活【用于邮箱、手机等验证】
+	public static int ACTIVATION_YES = 1; // 激活状态：激活【用于邮箱、手机等验证】
+
 	private String username;
-    private String password;
-    private String passwordSalt;
+	private String password;
+	private String passwordSalt;
 
-    private String phone;
-    private String email;
-    private String cardNo;
-    //Default user is initial when create database, do not delete
-    private boolean defaultUser = false;
-    
-    private String nickName;
-    private String realName;
-    private String headPicture;
-    
-    private String identifyNo;
+	private String phone;
+	private String email;
+	private String cardNo;
+	// Default user is initial when create database, do not delete
+	private boolean defaultUser = false;
 
-    private Date lastLoginTime;
-    
-    private String userState;
+	private String nickName;
+	private String realName;
+	private String headPicture;
 
-    private Integer id;
-    private String pid;
-    
-    private Integer identifyType;
-    private Integer userType;
-    private Integer userSercure;
-    private Integer emailActivation;
-    private Date updatePwdTime;
-    
-    private String desPassword;
-    private String aesPassword;
-    private String sha1Password;
-    private Integer appId;
-    private String md5Password;
-    private String md5Salt;
-    
-    
-    
-    public String getMd5Password() {
+	private String identifyNo;
+
+	private Date lastLoginTime;
+
+	private String userState;
+
+	private Integer id;
+	private String pid;
+
+	private Integer identifyType;
+	private Integer userType;
+	private Integer userSercure;
+	private Integer emailActivation;
+	private Date updatePwdTime;
+
+	private String desPassword;
+	private String aesPassword;
+	private String sha1Password;
+	private Integer appId;
+	private String md5Password;
+	private String md5Salt;
+
+	public String getMd5Password() {
 		return md5Password;
 	}
 
@@ -85,184 +81,215 @@ public class User extends AbstractDomain {
 
 	private List<Privilege> privileges = new ArrayList<Privilege>();
 
-    public User() {
-    }
-    
-    public User(String username, String password, String phone, String email) {
-        this.username = username;
-        this.buildPasswordSalt();
-        this.setPlanPassword(password);
-        this.phone = phone;
-        this.email = email;
-    }
-    
-    public User(String username, String password, String phone, String email, String nickName, String realName, String headPicture) {
-        this.username = username;
-        this.buildPasswordSalt();
-        this.setPlanPassword(password);
-        this.phone = phone;
-        this.email = email;
-        this.nickName = nickName;
-        this.realName = realName;
-        this.headPicture = headPicture;
-    }
-    public User(String username, String phone, String email, String nickName, String realName, String headPicture) {
-        this.username = username;
-        this.phone = phone;
-        this.email = email;
-        this.nickName = nickName;
-        this.realName = realName;
-        this.headPicture = headPicture;
-    }
-    public User(String phone, String email, String realName, String identifyNo, Boolean defaultUser) {
-        this.phone = phone;
-        this.email = email;
-        this.realName = realName;
-        this.identifyNo = identifyNo;
-    }
-    
-    /**
-     * 自定义密码加密排列
-     * @param password
-     * @return password+passwordSalt
-     */
-    public String customPassword(String password){
-    	if(md5Salt!=null){
-    		return password+md5Salt;
-    	}
-    	return password;
-    }
-    
-    /**
-     * 随机生成MD5盐值
-     */
-    public void buildPasswordSalt() {
-    	this.md5Salt = StringTool.getRandomString(16);
-    }
-    
-    /**
-     * 密码加密
-     * @param planPassword
-     */
-    public void setPlanPassword(String planPassword) {
-        this.md5Password = MD5.Md5(customPassword(planPassword));
-    }
-    
-    /**
-     * 密码AES加密
-     * @param planPassword
-     */
-    public void setPlanPasswordByAes(String planPassword,String key) {
-        //this.password = MD5.Md5(customPassword(planPassword));
-        try {
+	public User() {
+	}
+
+	public User(String username, String password, String phone, String email) {
+		this.username = username;
+		this.buildPasswordSalt();
+		this.setPlanPassword(password);
+		this.phone = phone;
+		this.email = email;
+	}
+
+	public User(String username, String password, String phone, String email,
+			String nickName, String realName, String headPicture) {
+		this.username = username;
+		this.buildPasswordSalt();
+		this.setPlanPassword(password);
+		this.phone = phone;
+		this.email = email;
+		this.nickName = nickName;
+		this.realName = realName;
+		this.headPicture = headPicture;
+	}
+
+	public User(String username, String phone, String email, String nickName,
+			String realName, String headPicture) {
+		this.username = username;
+		this.phone = phone;
+		this.email = email;
+		this.nickName = nickName;
+		this.realName = realName;
+		this.headPicture = headPicture;
+	}
+
+	public User(String phone, String email, String realName, String identifyNo,
+			Boolean defaultUser) {
+		this.phone = phone;
+		this.email = email;
+		this.realName = realName;
+		this.identifyNo = identifyNo;
+	}
+
+	/**
+	 * 自定义密码加密排列
+	 * 
+	 * @param password
+	 * @return password+passwordSalt
+	 */
+	public String customPassword(String password) {
+		if (md5Salt != null) {
+			return password + md5Salt;
+		}
+		return password;
+	}
+
+	/**
+	 * 随机生成MD5盐值
+	 */
+	public void buildPasswordSalt() {
+		this.md5Salt = StringTool.getRandomString(16);
+	}
+
+	/**
+	 * 密码加密
+	 * 
+	 * @param planPassword
+	 */
+	public void setPlanPassword(String planPassword) {
+		this.md5Password = MD5.Md5(customPassword(planPassword));
+	}
+
+	/**
+	 * 密码AES加密
+	 * 
+	 * @param planPassword
+	 */
+	public void setPlanPasswordByAes(String planPassword, String key) {
+		// this.password = MD5.Md5(customPassword(planPassword));
+		try {
 			this.aesPassword = AESUtil.encrypt(planPassword, key);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
-    
-    /**
-     * 验证密码是否正确
-     * @param password
-     * @return
-     */
-    public boolean checkPasswod(String password){
-    	if(this.password==null||"".equals(this.password)){
-    		return false;
-    	}
-    	if(this.password.equals(MD5.Md5(customPassword(password)))){
-    		return true;
-    	}
-    	//如果des密码符合也算正确
-    	if(StringUtils.isNotBlank(this.desPassword)){
-    		try {
-				if(password.equals(Help_Encrypt.decrypt(this.desPassword))){
+	}
+
+	/**
+	 * 验证密码是否正确
+	 * 
+	 * @param password
+	 * @return
+	 */
+	public boolean checkPasswod(String password) {
+		if (this.password == null || "".equals(this.password)) {
+			return false;
+		}
+		if (this.password.equals(MD5.Md5(customPassword(password)))) {
+			return true;
+		}
+		// 如果des密码符合也算正确
+		if (StringUtils.isNotBlank(this.desPassword)) {
+			try {
+				if (password.equals(Help_Encrypt.decrypt(this.desPassword))) {
 					return true;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-    	}
-    	return false;
-    }
-    /**
-     * 验证密码是否正确
-     * @param password
-     * @return
-     */
-    public boolean checkPasswodByAes1(String password,String key){
-    	String aespwd="";
-    	String shapwd="";
-    	//aes密码验证
-    	if(this.aesPassword!=null&&StringUtils.isNotBlank(this.aesPassword)){
-        	try {
-        		aespwd=AESUtil.decrypt(this.aesPassword,key.substring(0,16)).trim();
-    		} catch (Exception e1) {
-    			// TODO Auto-generated catch block
-    			e1.printStackTrace();
-    		}
-		    if(aespwd.equals(password)){
-						return true;
-			}
-    	}
-    	//sha1_password 密码验证
-    	if(this.sha1Password!=null&&StringUtils.isNotBlank(this.sha1Password)){
-    			 PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
-    			 shapwd=passwordEncoder.encodePassword(password, null);
-        		 if(shapwd.equals(this.sha1Password)){
-     				return true; 
-     			}
-    	}
-    	return false;
-    }
-    /**
-     * 验证密码是否正确
-     * @param password
-     * @return
-     */
-    public boolean checkPasswodByAes(String password,String key,String pwdtype){
-    	String aespwd="";
-    	//如果aespassword密码不为空的话进行aes方式密码验证
-    	if(this.aesPassword!=null&&StringUtils.isNotBlank(this.aesPassword)){
-    		try {
-        		aespwd=AESUtil.decrypt(this.aesPassword,key.substring(0,16)).trim();
-    		} catch (Exception e1) {
-    			// TODO Auto-generated catch block
-    			e1.printStackTrace();
-    		}
-		    if(aespwd.equals(password)){
-			return true;
-			}
-    	}else{
-    		//md5加密方式验证
-        	if(StringUtils.isNotBlank(password)&&pwdtype.equals("MD5")){
-        		if(this.md5Password!=null&&!"".equals(this.md5Password)){
-        			if(this.md5Password.equals(MD5.Md5(customPassword(password)))){
-        	    		return true;
-        	    	}
-	    		}
-        	}
-        	//sha1_password 加密方式验证
-        	if(StringUtils.isNotBlank(password)&&pwdtype.equals("SHA1")){
-        		if(this.sha1Password!=null&&!"".equals(this.sha1Password)){
-        			 PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
-            		 password=passwordEncoder.encodePassword(password, null).toLowerCase();
-            		 if(password.equals(this.sha1Password.toLowerCase())){
-         				return true;
-         			}
-            	}
-        	}
-    	}
-    	
-    	return false;
-    }
-    public boolean defaultUser() {
-        return defaultUser;
-    }
+		}
+		return false;
+	}
 
-    public List<Privilege> privileges() {
-        return privileges;
-    }
+	/**
+	 * 验证密码是否正确
+	 * 
+	 * @param password
+	 * @return
+	 */
+	public boolean checkPasswodByAes1(String password, String key) {
+		String aespwd = "";
+		String shapwd = "";
+		// aes密码验证
+		if (this.aesPassword != null
+				&& StringUtils.isNotBlank(this.aesPassword)) {
+			try {
+				aespwd = AESUtil
+						.decrypt(this.aesPassword, key.substring(0, 16)).trim();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if (aespwd.equals(password)) {
+				return true;
+			}
+		}
+		// sha1_password 密码验证
+		if (this.sha1Password != null
+				&& StringUtils.isNotBlank(this.sha1Password)) {
+			PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
+			shapwd = passwordEncoder.encodePassword(password, null);
+			if (shapwd.equals(this.sha1Password)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 验证密码是否正确
+	 * 
+	 * @param password
+	 * @return
+	 */
+	public boolean checkPasswodByAes(String password, String key, String pwdtype) {
+		String aespwd = "";
+		// 如果aespassword密码不为空的话进行aes方式密码验证
+		if (this.aesPassword != null
+				&& StringUtils.isNotBlank(this.aesPassword)) {
+			try {
+				aespwd = AESUtil
+						.decrypt(this.aesPassword, key.substring(0, 16)).trim();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if (aespwd.equals(password)) {
+				return true;
+			}
+		} else {
+			// md5加密方式验证
+			if (StringUtils.isNotBlank(password) && pwdtype.equals("MD5")) {
+				if (this.md5Password != null && !"".equals(this.md5Password)) {
+					if (this.md5Password.equals(MD5
+							.Md5(customPassword(password)))) {
+						return true;
+					}
+				}
+			}
+			// md5加密方式验证
+			else if (StringUtils.isNotBlank(password)
+					&& pwdtype.equals("MD5_20")) {
+				if (this.md5Password != null && !"".equals(this.md5Password)) {
+					if (this.md5Password.equals(MD5
+							.Md5_20(customPassword(password)))) {
+						return true;
+					}
+				}
+			}
+			// sha1_password 加密方式验证
+			else if (StringUtils.isNotBlank(password) && pwdtype.equals("SHA1")) {
+				if (this.sha1Password != null && !"".equals(this.sha1Password)) {
+					PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
+					password = passwordEncoder.encodePassword(password, null)
+							.toLowerCase();
+					if (password.equals(this.sha1Password.toLowerCase())) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public boolean defaultUser() {
+		return defaultUser;
+	}
+
+	public List<Privilege> privileges() {
+		return privileges;
+	}
 
 	public Date getUpdatePwdTime() {
 		return updatePwdTime;
@@ -285,9 +312,9 @@ public class User extends AbstractDomain {
 	}
 
 	public void password(String password) {
-        buildPasswordSalt();
-        setPlanPassword(password);
-//		this.password = password;
+		buildPasswordSalt();
+		setPlanPassword(password);
+		// this.password = password;
 	}
 
 	public String phone() {
@@ -389,41 +416,41 @@ public class User extends AbstractDomain {
 	public List<Privilege> getPrivileges() {
 		return privileges;
 	}
-	
-	public String passwordSalt(){
+
+	public String passwordSalt() {
 		return passwordSalt;
 	}
-	
-	public void passwordSalt(String passwordSalt){
+
+	public void passwordSalt(String passwordSalt) {
 		this.passwordSalt = passwordSalt;
 	}
-	
-	public String cardNo(){
+
+	public String cardNo() {
 		return cardNo;
 	}
-	
-	public void cardNo(String cardNo){
+
+	public void cardNo(String cardNo) {
 		this.cardNo = cardNo;
 	}
-	
+
 	@Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("{username='").append(username).append('\'');
-        sb.append(", phone='").append(phone).append('\'');
-        sb.append(", id='").append(id).append('\'');
-        sb.append(", guid='").append(guid).append('\'');
-        sb.append(", defaultUser='").append(defaultUser).append('\'');
-        sb.append(", email='").append(email).append('\'');
-        sb.append(", identifyNo='").append(identifyNo).append('\'');
-        sb.append(", realName='").append(realName).append('\'');
-        sb.append(", pid='").append(pid).append('\'');
-        sb.append(", identifyType='").append(identifyType).append('\'');
-        sb.append(", userType='").append(userType).append('\'');
-        sb.append(", userSercure='").append(userSercure).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("{username='").append(username).append('\'');
+		sb.append(", phone='").append(phone).append('\'');
+		sb.append(", id='").append(id).append('\'');
+		sb.append(", guid='").append(guid).append('\'');
+		sb.append(", defaultUser='").append(defaultUser).append('\'');
+		sb.append(", email='").append(email).append('\'');
+		sb.append(", identifyNo='").append(identifyNo).append('\'');
+		sb.append(", realName='").append(realName).append('\'');
+		sb.append(", pid='").append(pid).append('\'');
+		sb.append(", identifyType='").append(identifyType).append('\'');
+		sb.append(", userType='").append(userType).append('\'');
+		sb.append(", userSercure='").append(userSercure).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 
 	public Integer getEmailActivation() {
 		return emailActivation;
@@ -612,6 +639,5 @@ public class User extends AbstractDomain {
 	public void setAppId(Integer appId) {
 		this.appId = appId;
 	}
-	
-	
+
 }
