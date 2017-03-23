@@ -31,6 +31,8 @@ import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
 import cn.com.open.openpaas.userservice.app.tools.StringTool;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
+import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
@@ -52,7 +54,8 @@ public class UserCenterRetrievePwdController extends BaseControllerUtil {
 	 private RedisClientTemplate redisClient;
 	 @Autowired
 	 private UserserviceDev userserviceDev;
-	
+	 @Autowired
+	 private UserCacheService userCacheService;
 	    
     /**
      * 
@@ -80,18 +83,63 @@ public class UserCenterRetrievePwdController extends BaseControllerUtil {
             return;
         }
         App app = (App) redisClient.getObject(RedisConstant.APP_INFO+client_id);
+		String new_pwd="";
+		try {
+				new_pwd=AESUtil.decrypt(password, app.getAppsecret()).trim();
+				log.info("加密后的 new_pwd："+new_pwd);
+				if(!nullEmptyBlankJudge(isValidate)&&isValidate.equals("1")){
+				if(nullEmptyBlankJudge(new_pwd)){
+					 paraMandaChkAndReturn(5, response,"密码不能为空");
+		       	     return;
+				}
+				if(StringTool.isNumeric(new_pwd)){
+					 paraMandaChkAndReturn(5, response,"密码不能为纯数字");
+		        	 return;
+				}if(judgeInputNotNo(new_pwd)==1){
+					paraMandaChkAndReturn(5, response,"密码必须为6-20位字母、数字或英文下划线符号");
+		        	 return;
+				}}else{
+					if(judgePwdNo(new_pwd)==1){
+					map = paraMandaChkAndReturnMap(5, response,"密码必须为6-20位");
+						writeErrorJson(response,map);
+			        	return;
+					}
+				}
+		
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+        
         if(app==null)
 		{
 			 app=appService.findIdByClientId(client_id);
 			 redisClient.setObject(RedisConstant.APP_INFO+client_id, app);
 		}
 		map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
+		
 		if(map.get("status").equals("1")){//client_id,access_token正确
 			Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
 			if(!hmacSHA1Verification){
 				paraMandaChkAndReturn(6, response,"认证失败");
 				return;
 			}
+			
+			Object userCacheInfoObj = redisClient.getObject(RedisConstant.USER_CACHE_INFO+username);
+			if(userCacheInfoObj!=null)
+			{
+				UserCache userCache = checkCacheUsername(username,userCacheService,app.getId());
+				if(userCache!=null)
+				{
+					userCache.setPlanPasswordByAes(new_pwd, userserviceDev.getAes_userCenter_key());
+					userCacheService.updateUserCache(userCache);
+		    		map.clear();
+		    		map.put("status", "1");
+		    		writeSuccessJson(response,map);
+		    		return;
+				}
+			}
+			
+			
 			if(username==null || username.length()==0 ){
 				map.clear();
 				map.put("status", "0");
@@ -104,9 +152,11 @@ public class UserCenterRetrievePwdController extends BaseControllerUtil {
 				try {
 					if((null==user||user.getId()<1)&&!nullEmptyBlankJudge(guid)){
 			          	  user = userService.findByGuid(guid);
-			          	phone=user.getPhone();
+			          	if(user!=null)
+			          	{
+			          		 phone=user.getPhone();
+			          	}
 			           }
-			            
 					bool=true;
 				} catch (MyBatisSystemException e) {
 					map.clear();
@@ -132,32 +182,7 @@ public class UserCenterRetrievePwdController extends BaseControllerUtil {
 	            		map.put("errMsg", "用户名不存在");
     			    }else{    
 	    				map.clear();
-	    				String new_pwd="";
-	    				try {
-	    						new_pwd=AESUtil.decrypt(password, app.getAppsecret()).trim();
-	    						log.info("加密后的 new_pwd："+new_pwd);
-	    						if(!nullEmptyBlankJudge(isValidate)&&isValidate.equals("1")){
-	    						if(nullEmptyBlankJudge(new_pwd)){
-	    							 paraMandaChkAndReturn(5, response,"密码不能为空");
-	    				       	     return;
-	    						}
-	    						if(StringTool.isNumeric(new_pwd)){
-	    							 paraMandaChkAndReturn(5, response,"密码不能为纯数字");
-	    				        	 return;
-	    						}if(judgeInputNotNo(new_pwd)==1){
-	    							paraMandaChkAndReturn(5, response,"密码必须为6-20位字母、数字或英文下划线符号");
-	    				        	 return;
-	    						}}else{
-	    							if(judgePwdNo(new_pwd)==1){
-	    							map = paraMandaChkAndReturnMap(5, response,"密码必须为6-20位");
-	    								writeErrorJson(response,map);
-	    					        	return;
-	    							}
-	    						}
-	    				
-	    				} catch (Exception e1) {
-	    					e1.printStackTrace();
-	    				}
+	    		
 	    				   //用户中心加密
 	    				    try {
 								password=AESUtil.encrypt(new_pwd, userserviceDev.getAes_userCenter_key());
