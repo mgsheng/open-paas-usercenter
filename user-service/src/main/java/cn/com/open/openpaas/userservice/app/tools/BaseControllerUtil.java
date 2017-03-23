@@ -384,9 +384,9 @@ public class BaseControllerUtil {
 		   		 if(!userList.get(i).getUsername().equals(username)){
 		   			 user= userList.get(i);
 		   		 }
-		   	 }}
+		   	 }
+		   	 }
 	   	 }
-
 	   	return user;
 	   } 
 	   
@@ -748,11 +748,14 @@ public class BaseControllerUtil {
     public UserCache  checkCacheUserByphone(String username,Integer appid,UserCacheService userCacheService){
     	UserCache userCache=null;
    	 List<UserCache> userList=userCacheService.findByPhone(username,appid);
-   	 for(int i=0;i<userList.size();i++){
-   		 if(!userList.get(i).username().equals(username)){
-   			userCache= userList.get(i);
-   		 }
+   	 if(userList!=null){
+   		 for(int i=0;i<userList.size();i++){
+   	   		 if(!userList.get(i).username().equals(username)){
+   	   			userCache= userList.get(i);
+   	   		 }
+   	   	 } 
    	 }
+   
    	return userCache;
    }
     /** 
