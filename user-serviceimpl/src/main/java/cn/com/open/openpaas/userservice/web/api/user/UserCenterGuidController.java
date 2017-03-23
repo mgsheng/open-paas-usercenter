@@ -22,6 +22,8 @@ import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
+import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
@@ -42,6 +44,8 @@ public class UserCenterGuidController extends BaseControllerUtil {
 	 private RedisClientTemplate redisClient;
 	 @Autowired
 	 private DefaultTokenServices tokenServices;
+	 @Autowired
+	 private UserCacheService userCacheService;
   
 	 /**
 	     * 用户账号验证接口
@@ -72,12 +76,14 @@ public class UserCenterGuidController extends BaseControllerUtil {
 				return;
 			}
 	       map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
-			
+	       UserCache userCache=null;
 			if(map.get("status").equals("1")){//client_id,access_token正确
 				User user=null;
 		    	if(account!=null&&!"".equals(account)){
-		    		
 		    		user=checkUsername(account,accountType,userService);
+					if(user.getAppId()!=app.getId()){
+						userCache= checkCacheUsername(account,userCacheService,app.getId());
+				    }
 		    	}else{
 		    		map.clear();
 		    		map.put("status", "0");
@@ -86,9 +92,13 @@ public class UserCenterGuidController extends BaseControllerUtil {
 		    	}
 		    	//判断account是否存在(对应判断属性：username,phone,email)
 			    //	checkUsername(account);
-		    	if(user!=null){
+		    	if(user!=null &&user.getAppId()==app.getId()){
 		            map.clear();
 		            map.put("guid", user.guid()==null?"":user.guid());
+		    		map.put("status", "1");
+		    	}else if(userCache!=null){
+		            map.clear();
+		            map.put("guid", userCache.guid()==null?"":userCache.guid());
 		    		map.put("status", "1");
 		    	}else{
 		    		map.clear();
