@@ -81,8 +81,10 @@ public class UserCenterGuidController extends BaseControllerUtil {
 				User user=null;
 		    	if(account!=null&&!"".equals(account)){
 		    		user=checkUsername(account,accountType,userService);
-					if(user.getAppId()!=app.getId()){
+		    		Object userCacheInfoObj = redisClient.getObject(RedisConstant.USER_CACHE_INFO+account);
+					if(user!=null&&user.getAppId()!=app.getId()&&userCacheInfoObj!=null){
 						userCache= checkCacheUsername(account,userCacheService,app.getId());
+						user=null;
 				    }
 		    	}else{
 		    		map.clear();
@@ -92,7 +94,7 @@ public class UserCenterGuidController extends BaseControllerUtil {
 		    	}
 		    	//判断account是否存在(对应判断属性：username,phone,email)
 			    //	checkUsername(account);
-		    	if(user!=null &&user.getAppId()==app.getId()){
+		    	if(user!=null){
 		            map.clear();
 		            map.put("guid", user.guid()==null?"":user.guid());
 		    		map.put("status", "1");
