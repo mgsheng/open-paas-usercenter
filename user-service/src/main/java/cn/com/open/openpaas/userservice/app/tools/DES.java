@@ -43,7 +43,7 @@ public class DES {
         cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
  
         byte[] retByte = cipher.doFinal(bytesrc);
-        return new String(retByte);
+        return new String(retByte, "utf-8");
     }
  
     public static byte[] convertHexString(String ss) {
@@ -98,12 +98,13 @@ public class DES {
     	return secert;
     };
     public static void main(String[] args) throws Exception {
-        String source = "123456";
+        String source = "2206880#20170224164235#91d921e029d0470b9eb41e39d895a0e0#874714#http://xjtudlc.imooc.com/learn/8089#oes_101011010998#测试用户";
+        ///EZ/8Fo4VJ7LgubAk4hmyHNEzUeuIBRK0b9Leza4My1AJ4dROaLxIIVd8Z0RaqBt5ZtljVXjSHWh6+gC8B2jJT8LbcujAciF1T4onjEz6y8Zwvm5tgW/VxxZ2U+zHTPBFMixwO0aPRyrgb3A/qS+5KzdlxkJ1yCkLIBzik2CzGB/XGxmGjYfpg==
         System.out.println("原文: " + source);
-        String key = "34b0771839444ec093347ddd1e178ba1";
+        String key = "1e167b2f28a6f4daf5a4812baa958242";
         String encryptData = encrypt(source, key);
         System.out.println("加密后: " + encryptData);
-        String decryptData = decrypt("xpDvZSedJmh6kM4Swf433aniHhSaJbap7gkKUxhSAZR5/Obn76tkpc5wUMnmPmgLfWtaMis49lsk3Fh3Qa0pvGQ/3OZgs+H5JD+BbLeVOxUoPLGr1lGWQbRATf2plfH3",  key);
+        String decryptData = decrypt("TpdwhPphhZymlQ9S94NoA7/O6BX1bjbEvV+TdE55InYDIY910NxWjuBRWC7w4aM4VHdSaLfhWraGdT7ymkA45KijOFNw974HXBtpQT42R74n/hWcNJArR3UnShfIclnMUtEa0OnD1BC4R/eRNYA2y3cf0JmosI7eucb7/xmUNk2JFL96qdSZgA==",  key);
         System.out.println("解密后: " + decryptData);
     }
 }
