@@ -106,6 +106,46 @@ public class UserCenterLoginController extends BaseControllerUtil {
 				UserCache userCache = null;
 				User user = null;
 				Map<String,String> errorMap = new LinkedHashMap<String, String>();
+				
+				
+
+				Object userCacheInfoObj = redisClient.getObject(RedisConstant.USER_CACHE_INFO+username);
+				//存在缓存信息，用户存在于用户异常表中
+				if(userCacheInfoObj!=null ){
+					userCache = checkCacheUsername(username,userCacheService,app.getId());
+					if(userCache == null){
+						//不存在则什么都不做，保留useraccount的错误信息
+					}
+					else if(userCache!=null){
+						//密码不正确
+						if(!userCache.checkPasswodByAes(password,userserviceDev.getAes_userCenter_key(),pwdtype)){
+							UserCache userCache1=checkCacheUserByphone(username,app.getId(),userCacheService);
+							if(userCache1==null){
+								errorMap.put("status", "0");
+								errorMap.put("error_code", "4");
+								errorMap.put("errMsg", "密码错误");
+							}else if(userCache1!=null&&!userCache1.checkPasswodByAes(password,userserviceDev.getAes_userCenter_key(),pwdtype)){
+								errorMap.put("status", "0");
+								errorMap.put("error_code", "4");
+								errorMap.put("errMsg", "密码错误");
+							}else{
+								userCache=userCache1;
+								isCache = true;
+							}
+						}
+						//用户被停用
+						//暂不判断
+						else if(User.STATUS_DISABLED.equals(userCache.userState())){
+							errorMap.put("status", "0");
+							errorMap.put("error_code", "6");//用户已被封停
+							errorMap.put("errMsg", "用户已被封停");
+						}
+						else{
+							isCache = true;
+						}
+				}
+			  }
+				if(!isCache){
 				//检查用户表中是否存在
 				user=checkUsername(username,userService);
 				if(user==null){
@@ -137,43 +177,6 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					isUser = true;
 				}
 				//正式表中不存在，查询userCache表
-				if(!isUser){
-					Object userCacheInfoObj = redisClient.getObject(RedisConstant.USER_CACHE_INFO+username);
-					//存在缓存信息，用户存在于用户异常表中
-					if(userCacheInfoObj!=null){
-						userCache = checkCacheUsername(username,userCacheService,app.getId());
-						if(userCache == null){
-							//不存在则什么都不做，保留useraccount的错误信息
-						}
-						else if(userCache!=null){
-							//密码不正确
-							if(!userCache.checkPasswodByAes(password,userserviceDev.getAes_userCenter_key(),pwdtype)){
-								UserCache userCache1=checkCacheUserByphone(username,app.getId(),userCacheService);
-								if(userCache1==null){
-									errorMap.put("status", "0");
-									errorMap.put("error_code", "4");
-									errorMap.put("errMsg", "密码错误");
-								}else if(userCache1!=null&&!userCache1.checkPasswodByAes(password,userserviceDev.getAes_userCenter_key(),pwdtype)){
-									errorMap.put("status", "0");
-									errorMap.put("error_code", "4");
-									errorMap.put("errMsg", "密码错误");
-								}else{
-									userCache=userCache1;
-									isCache = true;
-								}
-							}
-							//用户被停用
-							//暂不判断
-							else if(User.STATUS_DISABLED.equals(userCache.userState())){
-								errorMap.put("status", "0");
-								errorMap.put("error_code", "6");//用户已被封停
-								errorMap.put("errMsg", "用户已被封停");
-							}
-							else{
-								isCache = true;
-							}
-					}
-				  }
 				}
 				//存在用户数据
 				if(isCache ||isUser){

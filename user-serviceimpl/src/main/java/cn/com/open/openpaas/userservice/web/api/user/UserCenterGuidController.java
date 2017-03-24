@@ -84,7 +84,9 @@ public class UserCenterGuidController extends BaseControllerUtil {
 		    		Object userCacheInfoObj = redisClient.getObject(RedisConstant.USER_CACHE_INFO+account);
 					if(user!=null&&user.getAppId()!=app.getId()&&userCacheInfoObj!=null){
 						userCache= checkCacheUsername(account,userCacheService,app.getId());
-						user=null;
+						if(userCache!=null){
+							user=null;
+						}
 				    }
 		    	}else{
 		    		map.clear();

@@ -28,8 +28,8 @@
 		<result property="aesPassword" column="aes_password"/>
 		<result property="md5Password" column="md5_password"/>
 		<result property="md5Salt" column="md5_salt"/>
-		<result property="app_id" column="appId"/>
-		<result property="card_no" column="cardNo"/>
+		<result property="appId" column="app_id"/>
+		<result property="cardNo" column="card_no"/>
     </resultMap>
     
     <sql id="Column_List">
@@ -85,7 +85,7 @@
          and archived = 0 limit 1
 	</select> -->
 	
-	<select id="findByUsername" parameterType="String" resultMap="userMap">
+	<select id="findByUsername" parameterType="String" resultMap="userMap" flushCache="true">
          select 
          <include refid="Column_List" />
          from user_account
