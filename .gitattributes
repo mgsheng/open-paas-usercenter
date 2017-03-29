@@ -447,6 +447,7 @@ user-service/src/main/java/cn/com/open/openpaas/userservice/app/useractivated/mo
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/useractivated/model/UserActivatedHis.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/app/web/WebUtils.java -text
 user-service/src/main/java/cn/com/open/openpaas/userservice/dev/UserserviceDev.java -text
+user-service/src/main/resource/user-service.properties -text
 user-serviceimpl/.classpath -text
 user-serviceimpl/.mymetadata -text
 user-serviceimpl/.project -text
