@@ -24,14 +24,14 @@ import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.tools.HMacSha1;
 import cn.com.open.openpaas.userservice.app.tools.PropertiesTool;
 import cn.com.open.openpaas.userservice.app.tools.StringTool;
-import cn.com.open.openpaas.userservice.web.api.user.UserCenterLoginController;
+import cn.com.open.openpaas.userservice.web.api.user.UserCenterRegController;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath*:/spring/appCtx-disconf.xml",
 		"classpath*:/spring/context.xml", "classpath*:/spring/job.xml",
 		"classpath*:/spring/security.xml", "classpath*:/spring/transaction.xml" })
-public class TestLoginControler {
+public class TestRegControler {
 
 	// 模拟request,response
 	private MockHttpServletRequest request;
@@ -39,9 +39,9 @@ public class TestLoginControler {
 	@Autowired
 	private Filter springSecurityFilterChain;
 
-	// 注入loginController
+	// 注入regController
 	@Autowired
-	private UserCenterLoginController loginController;
+	private UserCenterRegController regController;
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 	// 执行测试方法之前初始化模拟request,response
@@ -88,19 +88,24 @@ public class TestLoginControler {
 		    }
       		
 			MvcResult loginResult = mockMvc.perform(
-					MockMvcRequestBuilders.get("/user/userCenterPassword")
+					MockMvcRequestBuilders.get("/user/userCenterReg")
 							.param("client_id", "credentials-client")
 							.param("access_token", "435e418c-a030-4330-891d-bc076bab3ad8")
 							.param("grant_type", "client_credentials")
 							.param("scope", "write")
+							.param("source_id", "123")
 							.param("username", "xiaoli123")
 							.param("password", password)
+							.param("phone", "131217833")
+							.param("email", "1253014019@qq.com")
+							.param("cardNo", "123456789")
 							.param("pwdtype", "md5")
+							.param("isValidate", "0")/*是否验证，0-是 1-否*/
 							.param("sessionTime", "")/*有效时间，默认是分钟，如果为空则默认30分钟*/
 							.param("signature", signature)
 							.param("timestamp", timestamp)
 							.param("signatureNonce", signatureNonce)).andReturn();
-			System.out.println(loginResult.getResponse().getContentAsString());
+			System.out.println(loginResult.getResponse().getContentAsString());			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
