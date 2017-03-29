@@ -31,26 +31,26 @@ import cn.com.open.openpaas.userservice.web.api.user.UserCenterLoginController;
 		"classpath*:/spring/context.xml", "classpath*:/spring/job.xml",
 		"classpath*:/spring/security.xml", "classpath*:/spring/transaction.xml" })
 public class TestControler {
-	public static class MockSecurityContext implements SecurityContext {
-
-		private static final long serialVersionUID = -1386535243513362694L;
-
-		private Authentication authentication;
-
-		public MockSecurityContext(Authentication authentication) {
-			this.authentication = authentication;
-		}
-
-		@Override
-		public Authentication getAuthentication() {
-			return this.authentication;
-		}
-
-		@Override
-		public void setAuthentication(Authentication authentication) {
-			this.authentication = authentication;
-		}
-	}
+//	public static class MockSecurityContext implements SecurityContext {
+//
+//		private static final long serialVersionUID = -1386535243513362694L;
+//
+//		private Authentication authentication;
+//
+//		public MockSecurityContext(Authentication authentication) {
+//			this.authentication = authentication;
+//		}
+//
+//		@Override
+//		public Authentication getAuthentication() {
+//			return this.authentication;
+//		}
+//
+//		@Override
+//		public void setAuthentication(Authentication authentication) {
+//			this.authentication = authentication;
+//		}
+//	}
 
 	// 模拟request,response
 	private MockHttpServletRequest request;
