@@ -59,11 +59,11 @@ public class TestRegControler {
 
 	/**
 	 * 
-	 * @Title：testLogin
-	 * @Description: 测试用户登录
+	 * @Title：testReg
+	 * @Description: 测试用户注册
 	 */
 	@Test
-	public void testLogin() {
+	public void testReg() {
 		try {		
 			String key=PropertiesTool.getAppPropertieByKey("credentials-client");
 	   	    String signature="";
@@ -87,7 +87,7 @@ public class TestRegControler {
 	      		password=AESUtil.getNewPwd(password);
 		    }
       		
-			MvcResult loginResult = mockMvc.perform(
+			MvcResult result = mockMvc.perform(
 					MockMvcRequestBuilders.get("/user/userCenterReg")
 							.param("client_id", "credentials-client")
 							.param("access_token", "435e418c-a030-4330-891d-bc076bab3ad8")
@@ -101,11 +101,10 @@ public class TestRegControler {
 							.param("cardNo", "123456789")
 							.param("pwdtype", "md5")
 							.param("isValidate", "0")/*是否验证，0-是 1-否*/
-							.param("sessionTime", "")/*有效时间，默认是分钟，如果为空则默认30分钟*/
 							.param("signature", signature)
 							.param("timestamp", timestamp)
 							.param("signatureNonce", signatureNonce)).andReturn();
-			System.out.println(loginResult.getResponse().getContentAsString());			
+			System.out.println(result.getResponse().getContentAsString());			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

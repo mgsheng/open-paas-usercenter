@@ -24,14 +24,15 @@ import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.tools.HMacSha1;
 import cn.com.open.openpaas.userservice.app.tools.PropertiesTool;
 import cn.com.open.openpaas.userservice.app.tools.StringTool;
-import cn.com.open.openpaas.userservice.web.api.user.UserCenterLoginController;
+import cn.com.open.openpaas.userservice.web.api.user.ModiPwdController;
+import cn.com.open.openpaas.userservice.web.api.user.UserCenterRegController;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath*:/spring/appCtx-disconf.xml",
 		"classpath*:/spring/context.xml", "classpath*:/spring/job.xml",
 		"classpath*:/spring/security.xml", "classpath*:/spring/transaction.xml" })
-public class TestLoginControler {
+public class TestModiPwdControler {
 
 	// 模拟request,response
 	private MockHttpServletRequest request;
@@ -39,9 +40,9 @@ public class TestLoginControler {
 	@Autowired
 	private Filter springSecurityFilterChain;
 
-	// 注入loginController
+	// 注入regController
 	@Autowired
-	private UserCenterLoginController loginController;
+	private ModiPwdController modiPwdController;
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 	// 执行测试方法之前初始化模拟request,response
@@ -59,17 +60,18 @@ public class TestLoginControler {
 
 	/**
 	 * 
-	 * @Title：testLogin
-	 * @Description: 测试用户登录
+	 * @Title：testModiPwd
+	 * @Description: 测试用户修改密码
 	 */
 	@Test
-	public void testLogin() {
+	public void testModiPwd() {
 		try {		
 			String key=PropertiesTool.getAppPropertieByKey("credentials-client");
 	   	    String signature="";
 	   	    String timestamp="";
 	   	    String signatureNonce="";
-	   	    String password="a11111111";
+	   	    String oldPwd="abc123";
+	   	    String newPwd="a11111111";
 		    if(key!=null){
 	      	    timestamp=DateTools.getSolrDate(new Date());
 			 	StringBuilder encryptText = new StringBuilder();
@@ -83,24 +85,25 @@ public class TestLoginControler {
 			 	encryptText.append(signatureNonce);
 			 	signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
 			 	signature=HMacSha1.getNewResult(signature);
-			 	password=AESUtil.encrypt(password,key);
-	      		password=AESUtil.getNewPwd(password);
+			 	oldPwd=AESUtil.encrypt(oldPwd, key);
+	        	oldPwd=AESUtil.getNewPwd(oldPwd);
+	    		newPwd=AESUtil.encrypt(newPwd, key);
+	    		newPwd=AESUtil.getNewPwd(newPwd);
 		    }
       		
 			MvcResult result = mockMvc.perform(
-					MockMvcRequestBuilders.get("/user/userCenterPassword")
+					MockMvcRequestBuilders.get("/user/userCenterModiPwd")
 							.param("client_id", "credentials-client")
 							.param("access_token", "435e418c-a030-4330-891d-bc076bab3ad8")
-							.param("grant_type", "client_credentials")
-							.param("scope", "write")
-							.param("username", "xiaoli123")
-							.param("password", password)
+							.param("account", "xiaoli123")
+							.param("old_pwd", oldPwd)							
+							.param("new_pwd", newPwd)
 							.param("pwdtype", "md5")
-							.param("sessionTime", "")/*有效时间，默认是分钟，如果为空则默认30分钟*/
+							.param("isValidate", "0")/*是否验证，0-是 1-否*/
 							.param("signature", signature)
 							.param("timestamp", timestamp)
 							.param("signatureNonce", signatureNonce)).andReturn();
-			System.out.println(result.getResponse().getContentAsString());
+			System.out.println(result.getResponse().getContentAsString());	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
