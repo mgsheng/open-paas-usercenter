@@ -577,6 +577,7 @@ user-serviceimpl/src/main/resources/spring/job.xml -text
 user-serviceimpl/src/main/resources/spring/security.xml -text
 user-serviceimpl/src/main/resources/spring/transaction.xml -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestControler.java -text
+user-serviceimpl/src/main/test/cn/com/open/test/TestLoginControler.java -text
 user-serviceimpl/src/main/webapp/META-INF/MANIFEST.MF -text
 user-serviceimpl/src/main/webapp/WEB-INF/decorators.xml -text
 user-serviceimpl/src/main/webapp/WEB-INF/jsp/clientdetails/client_details.jsp -text
