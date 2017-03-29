@@ -84,6 +84,14 @@ public class AESUtil {
 			}
 			return iv;
 		}
+		
+		public static String getNewPwd(String password){
+	    	if(password.contains("+")){
+	    		password=password.replaceAll("\\+", "%2B");
+	    	}
+	    	return password;
+	    };
+		
 	  public static void main(String[] args) {
 	      String data = "a1111111";
 	      String key = "67d73cec5d6b4c8a8a9883748f4066fe";
