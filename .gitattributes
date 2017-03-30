@@ -587,6 +587,7 @@ user-serviceimpl/src/main/test/cn/com/open/test/TestRefreshTokenControler.java -
 user-serviceimpl/src/main/test/cn/com/open/test/TestRegControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestRetrievePwdControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestSynInfoControler.java -text
+user-serviceimpl/src/main/test/cn/com/open/test/TestUnBindControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestValidateLoginControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestVerifyController.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestVerifyPwdControler.java -text
