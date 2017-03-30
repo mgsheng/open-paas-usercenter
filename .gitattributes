@@ -580,6 +580,7 @@ user-serviceimpl/src/main/test/cn/com/open/test/TestBindInfoControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestCheckTokenControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestGetPwdRuleControler.java -text
+user-serviceimpl/src/main/test/cn/com/open/test/TestGetRedisControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestGuidController.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestLoginControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestModiPwdControler.java -text
@@ -587,6 +588,7 @@ user-serviceimpl/src/main/test/cn/com/open/test/TestRefreshTokenControler.java -
 user-serviceimpl/src/main/test/cn/com/open/test/TestRegControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestRemoveSessionControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestRetrievePwdControler.java -text
+user-serviceimpl/src/main/test/cn/com/open/test/TestSaveRedisControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestSaveUserInfoControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestSynInfoControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestUnBindControler.java -text
