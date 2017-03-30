@@ -585,6 +585,7 @@ user-serviceimpl/src/main/test/cn/com/open/test/TestLoginControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestModiPwdControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestRefreshTokenControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestRegControler.java -text
+user-serviceimpl/src/main/test/cn/com/open/test/TestRemoveSessionControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestRetrievePwdControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestSaveUserInfoControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestSynInfoControler.java -text
@@ -593,6 +594,7 @@ user-serviceimpl/src/main/test/cn/com/open/test/TestValidateLoginControler.java 
 user-serviceimpl/src/main/test/cn/com/open/test/TestVerifyAutoLoginControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestVerifyController.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestVerifyPwdControler.java -text
+user-serviceimpl/src/main/test/cn/com/open/test/TestVerifySessionControler.java -text
 user-serviceimpl/src/main/webapp/META-INF/MANIFEST.MF -text
 user-serviceimpl/src/main/webapp/WEB-INF/decorators.xml -text
 user-serviceimpl/src/main/webapp/WEB-INF/jsp/clientdetails/client_details.jsp -text
