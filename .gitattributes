@@ -579,6 +579,7 @@ user-serviceimpl/src/main/resources/spring/transaction.xml -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestBindInfoControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestCheckTokenControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestControler.java -text
+user-serviceimpl/src/main/test/cn/com/open/test/TestGuidController.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestLoginControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestModiPwdControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestRefreshTokenControler.java -text
