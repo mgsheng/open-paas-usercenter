@@ -39,7 +39,7 @@ public class TestValidateLoginControler {
 	@Autowired
 	private Filter springSecurityFilterChain;
 
-	// 注入regController
+	// 注入validateLoginController
 	@Autowired
 	private ValidateLoginController validateLoginController;
 	@Autowired
@@ -59,8 +59,8 @@ public class TestValidateLoginControler {
 
 	/**
 	 * 
-	 * @Title：testModiPwd
-	 * @Description: 测试用户修改密码
+	 * @Title：testValidateLogin
+	 * @Description: 测试用户无密码登录
 	 */
 	@Test
 	public void testValidateLogin() {

@@ -39,7 +39,7 @@ public class TestCheckTokenControler {
 	@Autowired
 	private Filter springSecurityFilterChain;
 
-	// 注入regController
+	// 注入checkTokenController
 	@Autowired
 	private CheckTokenController checkTokenController;
 	@Autowired
@@ -59,8 +59,8 @@ public class TestCheckTokenControler {
 
 	/**
 	 * 
-	 * @Title：testModiPwd
-	 * @Description: 测试用户修改密码
+	 * @Title：testCheckToken
+	 * @Description: 测试验证Token
 	 */
 	@Test
 	public void testCheckToken() {

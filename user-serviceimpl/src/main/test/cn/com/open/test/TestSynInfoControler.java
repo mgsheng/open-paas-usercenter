@@ -38,7 +38,7 @@ public class TestSynInfoControler {
 	@Autowired
 	private Filter springSecurityFilterChain;
 
-	// 注入regController
+	// 注入synInfoController
 	@Autowired
 	private SynInfoController synInfoController;
 	@Autowired

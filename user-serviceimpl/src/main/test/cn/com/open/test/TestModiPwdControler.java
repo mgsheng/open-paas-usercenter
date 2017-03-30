@@ -40,7 +40,7 @@ public class TestModiPwdControler {
 	@Autowired
 	private Filter springSecurityFilterChain;
 
-	// 注入regController
+	// 注入modiPwdController
 	@Autowired
 	private ModiPwdController modiPwdController;
 	@Autowired
