@@ -576,6 +576,7 @@ user-serviceimpl/src/main/resources/spring/context.xml -text
 user-serviceimpl/src/main/resources/spring/job.xml -text
 user-serviceimpl/src/main/resources/spring/security.xml -text
 user-serviceimpl/src/main/resources/spring/transaction.xml -text
+user-serviceimpl/src/main/test/cn/com/open/test/TestAutoLoginControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestBindInfoControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestCheckTokenControler.java -text
 user-serviceimpl/src/main/test/cn/com/open/test/TestControler.java -text
