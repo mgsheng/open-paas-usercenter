@@ -82,6 +82,18 @@ public class UserCacheServiceImpl implements UserCacheService {
 		return userCacheRepository.findByCardNoAndAppid(cardNo, appid);
 	}
 
+	@Override
+	public Boolean updateUserStatus(String guid, String status) {
+		// TODO Auto-generated method stub
+		try {
+			userCacheRepository.updateUserStatus(guid, status);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+	}
+
  /*   @Autowired
     private UserCacheRepository userCacheRepository;
 

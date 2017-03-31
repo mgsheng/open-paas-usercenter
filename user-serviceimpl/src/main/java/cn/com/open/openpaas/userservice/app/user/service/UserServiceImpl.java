@@ -413,4 +413,14 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Boolean updateUserStatus(String guid, int stauts) {
+		try {
+			userRepository.updateUserStatus(guid,stauts);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }

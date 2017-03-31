@@ -31,5 +31,6 @@ public interface UserCacheRepository extends Repository {
 	UserCache findByUserInfo(@Param("username")String username,@Param("appid")Integer appid);
 	List<UserCache> findAll();
 	UserCache findUserById(Integer userId);
+	void updateUserStatus( @Param("guid")String guid,@Param("status")String status);
 
 }

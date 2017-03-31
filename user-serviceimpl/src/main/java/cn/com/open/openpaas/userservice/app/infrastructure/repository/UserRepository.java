@@ -77,6 +77,7 @@ public interface UserRepository extends Repository {
     void updateAesPwdById(@Param("id")int id,@Param("aesPassword")String aesPassword);
     void updateSha1PwdById(@Param("id")int id,@Param("sha1Password")String sha1Password);
 	void updateDAPById(@Param("id")String id,@Param("defaultUser")Boolean defaultUser,@Param("pid")String pid);
+	void updateUserStatus(@Param("guid")String guid,@Param("status")int status);
 	void updateParentUser(@Param("username")String username,@Param("phone")String phone,@Param("email")String email,@Param("cardno")String cardno,@Param("id")int id);
     
 

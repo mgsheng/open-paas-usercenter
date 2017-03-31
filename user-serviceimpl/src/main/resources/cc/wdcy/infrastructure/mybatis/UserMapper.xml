@@ -287,6 +287,11 @@
         email=#{email}
         where id = #{id}
     </update>
+    <update id="updateUserStatus">
+        update user_account set
+        user_state = #{status}
+        where guid = #{guid}
+    </update>
     
     <delete id="deleteUser" parameterType="Integer">
         delete from user_account where id=#{id}

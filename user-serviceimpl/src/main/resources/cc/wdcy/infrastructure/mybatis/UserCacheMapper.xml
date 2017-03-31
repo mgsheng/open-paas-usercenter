@@ -190,7 +190,11 @@
         
         where id = #{id}
     </update>
-    
+        <update id="updateUserStatus">
+        update user_cache set
+        user_state = #{status}
+        where guid = #{guid}
+    </update>
     <select id="findAll" resultMap="userCacheMap">
 		select
 		<include refid="Column_List" />
