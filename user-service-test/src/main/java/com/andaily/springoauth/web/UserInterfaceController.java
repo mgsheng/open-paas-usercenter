@@ -110,6 +110,8 @@ public class UserInterfaceController {
 	private String getRedisUri;
 	@Value("#{properties['save-redis-uri']}")
 	private String saveRedisUri;
+	@Value("#{properties['user-status-change-uri']}")
+	private String userStatusChangeUri;
     private Map<String,String> map=LoadPopertiesFile.loadProperties();
     
       /**
@@ -1116,5 +1118,39 @@ public class UserInterfaceController {
 		model.addAttribute("saveRedisUri", saveRedisUri);
 		model.addAttribute("data", data);
 		return "usercenter/user_center_saveredis";
+	}
+	/**
+	 *
+	 *用户账号封停以及启用接口
+	 */
+	@RequestMapping(value = "updateUserStatus", method = RequestMethod.GET)
+	public String updateUserStatus(Model model) {
+		model.addAttribute("userStatusChangeUri", userStatusChangeUri);
+		
+		return "usercenter/user_status_change";
+	}
+	@RequestMapping(value = "updateUserStatus", method = RequestMethod.POST)
+	public String updateUserStatus(String clientId,String accessToken,String guid,String status,Model model) throws Exception {
+		String key=map.get(clientId);
+		String signature="";
+		String timestamp="";
+		String signatureNonce="";
+		if(key!=null){
+			timestamp=DateTools.getSolrDate(new Date());
+			StringBuilder encryptText = new StringBuilder();
+			signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
+			encryptText.append(clientId);
+			encryptText.append(SEPARATOR);
+			encryptText.append(accessToken);
+			encryptText.append(SEPARATOR);
+			encryptText.append(timestamp);
+			encryptText.append(SEPARATOR);
+			encryptText.append(signatureNonce);
+			signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
+			signature=HMacSha1.getNewResult(signature);
+		}
+		final String fullUri = userStatusChangeUri+"?access_token="+accessToken+"&client_id="+clientId+"&guid="+guid+"&status="+status+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+        LOG.debug("Send to Oauth-Server URL: {}", fullUri);
+        return "redirect:" + fullUri;
 	}
 }

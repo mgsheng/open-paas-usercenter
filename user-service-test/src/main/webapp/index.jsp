@@ -136,6 +136,9 @@
         <li>
             <p><a href="getRedis">getRedis</a> <br/>Redis获取接口</p>
         </li>
+          <li>
+            <p><a href="updateUserStatus">updateUserStatus</a> <br/>用户账号封停以及启用接口</p>
+        </li>
     </ul>
 </div>
 </body>

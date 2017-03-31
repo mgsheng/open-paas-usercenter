@@ -238,6 +238,7 @@ user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_verifyPassW
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_center_verify_session.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_guid_info.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_save_info.jsp -text
+user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_status_change.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_syn_info.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_syn_name.jsp -text
 user-service-test/src/main/webapp/WEB-INF/jsp/usercenter/user_unbind_info.jsp -text
