@@ -125,6 +125,7 @@ public interface UserService extends UserDetailsService {
     public Boolean updateAesPwdById(int id, String pwd);
     public Boolean updateSha1PwdById(int id, String pwd);
     public Boolean updateDAPById(String id, Boolean defaultUser,String pid);
+    public Boolean updateUserStatus(String guid,int status);
     public Boolean updateParentUser(String username,String phone,String email,String catdno,Integer id);
 	
 }

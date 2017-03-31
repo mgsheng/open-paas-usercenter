@@ -25,5 +25,6 @@ public interface UserCacheService {
 	List<UserCache> findByEmail(String account,Integer appid);
 	List<UserCache> findByPhone(String account,Integer appid);
 	List<UserCache> findByCardNo(String cardNo,Integer appid);
+	public Boolean updateUserStatus(String guid,String status);
 	
 }
