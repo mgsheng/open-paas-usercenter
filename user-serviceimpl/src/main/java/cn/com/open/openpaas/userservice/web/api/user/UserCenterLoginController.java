@@ -16,6 +16,7 @@ import cn.com.open.openpaas.userservice.app.user.model.UserCache;
 import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
+import cn.com.open.openpaas.userservice.web.MessageGZIP;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -363,19 +364,19 @@ public class UserCenterLoginController extends BaseControllerUtil {
 					String redisUserName = RedisConstant.SSO_USER_CHECK+username;
 					/*是否存在 存储sessionid的 redisUserName*/
 					if(redisClient.existKey(redisUserName)){
-						bussinessSessionId = redisClient.getObject(redisUserName);
+						bussinessSessionId = redisClient.getString(redisUserName);
 					}
 					Map<String,Object> localRedisMap = new HashMap<String, Object>();
 					localRedisMap.put("status",1);
 					localRedisMap.put("info","有效");
 					localRedisMap.put("guid",map.get("guid"));
-					localRedisMap.put("user",JSON.toJSONString(user));
+					localRedisMap.put("user",user);
 					if(null == sessionTime || "".equals(sessionTime)   || "0".equals(sessionTime)||"null".equals(sessionTime) ){
 					    /*默认sessiontime 30分钟*/
-                        sessionTime = "30";
+                        sessionTime = userserviceDev.getRedisExpireTime();
                     }
 					localRedisMap.put("sessiontime",sessionTime);
-                    redisClient.setObjectByTime(localRedisKey,JSON.toJSONString(localRedisMap),Integer.parseInt(sessionTime)*60);
+                    redisClient.setStringByTime(localRedisKey, MessageGZIP.returnGzipString(JSON.toJSONString(localRedisMap)),Integer.parseInt(sessionTime)*60);
 					if(null != bussinessSessionId && "" != bussinessSessionId){
 						/*业务数据更新为 被踢下线*/
 						Map<String,Object> businessRedisMaps = new HashMap<String, Object>();
@@ -392,11 +393,11 @@ public class UserCenterLoginController extends BaseControllerUtil {
 								businessRedisMaps.put("info","被踢下线");
 								businessRedisMaps.put("businessData",jsonObjectBussiness.get("businessData"));
 								businessRedisMaps.put("sessiontime",jsonObjectBussiness.get("sessiontime"));
-								redisClient.setObjectByTime(bussinessRedisKey, JSON.toJSONString(businessRedisMaps),Integer.parseInt(sessionTime)*60);
+								redisClient.setStringByTime(bussinessRedisKey, MessageGZIP.returnGzipString(JSON.toJSONString(businessRedisMaps)),Integer.parseInt(sessionTime)*60);
 							}
 						}
 					}
-					redisClient.setObjectByTime(redisUserName,session.getId(),Integer.parseInt(sessionTime)*60);
+					redisClient.setStringByTime(redisUserName,session.getId(),Integer.parseInt(sessionTime)*60);
 				}
 				//没有符合条件的用户，则返回错误消息
 				else{

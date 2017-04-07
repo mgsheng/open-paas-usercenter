@@ -111,6 +111,9 @@ public class MessageGZIP {
         }
         return null;
     }
+    public static String returnGzipString(String value){
+       return MessageGZIP.uncompressToString(MessageGZIP.compressToByte(value));
+    }
 }
 /*
 class test{

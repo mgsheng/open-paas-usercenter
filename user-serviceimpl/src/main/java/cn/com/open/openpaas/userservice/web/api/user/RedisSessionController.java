@@ -77,7 +77,7 @@ public class RedisSessionController extends BaseControllerUtil {
             }
             /*业务数据rediskey 单点登录格式为{”status”:1, ”info”:”有效”, ” businessData”:{业务数据}.}*/
             /*String bussinessRedisKey = client_id+RedisConstant.USER_SERVICE+redis_key;*/
-            redis_value = MessageGZIP.uncompressToString(MessageGZIP.compressToByte(redis_value));
+            redis_value = MessageGZIP.returnGzipString(redis_value);
             if (null == sessionTime || "" == sessionTime || "0" == sessionTime) {
                 /*默认sessiontime 30分钟*/
                 sessionTime = userserviceDev.getRedisExpireTime();
@@ -129,7 +129,7 @@ public class RedisSessionController extends BaseControllerUtil {
             String bussinessRedisValue = null;
             /*判断是否存在key 否则是报错*/
             if (redisClient.existKey(redis_key)) {
-                bussinessRedisValue = redisClient.getString(redis_key);
+                bussinessRedisValue = MessageGZIP.returnGzipString(redisClient.getString(redis_key));
             }
             map.clear();
             map.put("status", 1);

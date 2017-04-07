@@ -69,7 +69,7 @@ public class SessionDestoryController  extends BaseController{
 			String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+jsessionId;
             if (redisClient.existKey(localRedisKey)) {
                 /*取值*/
-                Object objLocalRedisKeyValue = redisClient.getObject(localRedisKey);
+                Object objLocalRedisKeyValue = redisClient.getString(localRedisKey);
                 if(null != objLocalRedisKeyValue){
                     /*获取json值*/
                     JSONObject localRedisValues= JSONObject.fromObject(objLocalRedisKeyValue);

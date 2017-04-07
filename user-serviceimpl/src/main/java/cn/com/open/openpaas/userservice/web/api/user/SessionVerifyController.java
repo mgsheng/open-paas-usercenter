@@ -66,7 +66,7 @@ public class SessionVerifyController  extends BaseController{
 			String localRedisKey = RedisConstant.USER_SERVICE_JSESSIONID+jsessionId;
 			JSONObject redisValue = null;
 			if(redisClient.existKey(localRedisKey)){
-				Object objLocalRedisKeyValue = redisClient.getObject(localRedisKey);
+				Object objLocalRedisKeyValue = redisClient.getString(localRedisKey);
 				if(null != objLocalRedisKeyValue){
 					redisValue=JSONObject.fromObject(objLocalRedisKeyValue);
 				}

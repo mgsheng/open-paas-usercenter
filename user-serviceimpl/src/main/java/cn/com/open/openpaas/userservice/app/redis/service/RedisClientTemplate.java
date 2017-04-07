@@ -204,7 +204,7 @@ public class RedisClientTemplate {
 		boolean broken = false;
 		try {
 			result = shardedJedis.get(key);
-			result=new String(result.getBytes("ISO-8859-1"),"UTF-8");
+			result=new String(result.getBytes(),"UTF-8");
 
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
