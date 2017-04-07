@@ -18,6 +18,7 @@ public class UserserviceDev {
 	private String user_center_getInfoList_uri;
 	private String access_token_uri;
 	private String single_sign_user;
+	private String redisExpireTime;
 	
 	
 	public String getUser_center_getInfoList_uri() {
@@ -146,5 +147,13 @@ public class UserserviceDev {
 
 	public void setSingle_sign_user(String single_sign_user) {
 		this.single_sign_user = single_sign_user;
-	}		
+	}
+
+    public String getRedisExpireTime() {
+        return redisExpireTime;
+    }
+
+    public void setRedisExpireTime(String redisExpireTime) {
+        this.redisExpireTime = redisExpireTime;
+    }
 }

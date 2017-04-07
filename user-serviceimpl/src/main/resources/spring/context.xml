@@ -191,5 +191,6 @@
         	<property name="access_token_uri" value="${access-token-uri}"></property>
         	<property name="user_center_getInfoList_uri" value="${user-center-getInfoList-uri}"></property>
         	<property name="single_sign_user" value="${single-sign-user}"></property>
+         <property name="redisExpireTime" value="30"></property>
         </bean>
 </beans>

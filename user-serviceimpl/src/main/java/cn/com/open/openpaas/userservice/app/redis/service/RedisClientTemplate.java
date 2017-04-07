@@ -91,6 +91,25 @@ public class RedisClientTemplate {
 
 		return result;
 	}
+	/** set Object */
+	public String setStringByTime(String key, String object, int time) {
+		String result = null;
+		ShardedJedis shardedJedis = redisDataSource.getRedisClient();
+		if (shardedJedis == null) {
+			return result;
+		}
+		boolean broken = false;
+		try {
+			shardedJedis.setex(key, time,object);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			broken = true;
+		} finally {
+			redisDataSource.returnResource(shardedJedis, broken);
+		}
+
+		return result;
+	}
 
 	/** get Object */
 	public Object getObject(String key) {
@@ -185,6 +204,7 @@ public class RedisClientTemplate {
 		boolean broken = false;
 		try {
 			result = shardedJedis.get(key);
+			result=new String(result.getBytes("ISO-8859-1"),"UTF-8");
 
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

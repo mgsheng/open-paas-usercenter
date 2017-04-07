@@ -523,7 +523,7 @@ user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/webservice/W
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/webservice/WebServicePublish.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/app/webservice/WebServicePublishListener.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/BaseController.java -text
-user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/GzipUtil.java -text
+user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/MessageGZIP.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/WebUtils.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/oauth/OauthSignatureValidateHandler.java -text
 user-serviceimpl/src/main/java/cn/com/open/openpaas/userservice/web/api/oauth/OauthUserApprovalHandler.java -text
