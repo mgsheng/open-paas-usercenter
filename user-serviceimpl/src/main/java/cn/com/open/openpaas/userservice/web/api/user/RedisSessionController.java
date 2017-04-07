@@ -31,9 +31,6 @@ import java.util.Map;
 public class RedisSessionController extends BaseControllerUtil {
     private static final Logger log = LoggerFactory.getLogger(RedisSessionController.class);
 
-    @Value("#{properties['redis-expired-time']}")
-    private String redisExpiredTime;
-
     @Autowired
     private AppService appService;
     @Autowired
