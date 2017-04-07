@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1112,7 +1113,7 @@ public class UserInterfaceController {
 			signature=HMacSha1.getNewResult(signature);
 		}
 		/*final String fullUri =saveRedisUri+"?client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&session_id="+sessionId+"&redis_key="+redisKey+"&redis_value="+redisValue+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;*/
-		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+redisValue+"&session_time="+sessionTime+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
+		String data = sendPost(saveRedisUri,"client_id="+clientId+"&access_token="+accessToken+"&service_name="+serviceName+"&redis_key="+redisKey+"&redis_value="+ URLEncoder.encode(redisValue,"utf-8")+"&session_time="+sessionTime+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce);
 		LOG.debug("Send to user-service-server URL: {}", data);
 
 		model.addAttribute("saveRedisUri", saveRedisUri);
