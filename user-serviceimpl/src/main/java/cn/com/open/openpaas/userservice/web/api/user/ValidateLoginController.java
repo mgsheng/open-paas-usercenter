@@ -93,8 +93,8 @@ public class ValidateLoginController extends BaseControllerUtil {
 				    		WebUtils.paraMandaChkAndReturn(3,response,"用户不存在");
  				             return;
 				    	}
-				    	if(timeSub>30){
-				    		WebUtils.paraMandaChkAndReturn(5,response,"时间超时-超过30分钟有效期");
+				    	if(timeSub>Integer.parseInt(userserviceDev.getRedisExpireTime())){
+				    		WebUtils.paraMandaChkAndReturn(5,response,"时间超时-超过"+userserviceDev.getRedisExpireTime()+"分钟有效期");
  				             return;
 				    	}
 				    }
