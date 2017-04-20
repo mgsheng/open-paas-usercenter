@@ -1,10 +1,7 @@
 package cn.com.open.openpaas.userservice.app.tools;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
-import sun.misc.BASE64Encoder;
 
 public class MD5 {
 	public final static String Md5(String str) {

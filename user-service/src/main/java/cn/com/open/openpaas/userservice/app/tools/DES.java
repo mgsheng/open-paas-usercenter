@@ -8,8 +8,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
  
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 public class DES {
  
     public final static String DES_KEY_STRING = "ABSujsuu";
@@ -79,16 +78,16 @@ public class DES {
     public static String base64Encode(byte[] s) {
         if (s == null)
             return null;
-        BASE64Encoder b = new sun.misc.BASE64Encoder();
-        return b.encode(s);
+        Base64 b= new Base64();
+        return b.encodeToString(s);
     }
  
     public static byte[] base64Decode(String s) throws IOException {
         if (s == null)
             return null;
-        BASE64Decoder decoder = new BASE64Decoder();
+        Base64 decoder = new Base64();
         s = new String(s.getBytes("UTF-8"));
-        byte[] b = decoder.decodeBuffer(s);
+        byte[] b = decoder.decode(s);
         return b;
     }
     public static String getNewSecert(String secert){
@@ -104,7 +103,7 @@ public class DES {
         String key = "1e167b2f28a6f4daf5a4812baa958242";
         String encryptData = encrypt(source, key);
         System.out.println("加密后: " + encryptData);
-        String decryptData = decrypt("TpdwhPphhZymlQ9S94NoA7/O6BX1bjbEvV+TdE55InYDIY910NxWjuBRWC7w4aM4VHdSaLfhWraGdT7ymkA45KijOFNw974HXBtpQT42R74n/hWcNJArR3UnShfIclnMUtEa0OnD1BC4R/eRNYA2y3cf0JmosI7eucb7/xmUNk2JFL96qdSZgA==",  key);
+        String decryptData = decrypt(encryptData,  key);
         System.out.println("解密后: " + decryptData);
     }
 }
