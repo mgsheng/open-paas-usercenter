@@ -71,6 +71,7 @@ public class UserCenterRegController extends BaseControllerUtil {
         String username=userCenterReg.getUsername();
         String  isValidate =userCenterReg.getIsValidate();
         String cardNo=userCenterReg.getCard_no();
+        
         if(username==null||username.trim().length()==0)
         {
         	username=null;
