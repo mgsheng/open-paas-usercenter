@@ -17,6 +17,7 @@ import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.tools.DES;
+import cn.com.open.openpaas.userservice.app.tools.DESUtil;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
@@ -123,7 +124,12 @@ public class AutoLoginController {
     				    		  return "redirect:"+desAddress;
     				    		 }else{
     				    			 String mcSercrt=app_id+"#"+user.username()+"#"+user.email()+"#"+user.phone()+"#"+user.guid()+"#"+time+"#"+desAppKey+"#"+salt+"#"+desAddress+"#"+studentCode+"#"+realName;
-    				    			 String sendMcSercret=DES.encrypt(mcSercrt, desAppSecert);
+    				    			 String sendMcSercret="";
+    				    			 if(desApp_id.equals("10026")){
+    				    				 sendMcSercret=DESUtil.encrypt(mcSercrt, desAppSecert);
+    				    			 }else{
+    				    				 sendMcSercret=DES.encrypt(mcSercrt, desAppSecert);
+    				    			 }
     				    			 sendMcSercret=DES.getNewSecert(sendMcSercret);
     				    			 if(!nullEmptyBlankJudge(desAddress)){
 										return "redirect:"+desAppUrl+"?secret="+sendMcSercret+"&desAddress="+desAddress;  
