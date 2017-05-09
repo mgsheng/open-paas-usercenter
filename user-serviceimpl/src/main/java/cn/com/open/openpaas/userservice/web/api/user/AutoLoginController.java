@@ -132,8 +132,11 @@ public class AutoLoginController {
     				    			 }
     				    			 sendMcSercret=DES.getNewSecert(sendMcSercret);
     				    			 if(!nullEmptyBlankJudge(desAddress)){
-										return "redirect:"+desAppUrl+"?secret="+sendMcSercret+"&desAddress="+desAddress;  
-										
+    				    				 if(desAppUrl.indexOf("?")>-1){
+    				    					 return "redirect:"+desAppUrl+"&secret="+sendMcSercret+"&desAddress="+desAddress;  
+    				    				 }else{
+    				    					 return "redirect:"+desAppUrl+"?secret="+sendMcSercret+"&desAddress="+desAddress;  
+    				    				 }
     				    			 }else{
         						    	 return "redirect:"+desAppUrl+"?secret="+sendMcSercret; 
     				    			 }

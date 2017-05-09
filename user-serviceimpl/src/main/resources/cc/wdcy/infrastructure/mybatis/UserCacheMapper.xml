@@ -203,4 +203,11 @@
 	<select id="findUserById" parameterType="Integer" resultMap="userCacheMap">
          select <include refid="Column_List" /> from user_cache where id = #{id}
 	</select>
+	
+	
+	<insert id="saveUserCache" parameterType="UserCache" useGeneratedKeys="true" keyProperty="id">
+	        insert into user_cache(id,guid,pid,archived,create_time,email,sha1_password,aes_password,user_name,phone, last_login_time,nickname,real_name,head_picture,identify_no,identify_type,user_type,user_sercure,default_user,app_id,card_no,md5_password,md5_salt)
+	        values
+	        (#{id},#{guid},#{pid},#{archived},#{createTime},#{email},#{sha1Password},#{aesPassword},#{username}, #{phone}, #{lastLoginTime}, #{nickName},#{realName},#{headPicture}, #{identifyNo}, #{identifyType}, #{userType}, #{userSercure},#{defaultUser},#{appId},#{cardNo},#{md5Password},#{md5Salt})
+	</insert>
 </mapper>

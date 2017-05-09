@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.model.UserCache;
 
 /**
@@ -32,5 +33,6 @@ public interface UserCacheRepository extends Repository {
 	List<UserCache> findAll();
 	UserCache findUserById(Integer userId);
 	void updateUserStatus( @Param("guid")String guid,@Param("status")String status);
+	 void saveUserCache(UserCache userCache);
 
 }

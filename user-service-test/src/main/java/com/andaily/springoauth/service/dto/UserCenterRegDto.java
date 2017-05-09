@@ -82,10 +82,20 @@ public class UserCenterRegDto implements Serializable {
     private String appUid;
     private String guid;
     private String whetherBind;
+    private String methordName;
     
     
     
-    public String getWhetherBind() {
+    
+    public String getMethordName() {
+		return methordName;
+	}
+
+	public void setMethordName(String methordName) {
+		this.methordName = methordName;
+	}
+
+	public String getWhetherBind() {
 		return whetherBind;
 	}
 
@@ -625,8 +635,8 @@ public class UserCenterRegDto implements Serializable {
         		userCenterRegUri,username,aesPassword, clientId, access_token, grantType, scope, sourceId,phone,isValidate,email,signature,timestamp,signatureNonce,cardNo);  
     }
 	public String getSaveUri(String signature,String timestamp,String signatureNonce) throws UnsupportedEncodingException {
-        return String.format("%s?username=%s&password=%s&client_id=%s&access_token=%s&grant_type=%s&scope=%s&source_id=%s&phone=%s&isValidate=%s&email=%s&signature=%s&timestamp=%s&signatureNonce=%s&card_no=%s&id=%s&guid=%s&appUid=%s",
-        		saveUserInfoUri,username,aesPassword, clientId, access_token, grantType, scope, sourceId,phone,isValidate,email,signature,timestamp,signatureNonce,cardNo,id,guid,appUid);  
+        return String.format("%s?username=%s&password=%s&client_id=%s&access_token=%s&grant_type=%s&scope=%s&methordName=%s&source_id=%s&phone=%s&isValidate=%s&email=%s&signature=%s&timestamp=%s&signatureNonce=%s&card_no=%s&id=%s&guid=%s&appUid=%s",
+        		saveUserInfoUri,username,aesPassword, clientId, access_token, grantType, scope,methordName, sourceId,phone,isValidate,email,signature,timestamp,signatureNonce,cardNo,id,guid,appUid);  
     }
 	public String getsynUserInfoUri() throws UnsupportedEncodingException {
         return String.format("%s?username=%s&password=%s&client_id=%s&access_token=%s&grant_type=%s&scope=%s&source_id=%s&nickname=%s&real_name=%s&head_picture=%s&identify_type=%s&identify_no=%s&phone=%s&email=%s&user_type=%s&user_state=%s&sex=%s&nation=%s&politics=%s&birthday=%s&age=%s&marriage=%s&education=%s&occupation=%s&region=%s&province=%s&city=%s&hukou=%s&create_time=%s&qq=%s&weixin=%s&weibo=%s&blog=%s&others=%s&address=%s&school=%s&major=%s&start_date=%s&end_date=%s&study_description=%s&study_level=%s&home_address=%s&tel=%s&fax=%s&begin_date=%s&finish_date=%s&now_address=%s&company=%s&description=%s&position=%s&responsibility=%s&work_content=%s",

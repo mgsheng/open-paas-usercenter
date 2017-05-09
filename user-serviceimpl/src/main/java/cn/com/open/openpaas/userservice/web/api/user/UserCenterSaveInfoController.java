@@ -26,7 +26,9 @@ import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.CommonConstant;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
+import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 
 /**
@@ -46,6 +48,8 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 	 private RedisClientTemplate redisClient;
 	 @Autowired
 	 private UserserviceDev userserviceDev;
+	 @Autowired
+	 private UserCacheService userCacheService;
   
 	 @RequestMapping("saveUserInfo")
 	    public void userSynUserInfo(HttpServletRequest request,HttpServletResponse response,UserCenterRegDto userCenterReg) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -87,130 +91,6 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
                    else if(methord!=null&&methord.equals(CommonConstant.METHORD_BIND_USER_INFO)){
                 	   flag=  bindUserInfo(app,userCenterReg);
 	        	   }
-	        	 /*  
-	                    AppUser appUser = appUserService.findByCidSid(app.getId(), userCenterReg.getSource_id());
-	                    if(null!=appUser){
-	                         user 
-	                            User user = userService.findUserById(appUser.userId());
-	                            if (null != user) {
-	                                if (!nullEmptyBlankJudge(userCenterReg.getUsername())) {
-	                                user.setUsername(userCenterReg.getUsername());
-	                                }
-	                                if (!nullEmptyBlankJudge(userCenterReg.getPassword())) {
-	                                	String aesPassword="";
-	            						try {
-	            							aesPassword=AESUtil.encrypt(userCenterReg.getPassword(), userserviceDev.getAes_userCenter_key());
-	            						} catch (Exception e1) {
-	            							log.info("aes加密出错："+userCenterReg.getPassword());
-	            							e1.printStackTrace();
-	            						}
-	            						user.setAesPassword(aesPassword);
-		                            }
-	                                if(!nullEmptyBlankJudge(userCenterReg.getPhone())){
-	                                user.setPhone(userCenterReg.getPhone());
-	                                }if (!nullEmptyBlankJudge(userCenterReg.getEmail())) {
-	                                  user.setEmail(userCenterReg.getEmail());
-	                                }if (!nullEmptyBlankJudge(userCenterReg.getCard_no())) {
-		                              user.setCardNo(userCenterReg.getCard_no());
-		                            }  if(nullEmptyBlankJudge(userCenterReg.getPassword())|| ("null").equals(userCenterReg.getPassword())){
-	                                    user.userType(1);
-	                                } user.userState("1");
-	                                if(!nullEmptyBlankJudge(userCenterReg.getGuid())){
-		                               user.guid(userCenterReg.getGuid());
-		                             }
-	                                userService.updateUser(user);
-	                            }else{
-	                                user=new User(userCenterReg.getUsername(),userCenterReg.getPassword(),userCenterReg.getPhone(),
-	                                        userCenterReg.getEmail(),userCenterReg.getNickname(),
-	                                        userCenterReg.getReal_name(),userCenterReg.getHead_picture());
-	                                user.setEmailActivation(User.ACTIVATION_YES);
-	                                user.userState("1");
-	                                userService.save(user);
-	                        }
-	                    }*/
-	                    
-	                    /*    else {
-	                        User user = null;
-	                        if(!nullEmptyBlankJudge(userCenterReg.getGuid())){
-	                      	  user = userService.findByGuid(userCenterReg.getGuid());
-	                       }
-	                        if((null==user)&&!nullEmptyBlankJudge(userCenterReg.getPhone())){
-	                        	
-	                        	List<User> userList = userService.findByPhone(userCenterReg.getPhone());
-	                        	if(userList!=null && userList.size()>0){
-	                        		user = userList.get(0);
-	                        	}
-	                        }
-	                        if((null==user)&&!nullEmptyBlankJudge(userCenterReg.getEmail())){
-	                        	List<User> userList = userService.findByEmail(userCenterReg.getEmail());
-	                            if(userList!=null && userList.size()>0){
-	                        		user = userList.get(0);
-	                        	}
-	                        }
-	            			if(user==null){
-	            				 user=new User(userCenterReg.getUsername(),userCenterReg.getPassword(),userCenterReg.getPhone(),userCenterReg.getEmail(),"","","");
-								String aesPassword="";
-								try {
-									aesPassword=AESUtil.encrypt(userCenterReg.getPassword(), userserviceDev.getAes_userCenter_key());
-								} catch (Exception e1) {
-									log.info("aes加密出错："+userCenterReg.getPassword());
-									e1.printStackTrace();
-								}
-								user.setAesPassword(aesPassword);
-								user.setAppId(app.getId());
-								if(!nullEmptyBlankJudge(userCenterReg.getId())){
-								  user.setId(Integer.parseInt(userCenterReg.getId()));	
-								}if(!nullEmptyBlankJudge(userCenterReg.getGuid())){
-								  user.guid(userCenterReg.getGuid());	
-								}
-								//sha1 加密
-								PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
-								sha1Password=passwordEncoder.encodePassword(password, null);
-								
-								user.setSha1Password(sha1Password);
-								user.cardNo(userCenterReg.getCard_no());
-								user.setEmailActivation(User.ACTIVATION_NO);
-								user.userState("0");
-								Boolean f=userService.save(user);
-								if(f){
-								if(null==userCenterReg.getSource_id()||"".equals(userCenterReg.getSource_id().trim())){
-									appUser=new AppUser(app.getId(),user.getId(),user.guid());
-								}else{
-									appUser=new AppUser(app.getId(),user.getId(),userCenterReg.getSource_id());
-								}
-								if(!nullEmptyBlankJudge(userCenterReg.getAppUid())){
-									appUser.appUid(Integer.parseInt(userCenterReg.getAppUid()));
-								}
-								f=appUserService.saveAppUser(appUser);
-								if(f){
-				            		map.put("guid", user.guid());
-				            		if(!nullEmptyBlankJudge(userCenterReg.getUsername())&&!nullEmptyBlankJudge(userCenterReg.getPassword())&&userCenterReg.getUsername().equals(userCenterReg.getPassword())){
-				            		  map.put("msg","用户名和密码一致，建议及时更新密码");	
-				            		}
-				            		map.put("guid", user.guid());
-								}
-							 }
-	            			}else{
-		            				if(null==userCenterReg.getSource_id()||"".equals(userCenterReg.getSource_id().trim())){
-										appUser=new AppUser(app.getId(),user.getId(),user.guid());
-									}else{
-										appUser=new AppUser(app.getId(),user.getId(),userCenterReg.getSource_id());
-									}
-		            				if(!nullEmptyBlankJudge(userCenterReg.getAppUid())){
-										appUser.appUid(Integer.parseInt(userCenterReg.getAppUid()));
-									}
-	            					Boolean f=appUserService.saveAppUser(appUser);
-	            					if(f){
-	            						if(!nullEmptyBlankJudge(userCenterReg.getCard_no())){
-	            							userService.updateUserCardNoById(user.getId(),userCenterReg.getCard_no());
-	            						}
-	            						if(!nullEmptyBlankJudge(userCenterReg.getPhone())){
-	            							userService.updatePhoneById(user.getId(), userCenterReg.getPhone());
-	            						}
-	            	            		map.put("guid", user.guid());
-	            					}
-	            				}
-	            		}*/
 	                }
 	            if(!flag){
 	                writeErrorJson(response,map);
@@ -225,37 +105,66 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 
 	public  boolean registerUser( App app,UserCenterRegDto userCenterReg){
 		boolean flag=false;
-		User user=new User(userCenterReg.getUsername(),userCenterReg.getPassword(),userCenterReg.getPhone(),userCenterReg.getEmail(),"","","");
-		AppUser appUser=null;
-			String aesPassword="";
+		 User user=userService.findByUsername(userCenterReg.getUsername());
+		  String aesPassword="";
 			try {
 				aesPassword=AESUtil.encrypt(userCenterReg.getPassword(), userserviceDev.getAes_userCenter_key());
 			} catch (Exception e1) {
 				log.info("aes加密出错："+userCenterReg.getPassword());
 				e1.printStackTrace();
 			}
-			user.setAesPassword(aesPassword);
-			user.setAppId(app.getId());
-			if(!nullEmptyBlankJudge(userCenterReg.getId())){
-			  user.setId(Integer.parseInt(userCenterReg.getId()));	
-			}if(!nullEmptyBlankJudge(userCenterReg.getGuid())){
-			  user.guid(userCenterReg.getGuid());	
-			}
-			user.cardNo(userCenterReg.getCard_no());
-			user.setEmailActivation(User.ACTIVATION_NO);
-			user.userState("0");
-			Boolean f=userService.save(user);
-			if(f){
-			if(null==userCenterReg.getSource_id()||"".equals(userCenterReg.getSource_id().trim())){
-				appUser=new AppUser(app.getId(),user.getId(),user.guid());
-			}else{
-				appUser=new AppUser(app.getId(),user.getId(),userCenterReg.getSource_id());
-			}
-			if(!nullEmptyBlankJudge(userCenterReg.getAppUid())){
-				appUser.appUid(Integer.parseInt(userCenterReg.getAppUid()));
-			}
-			flag =appUserService.saveAppUser(appUser);
-		 }
+		 if(user==null){
+			 user=new User(userCenterReg.getUsername(),userCenterReg.getPassword(),userCenterReg.getPhone(),userCenterReg.getEmail(),"","","");
+				AppUser appUser=null;
+					user.setAesPassword(aesPassword);
+					user.setAppId(app.getId());
+					if(!nullEmptyBlankJudge(userCenterReg.getId())){
+					  user.setId(Integer.parseInt(userCenterReg.getId()));	
+					}if(!nullEmptyBlankJudge(userCenterReg.getGuid())){
+					  user.guid(userCenterReg.getGuid());	
+					}
+					user.cardNo(userCenterReg.getCard_no());
+					user.setEmailActivation(User.ACTIVATION_NO);
+					user.userState("0");
+					Boolean f=userService.save(user);
+					if(f){
+					if(null==userCenterReg.getSource_id()||"".equals(userCenterReg.getSource_id().trim())){
+						appUser=new AppUser(app.getId(),user.getId(),user.guid());
+					}else{
+						appUser=new AppUser(app.getId(),user.getId(),userCenterReg.getSource_id());
+					}
+					if(!nullEmptyBlankJudge(userCenterReg.getAppUid())){
+						appUser.appUid(Integer.parseInt(userCenterReg.getAppUid()));
+					}
+					flag =appUserService.saveAppUser(appUser);
+				 } 
+		  }else{
+			  UserCache userCache=new UserCache(userCenterReg.getUsername(),userCenterReg.getPassword(),userCenterReg.getPhone(),userCenterReg.getEmail(),"","","");
+			  userCache.setAesPassword(aesPassword);
+			  userCache.appId(app.getId());
+				if(!nullEmptyBlankJudge(userCenterReg.getId())){
+					userCache.id(Integer.parseInt(userCenterReg.getId()));	
+				}if(!nullEmptyBlankJudge(userCenterReg.getGuid())){
+					userCache.guid(userCenterReg.getGuid());	
+				}
+				userCache.cardNo(userCenterReg.getCard_no());
+				userCache.emailActivation(User.ACTIVATION_NO);
+				userCache.userState("0");
+				Boolean f=userCacheService.save(userCache);
+				if(f){
+					AppUser appUser=null;
+					if(null==userCenterReg.getSource_id()||"".equals(userCenterReg.getSource_id().trim())){
+						appUser=new AppUser(app.getId(),userCache.id(),userCache.guid());
+					}else{
+						appUser=new AppUser(app.getId(),userCache.id(),userCenterReg.getSource_id());
+					}
+					if(!nullEmptyBlankJudge(userCenterReg.getAppUid())){
+						appUser.appUid(Integer.parseInt(userCenterReg.getAppUid()));
+					}
+					appUser.isCache(1);
+					flag =appUserService.saveAppUser(appUser);
+		      }
+		  }
 			return flag;
 	}
 	public  boolean sysUserInfo( App app,UserCenterRegDto userCenterReg){
@@ -292,7 +201,38 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 	                       flag=userService.updateUser(user);
 	                   }
 	                   else{
-	                	   log.info("~~~~~~~~~~~~~~sysUserInfo:not found user,userId:"+userCenterReg.getId()+",appId:"+app.getId());
+	                	   UserCache userCache=userCacheService.findUserById(Integer.parseInt(userCenterReg.getId()));
+	                	   if(userCache!=null){
+	                		   if (!nullEmptyBlankJudge(userCenterReg.getUsername())) {
+		                		   userCache.username(userCenterReg.getUsername());
+			                       }
+			                       if (!nullEmptyBlankJudge(userCenterReg.getPassword())) {
+			                       	String aesPassword="";
+			   						try {
+			   							aesPassword=AESUtil.encrypt(userCenterReg.getPassword(), userserviceDev.getAes_userCenter_key());
+			   						} catch (Exception e1) {
+			   							log.info("aes加密出错："+userCenterReg.getPassword());
+			   							e1.printStackTrace();
+			   						}
+			   						userCache.setAesPassword(aesPassword);
+			                       }
+			                       if(!nullEmptyBlankJudge(userCenterReg.getPhone())){
+			                    	   userCache.phone(userCenterReg.getPhone());
+			                       }if (!nullEmptyBlankJudge(userCenterReg.getEmail())) {
+			                    	   userCache.email(userCenterReg.getEmail());
+			                       }if (!nullEmptyBlankJudge(userCenterReg.getCard_no())) {
+			                    	   userCache.cardNo(userCenterReg.getCard_no());
+			                       }  if(nullEmptyBlankJudge(userCenterReg.getPassword())|| ("null").equals(userCenterReg.getPassword())){
+			                    	   userCache.userType(1);
+			                       } userCache.userState("1");
+			                       if(!nullEmptyBlankJudge(userCenterReg.getGuid())){
+			                    	   userCache.guid(userCenterReg.getGuid());
+			                        }
+			                      userCacheService.updateUserCache(userCache);  
+			                      flag=true;
+	                	   }else{
+	                		   log.info("~~~~~~~~~~~~~~sysUserInfo:not found user,userId:"+userCenterReg.getId()+",appId:"+app.getId()); 
+	                	   }
 	                   }  
 		           }
 		           return flag;

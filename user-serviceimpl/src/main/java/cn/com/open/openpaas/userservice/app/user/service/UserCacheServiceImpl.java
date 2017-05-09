@@ -55,7 +55,7 @@ public class UserCacheServiceImpl implements UserCacheService {
 	@Override
 	public UserCache findUserById(Integer userId) {
 		// TODO Auto-generated method stub
-		return null;
+		return userCacheRepository.findUserById(userId);
 	}
 
 	@Override
@@ -94,42 +94,15 @@ public class UserCacheServiceImpl implements UserCacheService {
 		}
 	}
 
- /*   @Autowired
-    private UserCacheRepository userCacheRepository;
-
 	@Override
-	public UserCache findByUsername(String username) {
-		return userCacheRepository.findByUsername(username);
+	public Boolean save(UserCache userCache) {
+		try{
+			userCacheRepository.saveUserCache(userCache);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
 	}
 
-	@Override
-	public List<UserCache> findByEmail(String email) {
-		return userCacheRepository.findByEmail(email);
-	}
-
-	@Override
-	public List<UserCache> findByPhone(String phone) {
-		return userCacheRepository.findByPhone(phone);
-	}
-	
-	@Override
-    public List<UserCache> findByCardNo(String cardNo) {
-    	return userCacheRepository.findByCardNo(cardNo);
-    }
-	
-	@Override
-	public void updateUserCache(UserCache userCache){
-		userCacheRepository.updateUserCache(userCache);
-	}
-	
-	@Override
-	public List<UserCache> findAll() {
-		return userCacheRepository.findAll();
-	}
-
-	@Override
-	public UserCache findUserById(Integer userId) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
+ 
 }

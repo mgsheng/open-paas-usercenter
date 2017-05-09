@@ -170,6 +170,19 @@
                             <p class="help-block">是否验证密码规则</p>
                         </div>
                     </div> 
+                    
+                       <div class="form-group">
+                        <label class="col-sm-2 control-label">methordName</label>
+
+                        <div class="col-sm-10">
+                            <select name="methordName" ng-model="methordName" id="methordName"class="form-control">
+                                <option value="registerUser">注册</option>
+                                <option value="sysUserInfo">同步</option>
+                                <option value="bindUserInfo">绑定</option>
+                            </select>
+                            <p class="help-block">是否验证密码规则</p>
+                        </div>
+                    </div> 
                     <div class="well well-sm">
                          <span class="text-muted">最终发给 spring-oauth-server的 URL:</span>
                         <br/>
