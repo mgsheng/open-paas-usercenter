@@ -2,6 +2,7 @@ package cn.com.open.openpaas.userservice.dev;
 
 public class UserserviceDev {
 
+	
 	public  String aes_iv_key;
 	public String aes_userCenter_key;
 	public String password_rule;
