@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import cn.com.open.openpaas.userservice.app.logic.SendEmailLogicService;
 import cn.com.open.openpaas.userservice.app.logic.UserLogicService;
+import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.tools.PropertiesTool;
 import cn.com.open.openpaas.userservice.app.tools.SmsTools;
@@ -24,6 +25,7 @@ import cn.com.open.openpaas.userservice.app.user.model.UserWork;
 import cn.com.open.openpaas.userservice.app.user.service.UserActivatedService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.useractivated.model.UserActivated;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 
 /**
  * 用户logic
@@ -38,6 +40,8 @@ public class UserLogicServiceImpl implements UserLogicService {
     private UserActivatedService userActivatedService;
     @Autowired
     private SendEmailLogicService sendEmailLogicService;
+    @Autowired
+	 private UserserviceDev userserviceDev;
 
     /**
      * 修改用户密码
@@ -388,6 +392,7 @@ public class UserLogicServiceImpl implements UserLogicService {
 			for(int i=0;i<userList.size();i++){
 				User newUser=userList.get(i);
 				try {
+				 String	aesPassword=AESUtil.encrypt(newPwd, userserviceDev.getAes_userCenter_key());
 					Boolean isLink;
 					isLink =newUser.defaultUser();
 					List<User> parentUserlist;
@@ -420,9 +425,11 @@ public class UserLogicServiceImpl implements UserLogicService {
 						}
 					}else{
 						//刷新盐值，重新加密
+						
 						newUser.buildPasswordSalt();
 						newUser.setPlanPassword(newPwd);
 						newUser.setUpdatePwdTime(new Date());
+						newUser.setAesPassword(aesPassword);
 						userService.updateUser(newUser);
 					}
 					return true;
