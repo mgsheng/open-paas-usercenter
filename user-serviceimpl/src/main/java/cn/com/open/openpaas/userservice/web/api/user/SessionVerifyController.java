@@ -77,7 +77,7 @@ public class SessionVerifyController  extends BaseController{
 					Object userObj = redisValue.get("user");
 					//获取redis时间
 					Object sessiontime = redisValue.get("sessiontime");
-					int sessiont = 30;
+					int sessiont = Integer.parseInt(userserviceDev.getRedisExpireTime());
 					if(sessiontime != null && sessiontime != "" && "0" == sessiontime){
 						sessiont = Integer.parseInt((String) sessiontime);
 					}
