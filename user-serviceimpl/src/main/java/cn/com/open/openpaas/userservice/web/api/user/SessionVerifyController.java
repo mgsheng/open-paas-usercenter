@@ -75,6 +75,14 @@ public class SessionVerifyController  extends BaseController{
 				/*如果存在sessionId 则返回相应的数据 否则提示相应的信息验证失败*/
 				if(null != redisValue && redisValue.size()>0){
 					Object userObj = redisValue.get("user");
+					//获取redis时间
+					Object sessiontime = redisValue.get("sessiontime");
+					int sessiont = 30;
+					if(sessiontime != null && sessiontime != "" && "0" == sessiontime){
+						sessiont = Integer.parseInt((String) sessiontime);
+					}
+                	/*刷新时间*/
+					redisClient.setStringByTime(localRedisKey, redisValue.toString(), sessiont * 60);
 					if(null != userObj)
 					{
 						Map<String,Object> user = new ObjectMapper().readValue(userObj.toString(), HashMap.class);
