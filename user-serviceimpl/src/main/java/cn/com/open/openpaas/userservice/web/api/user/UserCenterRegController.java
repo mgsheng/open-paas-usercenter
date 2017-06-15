@@ -157,7 +157,7 @@ public class UserCenterRegController extends BaseControllerUtil {
 					int returnValue; 
 					returnValue=judgeInput(username);
 					if(returnValue==1){
-						map = paraMandaChkAndReturnMap(7, response,"用户名5~20个字符");
+						map = paraMandaChkAndReturnMap(7, response,"用户名5~50个字符");
 						OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 						writeErrorJson(response,map);
 						return;

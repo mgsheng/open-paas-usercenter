@@ -33,6 +33,8 @@ public interface UserCacheRepository extends Repository {
 	List<UserCache> findAll();
 	UserCache findUserById(Integer userId);
 	void updateUserStatus( @Param("guid")String guid,@Param("status")String status);
-	 void saveUserCache(UserCache userCache);
-
+	void saveUserCache(UserCache userCache);
+	void deleteUser(Integer id);
+	void updateParentUser(@Param("username")String username,@Param("phone")String phone,@Param("email")String email,@Param("cardno")String cardno,@Param("id")int id);
+	void updateUserCardNoById(@Param("id")int id,@Param("cardNo")String cardNo);
 }

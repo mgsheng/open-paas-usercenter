@@ -210,4 +210,19 @@
 	        values
 	        (#{id},#{guid},#{pid},#{archived},#{createTime},#{email},#{sha1Password},#{aesPassword},#{username}, #{phone}, #{lastLoginTime}, #{nickName},#{realName},#{headPicture}, #{identifyNo}, #{identifyType}, #{userType}, #{userSercure},#{defaultUser},#{appId},#{cardNo},#{md5Password},#{md5Salt})
 	</insert>
+	 <update id="updateUserCardNoById">
+        update user_cache set
+        card_no = #{cardNo}
+        where id = #{id}
+    </update>
+     <update id="updateParentUser">
+        update user_cache set
+        user_name = #{username},
+        phone=#{phone},
+        email=#{email}
+        where id = #{id}
+    </update>
+     <delete id="deleteUser" parameterType="Integer">
+        delete from user_cache where id=#{id}
+    </delete>
 </mapper>

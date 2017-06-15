@@ -27,5 +27,8 @@ public interface UserCacheService {
 	List<UserCache> findByCardNo(String cardNo,Integer appid);
 	public Boolean updateUserStatus(String guid,String status);
 	Boolean save(UserCache userCache);
+	void deleteUserCache(Integer id);
+	public Boolean updateParentUserCache(String username,String phone,String email,String catdno,Integer id);
+	public Boolean updateUserCardNoById(int id, String cardNo);
 	
 }

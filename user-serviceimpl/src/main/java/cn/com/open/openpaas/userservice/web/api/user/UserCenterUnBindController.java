@@ -4,6 +4,7 @@ package cn.com.open.openpaas.userservice.web.api.user;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,8 @@ import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
+import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
@@ -50,6 +53,8 @@ public class UserCenterUnBindController  extends BaseControllerUtil{
 	 private RedisClientTemplate redisClient;
 	 @Autowired
 	 private UserserviceDev userserviceDev;
+	 @Autowired
+	 private UserCacheService userCacheService;
 	 
     /**
      * 用户应用解除绑定接口
@@ -83,34 +88,43 @@ public class UserCenterUnBindController  extends BaseControllerUtil{
     		}
     		map=checkClientIdOrToken(userCenterReg.getClient_id(),userCenterReg.getAccess_token(),app,tokenServices);
             if(null!=userCenterReg){
-           	 User user=null;
+           	 
             if(map.get("status").equals("1")) {//client_id和access_token正确
             	Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
     			if(!hmacSHA1Verification){
     				paraMandaChkAndReturn(5, response,"认证失败");
     				return;
     			}
-                if(!nullEmptyBlankJudge(username)){
+    			User user=null;
+    		    if(null!=app){
+    			AppUser appUser = appUserService.findByCidSid(app.getId(), userCenterReg.getSource_id());
+    			if(null!=appUser){
+				UserCache userCache = null;
+				Object userCacheInfoObj = redisClient.getObject(RedisConstant.USER_CACHE_INFO+username);
+				//存在缓存信息，用户存在于用户异常表中
+				if(userCacheInfoObj!=null ){
+					userCache = checkCacheUsername(username,userCacheService,app.getId());
+			    }
+    			if(userCache!=null){
+    				deleteUserCacheInfo(userCenterReg, userCache.id(),userCache.defaultUser(),userCache.pid());
+    			}else{
     				user=userService.findByUsername(username);
-                }
-                if(null!=app){
-                    AppUser appUser = appUserService.findByCidSid(app.getId(), userCenterReg.getSource_id());
-                    if(null!=appUser){
                    	 if(user!=null){
-                   		 deleteUserinfo(userCenterReg, user.getId(),user.defaultUser(),user.getPid());
+                   		 deleteUserInfo(userCenterReg, user.getId(),user.defaultUser(),user.getPid());
                    	 }else{
-                   			    map.clear();
-                                map.put("status", "0");
-                                map.put("errMsg","用户名不存在");
-                                map.put("error_code", "6");//source_id不存在 
-                   	 }
-                    }else {
-                        map.clear();
+                   		map.clear();
                         map.put("status", "0");
-                        map.put("errMsg","source_id不存在");
-                        map.put("error_code", "4");//source_id不存在
-                    }
-                }
+                        map.put("errMsg","用户名不存在");
+                        map.put("error_code", "6");//source_id不存在 
+                   	 }
+    			   }
+    			 }else {
+                     map.clear();
+                     map.put("status", "0");
+                     map.put("errMsg","source_id不存在");
+                     map.put("error_code", "4");//source_id不存在
+                 }
+    		   }
             }
             if(map.get("status")=="0"){
                 writeErrorJson(response,map);
@@ -129,7 +143,7 @@ public class UserCenterUnBindController  extends BaseControllerUtil{
      * @param defaultUser
      * @param pid
      */
-	private void deleteUserinfo(UserCenterRegDto userCenterReg, int id,Boolean defaultUser,String pid) {
+	private void deleteUserInfo(UserCenterRegDto userCenterReg, int id,Boolean defaultUser,String pid) {
 		List <AppUser> list=appUserService.findByUserId(id);
 		 if(list!=null&&list.size()>1){
 			for(int i=0;i<list.size();i++){
@@ -159,6 +173,45 @@ public class UserCenterUnBindController  extends BaseControllerUtil{
 			 }
 			 appUserService.deleteAppUser(list.get(0).appUid());
 			
+		 }
+	}
+	
+	 /**
+     * 删除用户缓存信息
+     * @param userCenterReg
+     * @param id
+     * @param defaultUser
+     * @param pid
+     */
+	private void deleteUserCacheInfo(UserCenterRegDto userCenterReg, int id,Boolean defaultUser,String pid) {
+		List <AppUser> list=appUserService.findByUserId(id);
+		 if(list!=null&&list.size()>1){
+			for(int i=0;i<list.size();i++){
+				if(list.get(i).sourceId().equals(userCenterReg.getSource_id())){
+					if(list.get(i).appId()==1){
+						userCacheService.updateUserCardNoById(list.get(i).userId(),"");	
+					}
+					appUserService.deleteAppUser(list.get(i).appUid());
+					break;
+				}
+			}
+		 }else{
+			 //存在Pid则证明该User为子账号,不存在Pid则证明该User为父账号
+			if(defaultUser&&!nullEmptyBlankJudge(pid)&&!pid.equals("0")){
+				 //更新父类账户defaultUser为false
+				userCacheService.deleteUserCache(id); 
+			 }else if(defaultUser&&nullEmptyBlankJudge(pid)){
+			 //更新子账户pid为空defaultUser为false
+			  //userService.updateDAPById("",false,String.valueOf(user.getId()));
+				 userCacheService.updateParentUserCache("","","","",id);
+			 }else if(defaultUser&&pid.equals("0")){
+				//更新子账户pid为空defaultUser为false
+			  //userService.updateDAPById("",false,String.valueOf(user.getId()));
+				 userCacheService.updateParentUserCache("","","","",id);
+			 }else{
+				 userCacheService.deleteUserCache(id); 
+			 }
+			 appUserService.deleteAppUser(list.get(0).appUid());
 		 }
 	}
     

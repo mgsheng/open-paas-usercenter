@@ -104,5 +104,34 @@ public class UserCacheServiceImpl implements UserCacheService {
 		}
 	}
 
+	@Override
+	public void deleteUserCache(Integer id) {
+		userCacheRepository.deleteUser(id);
+		
+	}
+
+	@Override
+	public Boolean updateParentUserCache(String username, String phone, String email, String cardno, Integer id) {
+		// TODO Auto-generated method stub
+		try {
+			userCacheRepository.updateParentUser(username, phone, email, cardno, id);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+	}
+
+	@Override
+	public Boolean updateUserCardNoById(int id, String cardNo) {
+		// TODO Auto-generated method stub
+		try {
+			userCacheRepository.updateUserCardNoById(id, cardNo);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+	}
  
 }
