@@ -103,18 +103,18 @@ public class UserCenterUnBindController  extends BaseControllerUtil{
 				Object userCacheInfoObj = redisClient.getObject(RedisConstant.USER_CACHE_INFO+username);
 				//存在缓存信息，用户存在于用户异常表中
 				if(userCacheInfoObj!=null ){
-					userCache = checkCacheUsername(username,userCacheService,app.getId());
+					userCache = userCacheService.findUserById(appUser.userId());
 			    }
     			if(userCache!=null){
     				deleteUserCacheInfo(userCenterReg, userCache.id(),userCache.defaultUser(),userCache.pid());
     			}else{
-    				user=userService.findByUsername(username);
+    				user=userService.findUserById(appUser.userId());
                    	 if(user!=null){
                    		 deleteUserInfo(userCenterReg, user.getId(),user.defaultUser(),user.getPid());
                    	 }else{
                    		map.clear();
                         map.put("status", "0");
-                        map.put("errMsg","用户名不存在");
+                        map.put("errMsg","用户不存在");
                         map.put("error_code", "6");//source_id不存在 
                    	 }
     			   }
