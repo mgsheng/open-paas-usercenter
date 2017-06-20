@@ -149,5 +149,53 @@ public class RedisSessionController extends BaseControllerUtil {
         }
         return;
     }
+    /**
+     * Redis获取接口
+     *
+     * @return Json
+     */
+    @RequestMapping(value = "delRedis", method = RequestMethod.POST)
+    public void delRedis(HttpServletRequest request, HttpServletResponse response) {
+        String client_id = request.getParameter("client_id");
+        String access_token = request.getParameter("access_token");
+        String redis_key = request.getParameter("redis_key");
+        log.info("client_id:" + client_id + "access_token:" + access_token  + "redis_key:" + redis_key);
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (!paraMandatoryCheck(Arrays.asList(client_id, access_token, redis_key))) {
+            paraMandaChkAndReturn(3, response, "必传参数中有空值");
+            return;
+        }
+        App app = (App) redisClient.getObject(RedisConstant.APP_INFO + client_id);
+        if (app == null) {
+            app = appService.findIdByClientId(client_id);
+            redisClient.setObject(RedisConstant.APP_INFO + client_id, app);
+        }
+        map = checkClientIdOrToken(client_id, access_token, app, tokenServices);
+        if (map.get("status").equals("1")) {
+            Boolean hmacSHA1Verification = OauthSignatureValidateHandler.validateSignature(request, app);
+            if (!hmacSHA1Verification) {
+                paraMandaChkAndReturn(4, response, "认证失败");
+                return;
+            }
+            map.clear();
+            /*判断是否存在key 否则是报错*/
+            if (redisClient.existKey(redis_key)) {
+            	redisClient.del(redis_key);
+                 map.put("status", 1);
+            }
+            else
+            {
+            	  map.put("status", 0);
+            	  map.put("error_code", 5);
+            	  map.put("errMsg", "redis key值不存在");
+            }
+        }
+        if (map.get("status") == "0") {
+            writeErrorJson(response, map);
+        } else {
+            writeSuccessJson(response, map);
+        }
+        return;
+    }
 
 }
