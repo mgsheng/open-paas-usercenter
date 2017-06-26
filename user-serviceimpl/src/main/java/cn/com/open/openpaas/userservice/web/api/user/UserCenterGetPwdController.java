@@ -76,6 +76,7 @@ private UserService userService;
 						map.clear();
 						map.put("status", "1");//接口返回状态：1-正确 0-错误
 						map.put("pwd",pwd);
+						log.info("解密后pwd：" + pwd);
 		    		 } else{
 			    	    paraMandaChkAndReturn(1, response, "用户不存在");
 			    	 }
