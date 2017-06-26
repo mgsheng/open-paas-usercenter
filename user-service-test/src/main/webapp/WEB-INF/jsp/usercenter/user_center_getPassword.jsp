@@ -25,7 +25,7 @@
 
                 <div ng-show="visible">
                 
-                 		<!-- <div class="form-group">
+                 		 <div class="form-group">
                             <label class="col-sm-2 control-label">client_id</label>
 
                             <div class="col-sm-10">
@@ -44,7 +44,7 @@
 
                                 <p class="help-block">客户端从Oauth Server 获得访问的token</p>
                             </div>
-                        </div> -->
+                        </div> 
                          <div class="form-group">
                             <label class="col-sm-2 control-label">userName</label>
 
@@ -53,16 +53,6 @@
                                        ng-model="userName"/>
 
                                 <p class="help-block">用户名称</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">sourceId</label>
-
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="sourceId" required="required"
-                                       ng-model="sourceId"/>
-
-                                <p class="help-block">sourceId</p>
                             </div>
                         </div>
                         
@@ -104,21 +94,18 @@
 				var accessToken=$("input[name='access_token']").val();
 				var userName=$("input[name='userName']").val();
 	   			var GetPassWordUri=$("input[name='GetPassWordUri']").val();
-			//	if(clientId==''){
-			//	    alert("请输入clientId");
-			//		return;
-		//	}
-			////	if(accessToken==''){
-			//	    alert("请输入accessToken");
-			//		return;
-			//	}
+				if(clientId==''){
+				    alert("请输入clientId");
+					return;
+		    	}
+				if(accessToken==''){
+				    alert("请输入accessToken");
+					return;
+				}
 				if(userName==''){
 				    alert("请输入userName");
 					return;
-				}if(sourceId==''){
-				    alert("请输入sourceId");
-					return;
-				}
+				} 
 				$.post("${contextPath}/userCenterReg/getSignature",
 					{
 					clientId:clientId,
@@ -129,9 +116,7 @@
 	   					    var signature=data.signature;
 	   					    var timestamp=data.timestamp;
 	   					    var signatureNonce=data.signatureNonce;
-	   					//  var regUri=GetPassWordUri+"?&client_id="+clientId+"&sourceId="+sourceId+"&access_token="+accessToken+"&userName="+userName+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
-    					    var regUri=GetPassWordUri+"?&sourceId="+sourceId+"&userName="+userName+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
-	   						
+	   					    var regUri=GetPassWordUri+"?&client_id="+clientId+"&access_token="+accessToken+"&userName="+userName+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
 	   						$("#regUri").html(regUri);
 	   					}
 	   					else{

@@ -645,13 +645,6 @@ public class UserInterfaceController {
        }
      
      
-     
-     
-     
-     
-     
-     
-     
      /**
       *.查询用户密码
       * @param model
@@ -659,44 +652,35 @@ public class UserInterfaceController {
       */
       @RequestMapping(value = "userCenterGetPwd", method = RequestMethod.GET)
       public String userCenterGetPassWord(Model model) {
-      //	model.addAttribute("getValidationRuleUri", getValidationRuleUri);
       	model.addAttribute("GetPassWordUri", GetPassWordUri);
         return "usercenter/user_center_getPassword";
       }
       @RequestMapping(value = "userCenterGetPwd", method = RequestMethod.POST)
-      public String userCenterGetPassWord(String userName,String sourceId) throws Exception {
-     	//   String key=map.get(client_id);
+      public String userCenterGetPassWord(String access_token,String client_id,String userName) throws Exception {
+     	   String key=map.get(client_id);
  	   	  	String timestamp="";
  	   	  	String signatureNonce="";
  	   	  	String signature="";
- 	   	 // 	if(key!=null){
+ 	   	  	if(key!=null){
  	   	  	    timestamp=DateTools.getSolrDate(new Date());
  	   	  	    StringBuilder encryptText = new StringBuilder();
  	   		 	signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
- 	   		 	/*encryptText.append(client_id);
+ 	   		 	encryptText.append(client_id);
  	   			encryptText.append(SEPARATOR);
  	   		 	encryptText.append(access_token);
- 	   		 	encryptText.append(SEPARATOR);*/
+ 	   		 	encryptText.append(SEPARATOR);
  	   		 	encryptText.append(timestamp);
  	   		 	encryptText.append(SEPARATOR);
  	   		 	encryptText.append(signatureNonce);
- 	   		//    signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
+ 	   		    signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
  	   		    signature=HMacSha1.getNewResult(signature);
- 	   	 // 	}
- 	       //final String fullUri = GetPassWordUri+"?access_token="+access_token+"&sourceId="+sourceId+"&client_id="+client_id+"&userName="+userName+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
-
-            final String fullUri = GetPassWordUri+"?sourceId="+sourceId+"&userName="+userName+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+ 	   	  	}
+            final String fullUri = GetPassWordUri+"?access_token="+access_token+"&client_id="+client_id+"&userName="+userName+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
             LOG.debug("Send to Oauth-Server URL: {}", fullUri);
             return "redirect:" + fullUri;
         }
      
      
-     
-     
-     
-     
-     
-   
        /**
         *查询密码是否符合规则
         * @param model
