@@ -91,6 +91,9 @@
             <p><a href="userCentergetValidationRule">userCentergetValidationRule</a> <br/>用户获取密码规则接口</p>
         </li>
          <li>
+            <p><a href="userCenterGetPwd">userCenterGetPwd</a> <br/>用户查询密码接口2222222222222</p>
+        </li>
+         <li>
             <p><a href="validateLogin">validateLogin</a> <br/>验证用户自动登录地址</p>
         </li>
          <li>
