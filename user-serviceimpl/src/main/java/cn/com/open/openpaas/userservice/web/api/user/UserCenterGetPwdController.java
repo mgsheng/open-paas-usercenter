@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
+import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.user.model.User;
@@ -71,6 +72,7 @@ private UserService userService;
 							if(user.getDesPassword()!=null&&!"".equals(user.getDesPassword()))
 							pwd=user.getDesPassword();
 						}
+						pwd = AESUtil.decrypt(pwd, app.getAppsecret()).trim();
 						map.clear();
 						map.put("status", "1");//接口返回状态：1-正确 0-错误
 						map.put("pwd",pwd);
