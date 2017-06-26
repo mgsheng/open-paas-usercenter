@@ -68,6 +68,7 @@ private UserService userService;
 						if(user.getAesPassword()!=null&&!"".equals(user.getAesPassword())){
 							pwd=user.getAesPassword();
 						}else{
+							if(user.getDesPassword()!=null&&!"".equals(user.getDesPassword()))
 							pwd=user.getDesPassword();
 						}
 						map.clear();
