@@ -127,7 +127,7 @@ private UserCacheService userCacheService;
 		    	  }
 		    	}
 			} catch (Exception e) {
-				writeErrorJson(response, map);
+				paraMandaChkAndReturn(1, response, "查询密码异常");
 			}
 	 	    if (map.get("status") == "0") {
 				writeErrorJson(response, map);
