@@ -656,7 +656,7 @@ public class UserInterfaceController {
         return "usercenter/user_center_getPassword";
       }
       @RequestMapping(value = "userCenterGetPwd", method = RequestMethod.POST)
-      public String userCenterGetPassWord(String access_token,String client_id,String userName) throws Exception {
+      public String userCenterGetPassWord(String access_token,String client_id,String userName,String source_id) throws Exception {
      	   String key=map.get(client_id);
  	   	  	String timestamp="";
  	   	  	String signatureNonce="";
@@ -671,11 +671,15 @@ public class UserInterfaceController {
  	   		 	encryptText.append(SEPARATOR);
  	   		 	encryptText.append(timestamp);
  	   		 	encryptText.append(SEPARATOR);
+ 	   		 	encryptText.append(userName);
+	   		 	encryptText.append(SEPARATOR);
+	   		 	encryptText.append(source_id);
+	   		 	encryptText.append(SEPARATOR);
  	   		 	encryptText.append(signatureNonce);
  	   		    signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
  	   		    signature=HMacSha1.getNewResult(signature);
  	   	  	}
-            final String fullUri = GetPassWordUri+"?access_token="+access_token+"&client_id="+client_id+"&userName="+userName+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+            final String fullUri = GetPassWordUri+"?access_token="+access_token+"&source_id="+source_id+"&client_id="+client_id+"&userName="+userName+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
             LOG.debug("Send to Oauth-Server URL: {}", fullUri);
             return "redirect:" + fullUri;
         }

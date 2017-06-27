@@ -55,6 +55,16 @@
                                 <p class="help-block">用户名称</p>
                             </div>
                         </div>
+                         <div class="form-group">
+                            <label class="col-sm-2 control-label">source_id</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="source_id" required="required"
+                                       ng-model="source_id"/>
+
+                                <p class="help-block">source_id</p>
+                            </div>
+                        </div>
                         
                 <div class="well well-sm">
                         <span class="text-muted">最终发给 spring-oauth-server的 URL:</span>
@@ -77,8 +87,8 @@
 <script>
     var AuthorizationCodeCtrl = ['$scope', function ($scope) {
         $scope.GetPassWordUri = '${GetPassWordUri}';
-        $scope.clientId='client-unity';
-        $scope.accessToken = 'e23b86ea-1d4d-427c-a3da-c13a56c87192';
+        $scope.clientId='337e8524bfd74f03916512bd7104567f';
+        $scope.accessToken = 'c235bae1-666b-47d1-bacb-a7ce26e7b93e';
         $scope.account = 'xiaoli';
 
         $scope.oldPwd = '111';
@@ -106,6 +116,10 @@
 				    alert("请输入userName");
 					return;
 				} 
+				if(source_id==''){
+				    alert("请输入source_id");
+					return;
+				} 
 				$.post("${contextPath}/userCenterReg/getSignature",
 					{
 					clientId:clientId,
@@ -116,7 +130,7 @@
 	   					    var signature=data.signature;
 	   					    var timestamp=data.timestamp;
 	   					    var signatureNonce=data.signatureNonce;
-	   					    var regUri=GetPassWordUri+"?&client_id="+clientId+"&access_token="+accessToken+"&userName="+userName+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
+	   					    var regUri=GetPassWordUri+"?&client_id="+clientId+"&source_id="+source_id+"&access_token="+accessToken+"&userName="+userName+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
 	   						$("#regUri").html(regUri);
 	   					}
 	   					else{
