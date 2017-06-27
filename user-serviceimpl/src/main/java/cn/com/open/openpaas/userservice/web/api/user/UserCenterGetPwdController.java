@@ -64,7 +64,7 @@ private UserCacheService userCacheService;
 			UserCache userCache=null;
 	        String pwd="";
 	 	     try{
-	 	     	log.info("client_id:"+client_id+"access_token:"+access_token+"userName:"+userName);
+	 	     	log.info("UserCenterGetPwdController   userCenterGetPassWord   client_id:"+client_id+"access_token:"+access_token+"userName:"+userName+"source_id:"+source_id);
 	 	    	log.info("signature:"+request.getParameter("signature")+"timestamp:"+request.getParameter("timestamp")+"signatureNonce:"+request.getParameter("signatureNonce"));
 	 	    	if (!paraMandatoryCheck(Arrays.asList(client_id,access_token,userName,source_id))) {
 	 				paraMandaChkAndReturn(3, response, "必传参数中有空值");
@@ -104,7 +104,7 @@ private UserCacheService userCacheService;
 		    		
 			    	 if(user!=null){
 						if(user.getAesPassword()!=null&&!"".equals(user.getAesPassword())){
-							pwd=user.getAesPassword();
+							pwd=aesDecrypt(user.getAesPassword(), app.getAppsecret());
 						}else{
 							if(user.getDesPassword()!=null&&!"".equals(user.getDesPassword()))
 							pwd=user.getDesPassword();
@@ -112,7 +112,7 @@ private UserCacheService userCacheService;
 						log.info("user pwd：" + pwd);
 		    		 }else if(userCache!=null){
 						if(userCache.getAesPassword()!=null&&!"".equals(userCache.getAesPassword())){
-							pwd=userCache.getAesPassword();
+							pwd=aesDecrypt(userCache.getAesPassword(), app.getAppsecret());
 						}else{
 							if(userCache.desPassword()!=null&&!"".equals(userCache.desPassword()))
 							pwd=userCache.desPassword();
@@ -121,14 +121,6 @@ private UserCacheService userCacheService;
 		    		 } else{
 			    	    paraMandaChkAndReturn(1, response, "用户不存在");
 			    	 }
-			    	
-			    	if(!"".equals(pwd)){
-				    	log.info("解密前pwd：" + pwd);
-						pwd = AESUtil.decrypt(pwd, userserviceDev.getAes_userCenter_key()).trim();
-						log.info("AESUtil.decrypt解密后pwd：" + pwd);
-						pwd = DES.encrypt(pwd, app.getAppsecret()).trim();
-						log.info("DES.encrypt加密后pwd：" + pwd);
-			    	}
 					map.clear();
 					map.put("status", "1");//接口返回状态：1-正确 0-错误
 					map.put("pwd",pwd);
@@ -145,5 +137,18 @@ private UserCacheService userCacheService;
 	    	  log.info("接口调用查询密码为："+pwd);
 	        return ;
 	    }
+		
+		public String aesDecrypt(String pwd,String appsecret){
+			try {
+				log.info("解密前pwd：" + pwd);
+				pwd = AESUtil.decrypt(pwd, userserviceDev.getAes_userCenter_key()).trim();
+				log.info("AESUtil.decrypt解密后pwd：" + pwd);
+				pwd = DES.encrypt(pwd, appsecret).trim();
+				log.info("DES.encrypt加密后pwd：" + pwd);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return pwd;
+		}
 	 
 }
