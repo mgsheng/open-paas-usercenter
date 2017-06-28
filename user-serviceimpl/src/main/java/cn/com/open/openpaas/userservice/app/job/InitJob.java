@@ -33,12 +33,13 @@ public class InitJob implements ApplicationListener<ContextRefreshedEvent> {
 		if(event.getApplicationContext().getDisplayName().equals("Root WebApplicationContext")){
 			log.info("项目启动完成");
 			log.info("更新UserCache缓存 start...");
-			List<UserCache> userCacheList = userCacheService.findAll();
+			List<UserCache> userCacheList = userCacheService.findUnprocessed();
 			if(userCacheList!=null && userCacheList.size()>0){
 				for(UserCache userCache : userCacheList){
 					redisClient.setObject(RedisConstant.USER_CACHE_INFO+userCache.username(), "");
 				}
 			}
+			userCacheService.updateUserCacheUnprocessed(userCacheList);
 			log.info("更新UserCache缓存 end...");
 		}
 	}

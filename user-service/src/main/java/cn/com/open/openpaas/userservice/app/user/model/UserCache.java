@@ -37,7 +37,7 @@ public class UserCache{
     private String cardNo;
     //Default user is initial when create database, do not delete
     private boolean defaultUser = false; //标记该用户是否有其他用户关联 true：有
-    
+    private Integer  process;  // 0:未处理，1：处理
     private String nickName;
     private String realName;
     private String headPicture;
@@ -455,7 +455,15 @@ public class UserCache{
 	public void setSha1Password(String sha1Password) {
 		this.sha1Password = sha1Password;
 	}
-	
+
+	public int process() {
+		return process;
+	}
+
+	public void process(Integer process) {
+		this.process = process;
+	}
+
 //	@Override
 //    public String toString() {
 //        final StringBuilder sb = new StringBuilder();

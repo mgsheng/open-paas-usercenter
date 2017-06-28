@@ -133,5 +133,20 @@ public class UserCacheServiceImpl implements UserCacheService {
 			return false;
 		}
 	}
- 
+
+	@Override
+	public List<UserCache> findUnprocessed() {
+		return userCacheRepository.findUnprocessed();
+	}
+
+	@Override
+	public boolean updateUserCacheUnprocessed(List<UserCache> userCacheList) {
+		try{
+			userCacheRepository.updateUserCacheUnprocessed(userCacheList);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 }

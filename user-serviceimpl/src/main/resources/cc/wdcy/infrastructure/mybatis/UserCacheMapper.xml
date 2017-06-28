@@ -16,7 +16,7 @@
         <result property="phone" column="phone"/>
         <result property="cardNo" column="card_no"/>
         <result property="defaultUser" column="default_user"/>
-        
+
         <result property="nickName" column="nickname"/>
         <result property="realName" column="real_name"/>
         <result property="headPicture" column="head_picture"/>
@@ -33,6 +33,7 @@
 		<result property="sha1Password" column="sha1_password"/>
 		<result property="md5Password" column="md5_password"/>
 		<result property="md5Salt" column="md5_salt"/>
+        <result property="process" column="process"/>
 
     </resultMap>
     
@@ -62,7 +63,8 @@
     	aes_password,
     	sha1_password,
     	md5_password,
-    	md5_salt
+    	md5_salt,
+    	process
     </sql>
 
 	<select id="findByUsername" resultMap="userCacheMap">
@@ -184,6 +186,9 @@
          <if test="md5Salt != null" >
         md5_salt = #{md5Salt},
         </if>
+        <if test="process != null" >
+            process = #{process},
+        </if>
         archived = #{archived},
         default_user = #{defaultUser},
         email_activation = #{emailActivation}
@@ -206,9 +211,9 @@
 	
 	
 	<insert id="saveUserCache" parameterType="UserCache" useGeneratedKeys="true" keyProperty="id">
-	        insert into user_cache(id,guid,pid,archived,create_time,email,sha1_password,aes_password,user_name,phone, last_login_time,nickname,real_name,head_picture,identify_no,identify_type,user_type,user_sercure,default_user,app_id,card_no,md5_password,md5_salt)
+	        insert into user_cache(id,guid,pid,archived,create_time,email,sha1_password,aes_password,user_name,phone, last_login_time,nickname,real_name,head_picture,identify_no,identify_type,user_type,user_sercure,default_user,app_id,card_no,md5_password,md5_salt,process)
 	        values
-	        (#{id},#{guid},#{pid},#{archived},#{createTime},#{email},#{sha1Password},#{aesPassword},#{username}, #{phone}, #{lastLoginTime}, #{nickName},#{realName},#{headPicture}, #{identifyNo}, #{identifyType}, #{userType}, #{userSercure},#{defaultUser},#{appId},#{cardNo},#{md5Password},#{md5Salt})
+	        (#{id},#{guid},#{pid},#{archived},#{createTime},#{email},#{sha1Password},#{aesPassword},#{username}, #{phone}, #{lastLoginTime}, #{nickName},#{realName},#{headPicture}, #{identifyNo}, #{identifyType}, #{userType}, #{userSercure},#{defaultUser},#{appId},#{cardNo},#{md5Password},#{md5Salt},#{process})
 	</insert>
 	 <update id="updateUserCardNoById">
         update user_cache set
@@ -225,4 +230,15 @@
      <delete id="deleteUser" parameterType="Integer">
         delete from user_cache where id=#{id}
     </delete>
+    <select id="findUnprocessed" resultMap="userCacheMap">
+        select
+        <include refid="Column_List" />
+        from user_cache where process = 0
+    </select>
+
+    <update id="updateUserCacheUnprocessed">
+        <foreach collection="userCaches" item="item" index="index" separator=";">
+            update user_cache set process = 1 where id = #{item.id}
+        </foreach>
+    </update>
 </mapper>

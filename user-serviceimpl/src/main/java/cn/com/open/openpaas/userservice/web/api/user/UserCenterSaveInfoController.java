@@ -150,6 +150,7 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 				userCache.cardNo(userCenterReg.getCard_no());
 				userCache.emailActivation(User.ACTIVATION_NO);
 				userCache.userState("0");
+				userCache.process(0);
 				Boolean f=userCacheService.save(userCache);
 				if(f){
 					AppUser appUser=null;

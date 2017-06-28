@@ -30,5 +30,8 @@ public interface UserCacheService {
 	void deleteUserCache(Integer id);
 	public Boolean updateParentUserCache(String username,String phone,String email,String catdno,Integer id);
 	public Boolean updateUserCardNoById(int id, String cardNo);
-	
+
+	List<UserCache> findUnprocessed();
+
+	boolean updateUserCacheUnprocessed(List<UserCache> userCacheList);
 }
