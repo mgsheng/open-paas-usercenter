@@ -203,14 +203,15 @@ public class UserCache{
 			}
 	    	//sha1_password 密码验证
 	    	else	if(StringUtils.isNotBlank(password)&&pwdtype.equals("SHA1")){
-	    		if(this.sha1Password!=null&&!"".equals(this.sha1Password)){
-	    			 PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
-	        		 password=passwordEncoder.encodePassword(password, null);
-	        		 if(password.equals(this.sha1Password)){
-	     				return true;
-	     			}
-	        	}
-	    	}
+				if (this.sha1Password != null && !"".equals(this.sha1Password)) {
+					PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
+					password = passwordEncoder.encodePassword(password, null)
+							.toLowerCase();
+					if (password.equals(this.sha1Password.toLowerCase())) {
+						return true;
+					}
+				}
+			}
     	}
     	return false;
     }
