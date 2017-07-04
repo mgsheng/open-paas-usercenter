@@ -38,9 +38,9 @@ public class InitJob implements ApplicationListener<ContextRefreshedEvent> {
 				for(UserCache userCache : userCacheList){
 					redisClient.setObject(RedisConstant.USER_CACHE_INFO+userCache.username(), "");
 				}
+				userCacheService.updateUserCacheUnprocessed(userCacheList);
 			}
-			userCacheService.updateUserCacheUnprocessed(userCacheList);
-			log.info("更新UserCache缓存 end...");
+            log.info("更新UserCache缓存 end...");
 		}
 	}
 }
