@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    consul:
+      host: 10.96.142.132
+      port: 8500
+      discovery:
+        healthCheckPath: /info
+        healthCheckInterval: 15s
+        instance-id: user-service
+        hostname: localhost
+        register: true
+  application:
+     name: user-service
+server:
+  port: 8080
+serverHost: 10.96.5.174

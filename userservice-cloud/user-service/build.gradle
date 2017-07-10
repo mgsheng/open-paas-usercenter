@@ -1,0 +1,71 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.3.RELEASE'
+	}
+	repositories {
+		maven { 	    
+            name 'open'             	    
+            url "http://maven.open.com.cn/repository/maven-public/"         	
+        }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    maven { 	    
+        name 'open'             	    
+        url "http://maven.open.com.cn/repository/maven-public/"         	
+    }
+    
+    maven {
+        name 'aliyun'         
+        url "http://maven.aliyun.com/nexus/content/groups/public"     
+    } 
+    
+	mavenCentral()
+}
+
+ext {
+	springCloudVersion = 'Dalston.RELEASE'
+	buildDir "./out/build/${project.name}"
+}
+dependencies {
+compile('org.springframework.cloud:spring-cloud-sleuth-zipkin-stream')
+	compile('org.springframework.cloud:spring-cloud-starter-stream-kafka')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-aop') 
+    compile('org.springframework.cloud:spring-cloud-starter-feign')
+    compile('org.springframework.cloud:spring-cloud-starter-consul-discovery')
+    compile('org.springframework.cloud:spring-cloud-starter-bus-kafka')
+	compile('net.sf.json-lib:json-lib:2.4:jdk15@jar')
+	compile('net.sf.ezmorph:ezmorph:1.0.6')
+	compile('com.alibaba:fastjson:1.1.31')
+	compile('commons-beanutils:commons-beanutils:1.7.0')
+	compile('org.springframework.boot:spring-boot-starter-data-redis')
+	compile('org.springframework.boot:spring-boot-starter-cache')
+	
+	compile('org.springframework.security:spring-security-core:3.1.0.RELEASE')
+	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.0')
+	compile('mysql:mysql-connector-java:5.1.41')
+	compile('com.alibaba:druid:1.0.18')
+	compile('org.json:json:20151123')
+	
+	
+	testCompile("junit:junit:4.12")
+	testCompile("org.springframework:spring-test")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
