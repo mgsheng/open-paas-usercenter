@@ -24,10 +24,6 @@ public class UserLoginService {
 		return userMapper.findUserAccount(entity.getUsername(),entity.getPassword());
 	}
 	
-	public  ArrayList<UserJsonVo>  findUserAll(UserMergeVo mergeVo){
-		return userMapper.findUserAll(mergeVo);
-	}
-	
 	public ArrayList<User> findUserAccountByUsername(UserVo user) {
 		return userMapper.findUserAccountByUsername(user.getUsername());
 	}
@@ -37,8 +33,11 @@ public class UserLoginService {
 		return userMapper.findIdByClientId(client_id);
 	}
 
-	public void updateUserAccount(User user2) {
-		 userMapper.updateUserAccount(user2);
+	public void updateUserAccount(UserVo user) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", user.getId());
+		map.put("aesPassword", user.getPassword());
+		 userMapper.updateUserAccount(map);
 	}
 
 	public ArrayList<UserJsonVo> findUserAccountList(int userId) {

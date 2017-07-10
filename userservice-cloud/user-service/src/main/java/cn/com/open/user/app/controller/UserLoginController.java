@@ -48,76 +48,76 @@ public class UserLoginController extends BaseController{
 	   private static final Logger log = LoggerFactory.getLogger(UserLoginController.class);
 	   
 	   /**
-	    * 添加快递订单信息
+	    * 登录
 	    * @param request
 	    * @param response
 	    */
 	    @SuppressWarnings("null")
 		@RequestMapping(value = "/usercenter/login", method = RequestMethod.GET)
 		public void login(HttpServletRequest request, HttpServletResponse response,UserVo user) {
- 	     	log.info("UserLoginController login username"+user.getUsername()+"password:"+user.getPassword());
- 	    	  
-	    	int userId=0;
-	    	int userCacheId=0;
+ 	     	log.info("UserLoginController usercenter/login username"+user.getUsername()+"password:"+user.getPassword());
 	    	ArrayList<User> cacheList=null;
-	    	 UserMergeVo mergeVo=null;
+	    	ArrayList<UserJsonVo> infoList =null;
+	    	UserMergeVo mergeVo=null;
 		   try {
 			   Map<String, Object> map = new HashMap<String, Object>();
 	 	    	if (!paraMandatoryCheck(Arrays.asList(user.getUsername(),user.getPassword()))) {
-				   paraMandaChkAndReturn(7, response, "提交的数据不完整");
+				   paraMandaChkAndReturn(7, response, "必传参数中有空值");
 	 				return;
 	 			}
-	 	        
+	 	    	
 	 	    	Object userCacheInfoObj = redisService.get(RedisConstant.USER_CACHE_INFO+user.getUsername());
+	 	    	//获取缓存数据
 				if(userCacheInfoObj!=null ){
 					cacheList=userCacheService.findUserCacheByUsername(user);
 					if(cacheList!=null||cacheList.size()>0){
 						for (User cache : cacheList) {
 							int i=checkPasswodByAes(user.getPassword(), cache, key);
 							if(i==ConstantMessage.USER_ZERO)continue;
-							if(i==ConstantMessage.USER_TWO||i==ConstantMessage.USER_THREE){
-								userCacheService.updateUserCache(cache);
-							}
-							if(userCacheId>0){
+							if(user.getId()>0){
 								paraMandaChkAndReturn(5, response,"登陆异常!");
 								return;
 							}
-							userCacheId=cache.getId();
-							mergeVo=new UserMergeVo(cache);
-						}
-					}
-    		    }
-					if(userCacheInfoObj==null||cacheList==null||cacheList.size()==0){
-						ArrayList<User> accountList=userLoginService.findUserAccountByUsername(user);
-						if(accountList==null||accountList.size()==0){
-							paraMandaChkAndReturn(2, response,"用户不存在!");
-							return;
-						}else{
-							for (User userAccount : accountList) {
-								int i=checkPasswodByAes(user.getPassword(), userAccount, key);
-								if(i==ConstantMessage.USER_ZERO)continue;
-								if(i==ConstantMessage.USER_TWO||i==ConstantMessage.USER_THREE){
-									userLoginService.updateUserAccount(userAccount);
-								}
-								if(userId>0){
-									paraMandaChkAndReturn(5, response,"登陆异常!");
-									return;
-								}
-								userId=userAccount.getId();
-								mergeVo=new UserMergeVo(userAccount);
+							user.setId(cache.getId());
+							if(i==ConstantMessage.USER_TWO||i==ConstantMessage.USER_THREE){
+								userCacheService.updateUserCache(user);
 							}
-							
-							if(userCacheId==0&&userId==0){
-								paraMandaChkAndReturn(3, response,"密码错误!");
+							mergeVo=new UserMergeVo(cache);
+					   }
+					}
+					log.info("查询缓存数据 username"+user.getUsername()+"password:"+user.getPassword());
+    		    }
+				if(user.getId()==0){//查询数据库信息
+					ArrayList<User> accountList=userLoginService.findUserAccountByUsername(user);
+					if(accountList==null||accountList.size()==0){
+						paraMandaChkAndReturn(2, response,"用户不存在!");
+						return;
+					}else{
+						for (User userAccount : accountList) {
+							int i=checkPasswodByAes(user.getPassword(), userAccount, key);
+							if(i==ConstantMessage.USER_ZERO)continue;
+							if(user.getId()>0){
+								paraMandaChkAndReturn(5, response,"登陆异常!");
 								return;
 							}
-							 
+							user.setId(userAccount.getId());
+							if(i==ConstantMessage.USER_TWO||i==ConstantMessage.USER_THREE){
+								userCacheService.updateUserCache(user);
+							}
+							mergeVo=new UserMergeVo(userAccount);
 						}
+						if(user.getId()==0){
+							paraMandaChkAndReturn(3, response,"密码错误!");
+							return;
+						}
+						user.setType(ConstantMessage.USER_TWO);
+					}
+					log.info("查询库数据 username"+user.getUsername()+"password:"+user.getPassword());
     		    }
-				ArrayList<UserJsonVo> infoList =null;
-				if(userCacheId!=0||userId!=0){
-					 if(userCacheId!=0)infoList = userCacheService.findUserCacheList(userCacheId);
-					 if(userId!=0)infoList = userLoginService.findUserAccountList(userId);
+				
+				if(user.getId()!=0){
+				   if(user.getId()!=0&&user.getType()==ConstantMessage.USER_ONE)infoList = userCacheService.findUserCacheList(user.getId());
+				   if(user.getId()!=0&&user.getType()==ConstantMessage.USER_TWO)infoList = userLoginService.findUserAccountList(user.getId());
 				   if(infoList!=null&&infoList.size()>0){	
 					   map.clear();
 					   map.put("status", "1");//接口返回状态：1-正确 0-错误
@@ -136,7 +136,8 @@ public class UserLoginController extends BaseController{
 				   map.put("errorCode","3");
 			   }
 		   } catch (Exception e) {
-			   paraMandaChkAndReturn(1, response,"登陆失败!");
+			   paraMandaChkAndReturn(6, response,"登陆失败!");
+			   log.info("登陆异常失败 username"+user.getUsername()+"password:"+user.getPassword());
 			   e.printStackTrace();
 		   }
 			return ;
@@ -157,25 +158,22 @@ public class UserLoginController extends BaseController{
 		        		if(aesPassword.equals(obj.getAesPassword())){
 		        			return ConstantMessage.USER_ONE;
 		        		}
-		    		
 		    	}else{
 		    		    // md5加密方式验证
 			    		if(obj.getMd5Password()!=null&&!"".equals(obj.getMd5Password())){
-			    			aespwd=AESUtil.decrypt(aesPassword,key.substring(0,16)).trim();
-			    			if(obj.getMd5Password().equals(MD5.Md5(aespwd))){
+			    			aespwd=AESUtil.decrypt(aesPassword,key).trim();
+			    			if(obj.getMd5Password().equals(MD5.Md5(aespwd+obj.getMd5Salt()))){
 				        		return ConstantMessage.USER_TWO;
 				        	}	
-			    		}
-			    	//sha1_password 密码验证
-			    	else if(obj.getSha1Password()!=null&&!"".equals(obj.getSha1Password())){
-			    		 aespwd=AESUtil.decrypt(aesPassword,key.substring(0,16)).trim();
+			    		}else if(obj.getSha1Password()!=null&&!"".equals(obj.getSha1Password())){//sha1_password 密码验证
+			    		 aespwd=AESUtil.decrypt(aesPassword,key).trim();
 		    			 PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
-		        		 String password=passwordEncoder.encodePassword(aespwd, null).toLowerCase();;
+		        		 String password=passwordEncoder.encodePassword(aespwd, null).toLowerCase();
 		        		 if(password.equals(obj.getSha1Password().toLowerCase())){
 		     				return ConstantMessage.USER_THREE;
 		     			}
 		        	}
-		    	  }
+		    	}
 	    	} catch (Exception e1) {
 	    		e1.printStackTrace();
 	    	}

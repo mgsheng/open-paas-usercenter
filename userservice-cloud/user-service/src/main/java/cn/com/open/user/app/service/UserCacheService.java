@@ -23,8 +23,11 @@ public class UserCacheService {
 		return usercacheMapper.findUserCacheByUsername(user.getUsername());
 	}
 	
-	public void updateUserCache(User cache) {
-		usercacheMapper.updateUserCache(cache);
+	public void updateUserCache(UserVo cache) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", cache.getId());
+		map.put("aesPassword", cache.getPassword());
+		usercacheMapper.updateUserCache(map);
 	}
 
 	public ArrayList<UserJsonVo> findUserCacheList(int userCacheId) {

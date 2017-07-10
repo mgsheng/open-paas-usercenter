@@ -27,18 +27,15 @@ public interface UserMapper {
 	App findIdByClientId(@Param("client_id") String client_id);
 	
 	@Cacheable
-	@Select("select id,user_name username,aes_password aesPassword,md5_password md5Password,sha1_password sha1Password,archived,guid,email,phone from user_account where user_name=#{username}")
+	@Select("select id,user_name username,aes_password aesPassword,md5_password md5Password,sha1_password sha1Password,md5_salt md5Salt,archived,guid,email,phone from user_account where user_name=#{username}")
 	ArrayList<User> findUserAccountByUsername(@Param("username") String username);
 	 
 	@Cacheable
 	@Select("select id, user_name,guid,email,phone from user_account where user_name=#{username} and aes_password=#{password} limit 1")
 	UserMergeVo findUserAccount(@Param("username") String username,@Param("password") String password);
 	
-	@SelectProvider(method = "findUserAll", type = UserProvider.class)
-	ArrayList<UserJsonVo> findUserAll(UserMergeVo mergeVo);
-
 	@UpdateProvider(method="updateUserAccount", type = UserProvider.class)
-	void updateUserAccount(User user2);
+	void updateUserAccount(Map<String, Object> map);
 
 
 	@SelectProvider(method = "findUserAccountList", type = UserProvider.class)
