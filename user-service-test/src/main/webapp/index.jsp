@@ -142,6 +142,12 @@
           <li>
             <p><a href="updateUserStatus">updateUserStatus</a> <br/>用户账号封停以及启用接口</p>
         </li>
+        <li>
+            <p><a href="smsVerify">smsVerify</a> <br/>用户短信码验证接口接口</p>
+        </li>
+        <li>
+            <p><a href="smsSend">smsSend</a> <br/>用户发送短信接口接口</p>
+        </li>
     </ul>
 </div>
 </body>

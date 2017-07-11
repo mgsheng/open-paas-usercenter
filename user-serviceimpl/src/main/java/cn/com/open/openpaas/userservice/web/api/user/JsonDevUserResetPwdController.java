@@ -278,7 +278,6 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
     		List<UserActivatedHis> list =null;
     		if("1".equals(type)){
     			list=userActivatedHisService.getByCodeAndEmail(code,email);
-    				
     		}else{
     			list= userActivatedHisService.getByCodeAndPhone(code,phone);
     		}

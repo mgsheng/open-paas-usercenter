@@ -138,8 +138,6 @@ public class UserCenterRetrievePwdController extends BaseControllerUtil {
 		    		return;
 				}
 			}
-			
-			
 			if(username==null || username.length()==0 ){
 				map.clear();
 				map.put("status", "0");

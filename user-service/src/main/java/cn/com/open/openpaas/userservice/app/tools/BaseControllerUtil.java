@@ -117,7 +117,7 @@ public class BaseControllerUtil {
 	    		returnValue=1;
 	    		return returnValue;
 	    	}else{
-	    	Pattern p = Pattern.compile("[0-9A-Za-z_]*");
+	    	Pattern p = Pattern.compile("^(?!_)(?!.*?_$)[0-9A-Za-z_]*");
 	    	//Pattern p = Pattern.compile("^[a-zA-Z]/w{5,17}$");
 	    	Matcher m = p.matcher(value);
 	    	boolean chinaKey = m.matches();

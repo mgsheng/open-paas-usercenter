@@ -96,13 +96,13 @@ public class VerifyController extends BaseControllerUtil{
 	    		map.put("errMsg", "用户已存在");//参数不全
 	    	}else{
 	    		int returnValue; 
-				returnValue=judgeVerifyInput(account);
+				returnValue=judgeInput(account);
 				if(returnValue==1){
 					map = paraMandaChkAndReturnMap(6, response,"用户名5~20个字符");
 					writeErrorJson(response,map);
 					return;
 				}else if(returnValue==2){
-					map = paraMandaChkAndReturnMap(6, response,"用户名必须为数字、字母、下划线中最少两个组合");
+					map = paraMandaChkAndReturnMap(6, response,"用户名必须为数字和字母或者下划线的组合");
 					writeErrorJson(response,map);
 					return;
 				}else if(returnValue==3){

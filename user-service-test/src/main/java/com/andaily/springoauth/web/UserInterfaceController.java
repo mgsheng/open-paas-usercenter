@@ -116,8 +116,89 @@ public class UserInterfaceController {
 	private String saveRedisUri;
 	@Value("#{properties['user-status-change-uri']}")
 	private String userStatusChangeUri;
+	
+	@Value("#{properties['user-sms-send-uri']}")
+	private String userSmsSendUri;
+	
+	@Value("#{properties['user-sms-verify-uri']}")
+	private String userSmsVerify;
     private Map<String,String> map=LoadPopertiesFile.loadProperties();
-    
+    /**
+     * 用户发送短信接口
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "smsSend", method = RequestMethod.GET)
+    public String smsSend(Model model) {
+    	model.addAttribute("userSmsSendUri", userCenterRegUri);
+    	
+      return "usercenter/user_sms_send";
+    }
+
+     @RequestMapping(value = "smsSend", method = RequestMethod.POST)
+     public String smsSend(String clientId,String accessToken,String phone,String userName) throws Exception {
+
+     	String key=map.get(clientId);
+	    	  String signature="";
+	    	  String timestamp="";
+	    	  String signatureNonce="";
+		      	if(key!=null){
+		      		timestamp=DateTools.getSolrDate(new Date());
+		  		 	StringBuilder encryptText = new StringBuilder();
+		  		 	signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
+		  		 	encryptText.append(clientId);
+		  			encryptText.append(SEPARATOR);
+		  		 	encryptText.append(accessToken);
+		  		 	encryptText.append(SEPARATOR);
+		  		 	encryptText.append(timestamp);
+		  		 	encryptText.append(SEPARATOR);
+		  		 	encryptText.append(signatureNonce);
+		  		 	signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
+		  		 	signature=HMacSha1.getNewResult(signature);
+		      	}
+
+          final String fullUri = userSmsSendUri+"?client_id="+clientId+"&phone="+phone+"&userName="+userName+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+          LOG.debug("Send to Oauth-Server URL: {}", fullUri);
+          return "redirect:" + fullUri;
+     }
+     /**
+      * 用户短信码验证
+      * @param model
+      * @return
+      */
+     @RequestMapping(value = "smsVerify", method = RequestMethod.GET)
+     public String smsVerify(Model model) {
+     	model.addAttribute("userSmsVerify", userSmsVerify);
+     	
+       return "usercenter/user_sms_verify";
+     }
+
+      @RequestMapping(value = "smsVerify", method = RequestMethod.POST)
+      public String smsVerify(String clientId,String accessToken,String phone,String code) throws Exception {
+
+      	String key=map.get(clientId);
+ 	    	  String signature="";
+ 	    	  String timestamp="";
+ 	    	  String signatureNonce="";
+ 		      	if(key!=null){
+ 		      		timestamp=DateTools.getSolrDate(new Date());
+ 		  		 	StringBuilder encryptText = new StringBuilder();
+ 		  		 	signatureNonce=com.andaily.springoauth.tools.StringTools.getRandom(100,1);
+ 		  		 	encryptText.append(clientId);
+ 		  			encryptText.append(SEPARATOR);
+ 		  		 	encryptText.append(accessToken);
+ 		  		 	encryptText.append(SEPARATOR);
+ 		  		 	encryptText.append(timestamp);
+ 		  		 	encryptText.append(SEPARATOR);
+ 		  		 	encryptText.append(signatureNonce);
+ 		  		 	signature=HMacSha1.HmacSHA1Encrypt(encryptText.toString(), key);
+ 		  		 	signature=HMacSha1.getNewResult(signature);
+ 		      	}
+
+           final String fullUri = userSmsVerify+"?client_id="+clientId+"&phone="+phone+"&code="+code+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+           LOG.debug("Send to Oauth-Server URL: {}", fullUri);
+           return "redirect:" + fullUri;
+      }
       /**
        * 用户注册接口
        * @param model
@@ -132,11 +213,13 @@ public class UserInterfaceController {
   
        @RequestMapping(value = "userCenterReg", method = RequestMethod.POST)
        public String reg(UserCenterRegDto userCenterRegDto) throws Exception {
+    	   
+    	   
         	final String fullUri = getUri(userCenterRegDto);
             LOG.debug("Send to Oauth-Server URL: {}", fullUri);
 
             return "redirect:" + fullUri;
-        }
+       }
        /**
         * 验证自动登录接口
         * @param model
