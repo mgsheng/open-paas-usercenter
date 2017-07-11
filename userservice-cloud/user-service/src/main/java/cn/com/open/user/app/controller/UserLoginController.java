@@ -74,7 +74,7 @@ public class UserLoginController extends BaseController{
 						for (User cache : cacheList) {
 							int i=checkPasswodByAes(user.getPassword(), cache, key);
 							if(i==ConstantMessage.USER_ZERO)continue;
-							if(user.getId()>0){
+							if(user.getId()>0){//一个密码能登录俩用户时
 								paraMandaChkAndReturn(5, response,"登陆异常!");
 								return;
 							}
@@ -96,7 +96,7 @@ public class UserLoginController extends BaseController{
 						for (User userAccount : accountList) {
 							int i=checkPasswodByAes(user.getPassword(), userAccount, key);
 							if(i==ConstantMessage.USER_ZERO)continue;
-							if(user.getId()>0){
+							if(user.getId()>0){//一个密码能登录俩用户时
 								paraMandaChkAndReturn(5, response,"登陆异常!");
 								return;
 							}
