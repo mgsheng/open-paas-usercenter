@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.com.open.openpaas.userservice.app.app.model.App;
+import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
@@ -50,6 +51,8 @@ private AppUserService appUserService;
 @Autowired
 private UserCacheService userCacheService;
 
+@Autowired
+private AppService appService; 
 
 
 	private static final Logger log = LoggerFactory.getLogger(UserCenterGetPwdController.class);
@@ -71,6 +74,11 @@ private UserCacheService userCacheService;
 	 				return;
 	 			}
 	 			App app = (App) redisClient.getObject(RedisConstant.APP_INFO+ client_id);
+	 			 if(app==null)
+	 			{
+	 				 app=appService.findIdByClientId(client_id);
+	 				 redisClient.setObject(RedisConstant.APP_INFO+client_id, app);
+	 			}
 	 			map = checkClientIdOrToken(client_id, access_token, app, tokenServices);
 	 			if (map.get("status").equals("1")) {// client_id,access_token正确	 	
 	 				Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
