@@ -6,6 +6,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.lang.StringUtils;
 
+import cn.com.open.user.app.sign.MD5;
+
 import org.apache.commons.codec.binary.Base64;
 
 public class AESUtil {
@@ -98,12 +100,14 @@ public class AESUtil {
 	};
 
 	public static void main(String[] args) {
-		String data = "6pgNGtIp/muCheMJGY2LIw==";
+	//	String data = "6pgNGtIp/muCheMJGY2LIw==";
+		String data = "zhj1234567890哈";
+		System.out.println("md5加密后"+MD5.Md5(data));
 		String key = "1d4d8c77108a4fd2a3c23feba0cfdccc";
 		try {
 			String a = encrypt(data, key);
 			System.out.println(a);
-			String b = decrypt("6pgNGtIp/muCheMJGY2LIw==", key);
+			String b = decrypt(a, key);
 			System.out.println(b);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

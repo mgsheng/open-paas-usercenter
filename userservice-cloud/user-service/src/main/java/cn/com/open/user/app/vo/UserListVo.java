@@ -2,21 +2,16 @@ package cn.com.open.user.app.vo;
 
 import java.io.Serializable;
 
-public class UserJsonVo implements Serializable{
+public class UserListVo implements Serializable{
 	private String icon;
 	private String name;
 	private String callbackUrl;
 	private String sourceId;
 	private String appId;
+	private String appkey;
+	private String appsecret;
+	private String platform;
 	
-	
-	public UserJsonVo(UserListVo vo,String backUrl) {
-		this.icon = vo.getIcon();
-		this.name = vo.getName();
-		this.callbackUrl =  backUrl ;
-		this.sourceId = vo.getSourceId();
-		this.appId = vo.getAppId();
-	}
 	public String getIcon() {
 		return icon;
 	}
@@ -46,7 +41,24 @@ public class UserJsonVo implements Serializable{
 	}
 	public void setAppId(String appId) {
 		this.appId = appId;
+	}
+	public String getAppkey() {
+		return appkey;
+	}
+	public void setAppkey(String appkey) {
+		this.appkey = appkey;
+	}
+	public String getAppsecret() {
+		return appsecret;
+	}
+	public void setAppsecret(String appsecret) {
+		this.appsecret = appsecret;
+	}
+	public String getPlatform() {
+		return platform;
+	}
+	public void setPlatform(String platform) {
+		this.platform = platform;
 	} 
-	
 
 }

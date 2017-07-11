@@ -15,6 +15,7 @@ import cn.com.open.user.app.entiy.User;
 import cn.com.open.user.app.model.App;
 import cn.com.open.user.app.mybatis.UserProvider;
 import cn.com.open.user.app.vo.UserJsonVo;
+import cn.com.open.user.app.vo.UserListVo;
 import cn.com.open.user.app.vo.UserMergeVo;
 
  
@@ -23,7 +24,7 @@ import cn.com.open.user.app.vo.UserMergeVo;
 public interface UserMapper {
 	
 	@Cacheable
-	@Select("select id,appsecret,app_authorities,webServerRedirectUri from app where appkey = #{client_Id}")
+	@Select("select id,appsecret,app_authorities,webServerRedirectUri from app where appkey = #{client_id} limit 1")
 	App findIdByClientId(@Param("client_id") String client_id);
 	
 	@Cacheable
@@ -39,7 +40,7 @@ public interface UserMapper {
 
 
 	@SelectProvider(method = "findUserAccountList", type = UserProvider.class)
-	ArrayList<UserJsonVo> findUserAccountList(Map<String, Object> map);
+	ArrayList<UserListVo> findUserAccountList(Map<String, Object> map);
  
 	
 

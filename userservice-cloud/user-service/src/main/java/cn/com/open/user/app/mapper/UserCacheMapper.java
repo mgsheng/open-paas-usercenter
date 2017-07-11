@@ -14,8 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import cn.com.open.user.app.entiy.User;
 import cn.com.open.user.app.model.App;
 import cn.com.open.user.app.mybatis.UserCacheProvider;
-import cn.com.open.user.app.mybatis.UserProvider;
-import cn.com.open.user.app.vo.UserJsonVo;
+import cn.com.open.user.app.vo.UserListVo;
 import cn.com.open.user.app.vo.UserMergeVo;
 
  
@@ -39,6 +38,9 @@ public interface UserCacheMapper {
 	void updateUserCache(Map<String, Object> map);
 
 	@SelectProvider(method = "findUserCacheList", type = UserCacheProvider.class)
-	ArrayList<UserJsonVo> findUserCacheList(Map<String, Object> map);
+	ArrayList<UserListVo> findUserCacheList(Map<String, Object> map);
+	@Cacheable
+	@Select("select * from app where  id =#{appid} limit 1")
+	App findAppById(@Param("appid") int appid);
 
 }

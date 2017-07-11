@@ -1,7 +1,9 @@
 package cn.com.open.user.app.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,15 +23,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cn.com.open.user.app.constant.ConstantMessage;
 import cn.com.open.user.app.entiy.User;
+import cn.com.open.user.app.model.App;
 import cn.com.open.user.app.redis.RedisConstant;
 import cn.com.open.user.app.redis.RedisServiceImpl;
 import cn.com.open.user.app.service.UserCacheService;
 import cn.com.open.user.app.service.UserLoginService;
 import cn.com.open.user.app.sign.MD5;
 import cn.com.open.user.app.tools.AESUtil;
+import cn.com.open.user.app.tools.DESUtil;
+import cn.com.open.user.app.tools.DateTools;
+import cn.com.open.user.app.tools.OauthSignatureValidateHandler;
+import cn.com.open.user.app.tools.StringTool;
+import cn.com.open.user.app.tools.WebUtils;
 import cn.com.open.user.app.vo.UserJsonVo;
+import cn.com.open.user.app.vo.UserListVo;
 import cn.com.open.user.app.vo.UserMergeVo;
 import cn.com.open.user.app.vo.UserVo;
+import net.sf.json.JSONObject;
 @RestController
 public class UserLoginController extends BaseController{
 	   @Autowired
@@ -42,7 +52,11 @@ public class UserLoginController extends BaseController{
 	   RedisServiceImpl redisService;
 	   
 	   @Value("${aes-userCenter-key}")
-		String key;
+	   String key;
+	   
+	   @Value("${app.localhost.url}")
+	   String app_localhost_url;
+	   
 	   
 	    
 	   private static final Logger log = LoggerFactory.getLogger(UserLoginController.class);
@@ -53,16 +67,19 @@ public class UserLoginController extends BaseController{
 	    * @param response
 	    */
 	    @SuppressWarnings("null")
-		@RequestMapping(value = "/usercenter/login", method = RequestMethod.POST)
+		@RequestMapping(value = "/usercenter/login", method = RequestMethod.GET)
 		public void login(HttpServletRequest request, HttpServletResponse response,UserVo user) {
  	     	log.info("UserLoginController usercenter/login username"+user.getUsername()+"password:"+user.getPassword());
+ 	     	boolean flag=false;
 	    	ArrayList<User> cacheList=null;
-	    	ArrayList<UserJsonVo> infoList =null;
+	    	ArrayList<UserListVo> infoList =null;
+	    	ArrayList<UserJsonVo> jsonList =new ArrayList<UserJsonVo>();
 	    	UserMergeVo mergeVo=null;
+	    	String platform = request.getHeader("platform");
 		   try {
 			   Map<String, Object> map = new HashMap<String, Object>();
 	 	    	if (!paraMandatoryCheck(Arrays.asList(user.getUsername(),user.getPassword()))) {
-				   paraMandaChkAndReturn(7, response, "必传参数中有空值");
+				    paraMandaChkAndReturn(7, response, "必传参数中有空值");
 	 				return;
 	 			}
 	 	    	
@@ -83,11 +100,12 @@ public class UserLoginController extends BaseController{
 								userCacheService.updateUserCache(user);
 							}
 							mergeVo=new UserMergeVo(cache);
+							flag=true;
 					   }
 					}
 					log.info("查询缓存数据 username"+user.getUsername()+"password:"+user.getPassword());
     		    }
-				if(user.getId()==0){//查询数据库信息
+				if(!flag){//查询数据库信息
 					ArrayList<User> accountList=userLoginService.findUserAccountByUsername(user);
 					if(accountList==null||accountList.size()==0){
 						paraMandaChkAndReturn(2, response,"用户不存在!");
@@ -102,9 +120,10 @@ public class UserLoginController extends BaseController{
 							}
 							user.setId(userAccount.getId());
 							if(i==ConstantMessage.USER_TWO||i==ConstantMessage.USER_THREE){
-								userCacheService.updateUserCache(user);
+								userLoginService.updateUserAccount(user);
 							}
 							mergeVo=new UserMergeVo(userAccount);
+							flag=true;
 						}
 						if(user.getId()==0){
 							paraMandaChkAndReturn(3, response,"密码错误!");
@@ -115,15 +134,20 @@ public class UserLoginController extends BaseController{
 					log.info("查询库数据 username"+user.getUsername()+"password:"+user.getPassword());
     		    }
 				
-				if(user.getId()!=0){
+				if(flag){
 				   if(user.getId()!=0&&user.getType()==ConstantMessage.USER_ONE)infoList = userCacheService.findUserCacheList(user.getId());
 				   if(user.getId()!=0&&user.getType()==ConstantMessage.USER_TWO)infoList = userLoginService.findUserAccountList(user.getId());
-				   if(infoList!=null&&infoList.size()>0){	
+				   if(infoList!=null&&infoList.size()>0){
+					   UserJsonVo jsonVo=null;
+					   for (UserListVo listVo : infoList) {
+						   jsonVo=new UserJsonVo(listVo,findCallbackUrl(listVo,platform));
+						   jsonList.add(jsonVo);
+					   }
 					   map.clear();
 					   map.put("status", "1");//接口返回状态：1-正确 0-错误
 					   map.put("msg","登陆成功");
 					   map.put("errorCode","");
-					   mergeVo.setInfoList(infoList);
+					   mergeVo.setInfoList(jsonList);
 					   map.put("payload", mergeVo);
 					   writeSuccessJson(response,map);
 				   }else{
@@ -136,7 +160,7 @@ public class UserLoginController extends BaseController{
 				   map.put("errorCode","3");
 			   }
 		   } catch (Exception e) {
-			   paraMandaChkAndReturn(6, response,"登陆失败!");
+			   paraMandaChkAndReturn(6, response,"系统异常!");
 			   log.info("登陆异常失败 username"+user.getUsername()+"password:"+user.getPassword());
 			   e.printStackTrace();
 		   }
@@ -144,6 +168,156 @@ public class UserLoginController extends BaseController{
 		}
 	    
 	    
+
+		/*
+		 * 根据App和AppUser生成回调URL
+		 * DES加密方式
+		 * @see cn.com.open.user.app.controller#findCallbackUrl(cn.com.open.user.app.vo.AppUser)
+		 */
+		public String findCallbackUrl(UserListVo listVo,String platform){
+	    	Map<String, Object> map=new HashMap<String,Object>();
+			if( listVo==null){
+				return "";
+			}
+			StringBuffer url = new StringBuffer(app_localhost_url+"/usercenter/userCenterPublicLogin");
+			//time：格式yyyyMMddHHmmss
+			String time = DateTools.dateToString(new Date(), "yyyyMMddHHmmss");
+			
+			String strRedis=redisService.get(RedisConstant.APP_INFO+ConstantMessage.APPID);
+			if(strRedis==null||"".equals(strRedis)){
+				redisService.set(RedisConstant.APP_INFO+ConstantMessage.APPID,listVo.getAppsecret());
+			}
+			
+  		    String secret = "";
+			try {
+				map.put("sourceId", listVo.getSourceId());
+				map.put("time", time);
+				map.put("appkey", listVo.getAppkey());
+				map.put("appId", listVo.getAppId());
+				map.put("platform",platform);
+				secret = DESUtil.encrypt(JSONObject.fromObject(map).toString(),listVo.getAppsecret());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			secret = secret.replaceAll("\\+", "%2B");
+			url.append("?secret=").append(secret);
+			log.info("生成回调URL路径"+url);
+			return url.toString();
+		}
+	    
+	    
+	     /**
+	      * 用户中心公共登录接口
+	      * @param request
+	      * @param response
+	      */
+    	 @RequestMapping(value = "/usercenter/userCenterPublicLogin", method = RequestMethod.GET)
+ 		 public void userCenterPublicLogin(HttpServletRequest request, HttpServletResponse response) {
+	    	Map<String, Object> map=new HashMap<String,Object>();
+	    	Map<String, Object> mapJson=new HashMap<String,Object>();
+	    	App appCache=null;
+	    	map.put("status", "0");
+	    	String secret=request.getParameter("secret");
+	    	if(StringUtils.isBlank(secret)){
+	    		//参数错误
+	     		map.put("error_code", "8");
+	     		map.put("errMsg", "参数错误");
+	     		writeErrorJson(response,map);
+	    		return;
+	    	}
+			
+			String appsecret=redisService.get(RedisConstant.APP_INFO+ConstantMessage.APPID);
+			if(appsecret==null||"".equals(appsecret)){
+				appCache=userCacheService.findAppById(ConstantMessage.APPID);
+				if(appCache!=null){
+					appsecret=appCache.getAppsecret();
+					redisService.set(RedisConstant.APP_INFO+ConstantMessage.APPID,appsecret);
+				}
+			}
+			
+			if(appsecret==null||"".equals(appsecret)){
+				//用户中心App不存在
+				map.put("error_code", "9");
+	     		map.put("errMsg", "用户中心App信息不存在");
+	     		writeErrorJson(response,map);
+				return;
+			}
+			String secretDecrypt = "";
+	    	try {
+				secretDecrypt = DESUtil.decrypt(secret, appsecret.substring(0,8));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    	if(StringUtils.isBlank(secretDecrypt)){
+	    		//参数解密错误
+	    		map.put("error_code", "8");
+	     		map.put("errMsg", "参数解密错误");
+	     		writeErrorJson(response,map);
+	    		return;
+	    	}
+	    	
+		   JSONObject json = JSONObject.fromObject(secretDecrypt);
+	      	String sourceId=json.getString("sourceId");
+	      	String time=json.getString("time");
+	      	String appKey=json.getString("appkey");
+	      	String appId=json.getString("appId");
+	      	String platform=json.getString("platform");
+	      	
+	      	mapJson.put("sourceId", sourceId);
+	      	mapJson.put("time", time);
+	      	mapJson.put("appkey", appKey);
+	      	mapJson.put("appId", appId);
+	      	mapJson.put("platform",platform);
+	    	 
+	    	App app = userLoginService.findIdByClientId(appKey);
+	    	if(app==null){
+	    		//App不存在
+	    		map.put("error_code", "10");
+	     		map.put("errMsg", "该App信息不存在");
+	     		writeErrorJson(response,map);
+	    		return;
+	    	}
+	    	StringBuffer url = new StringBuffer(app.getWebServerRedirectUri());
+	    	//非教师培训App采用des加密方式
+	    	if(app.getId()!=5){
+	    		//time：格式yyyyMMddHHmmss
+	    		String appSecret = app.getAppsecret().substring(0, 8);
+	    		secret = "";
+	    		try {
+	    			secret = DESUtil.encrypt(JSONObject.fromObject(mapJson).toString(), appSecret);
+	    		} catch (Exception e) {
+	    			e.printStackTrace();
+	    			//异常
+	        		map.put("error_code", "6");
+	         		map.put("errMsg", "系统异常");
+	         		writeErrorJson(response,map);
+	        		return;
+	    		}
+	    		secret = secret.replaceAll("\\+", "%2B");
+	    		url.append("?secret=").append(secret);
+	    	}
+	    	//教师培训App采用MD5加密方式
+	    	else{
+	    		//salt=4位随机数
+	    		String salt = StringTool.getRandomString(4);
+	    		secret = MD5.Md5(sourceId+salt+appKey+app.getAppsecret());
+	    		url.append("?sourceId=").append(sourceId);
+	    		url.append("&salt=").append(salt);
+	    		url.append("&secret=").append(secret);
+	    	}
+			try {
+				response.sendRedirect(url.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+				//异常
+	    		map.put("error_code", "6");
+	     		map.put("errMsg", "系统异常");
+	     		writeErrorJson(response,map);
+	    		return;
+			} 
+		    log.info("公共方法跳转路径 url"+url);
+			return;
+	     }
 	    
 	    /**
 	     * 验证密码是否正确
@@ -159,17 +333,17 @@ public class UserLoginController extends BaseController{
 		        			return ConstantMessage.USER_ONE;
 		        		}
 		    	}else{
-		    		
 		    		    // md5加密方式验证
 			    		if(obj.getMd5Password()!=null&&!"".equals(obj.getMd5Password())){
 			    			aespwd=AESUtil.decrypt(aesPassword,key).trim();
-			    			if(obj.getMd5Password().equals(MD5.Md5(aespwd+obj.getMd5Salt()))){
+			    			String pwd=obj.getMd5Password()+obj.getMd5Salt();
+			    			if(pwd.equals(MD5.Md5(aespwd))){
 				        		return ConstantMessage.USER_TWO;
 				        	}	
 			    		}else if(obj.getSha1Password()!=null&&!"".equals(obj.getSha1Password())){//sha1_password 密码验证
-			    		 aespwd=AESUtil.decrypt(aesPassword,key).trim();
-		    			 PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
-		        		 String password=passwordEncoder.encodePassword(aespwd, null).toLowerCase();
+				    		 aespwd=AESUtil.decrypt(aesPassword,key).trim();
+			    			 PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
+			        		 String password=passwordEncoder.encodePassword(aespwd, null).toLowerCase();
 		        		 if(password.equals(obj.getSha1Password().toLowerCase())){
 		     				return ConstantMessage.USER_THREE;
 		     			}

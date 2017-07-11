@@ -11,6 +11,7 @@ import cn.com.open.user.app.entiy.User;
 import cn.com.open.user.app.mapper.UserMapper;
 import cn.com.open.user.app.model.App;
 import cn.com.open.user.app.vo.UserJsonVo;
+import cn.com.open.user.app.vo.UserListVo;
 import cn.com.open.user.app.vo.UserMergeVo;
 import cn.com.open.user.app.vo.UserVo;
 
@@ -40,7 +41,7 @@ public class UserLoginService {
 		 userMapper.updateUserAccount(map);
 	}
 
-	public ArrayList<UserJsonVo> findUserAccountList(int userId) {
+	public ArrayList<UserListVo> findUserAccountList(int userId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", userId);
 		return userMapper.findUserAccountList(map);

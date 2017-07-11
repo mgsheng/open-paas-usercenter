@@ -9,7 +9,7 @@ public class UserProvider {
 	public String findUserAccountList(Map<String, Object> map ) {
 		Integer id=(Integer)map.get("id");
 		StringBuilder sb = new StringBuilder();
-		sb.append("select ap.icon,au.source_id,ap.id,ap.name,ap.webServerRedirectUri ");
+		sb.append("select ap.icon,au.source_id sourceId,ap.id appId,ap.name,ap.webServerRedirectUri callbackUrl,ap.appkey,ap.appsecret");
 		sb.append(" from user_account ua,app_user au,app ap ");
 		sb.append(" where ua.id=au.user_id and au.app_id=ap.id");
 		if (id >0) {

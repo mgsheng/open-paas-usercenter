@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 
 import cn.com.open.user.app.entiy.User;
 import cn.com.open.user.app.mapper.UserCacheMapper;
-import cn.com.open.user.app.vo.UserJsonVo;
+import cn.com.open.user.app.model.App;
+import cn.com.open.user.app.vo.UserListVo;
 import cn.com.open.user.app.vo.UserMergeVo;
 import cn.com.open.user.app.vo.UserVo;
 
@@ -30,7 +31,7 @@ public class UserCacheService {
 		usercacheMapper.updateUserCache(map);
 	}
 
-	public ArrayList<UserJsonVo> findUserCacheList(int userCacheId) {
+	public ArrayList<UserListVo> findUserCacheList(int userCacheId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", userCacheId);
 		return usercacheMapper.findUserCacheList(map);
@@ -38,4 +39,9 @@ public class UserCacheService {
 	public UserMergeVo findByUserCache(User entity) {
 		return usercacheMapper.findByUserCache(entity.getUsername(),entity.getPassword());
 	}
+
+	public App findAppById(int appid) {
+		return usercacheMapper.findAppById(appid);
+	}
+
 }
