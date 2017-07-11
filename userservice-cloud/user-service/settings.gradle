@@ -15,4 +15,5 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'user-service'
+rootProject.name = 'user-service-cloud'
+

@@ -16,6 +16,7 @@ public class User implements Serializable{
 	private String aesPassword;
 	private String md5Password;
 	private String sha1Password;
+	private String md5Salt;
 	
 	
 	public int getId() {
@@ -85,5 +86,12 @@ public class User implements Serializable{
 	public void setSha1Password(String sha1Password) {
 		this.sha1Password = sha1Password;
 	}
+	public String getMd5Salt() {
+		return md5Salt;
+	}
+	public void setMd5Salt(String md5Salt) {
+		this.md5Salt = md5Salt;
+	}
+	
 	
 }

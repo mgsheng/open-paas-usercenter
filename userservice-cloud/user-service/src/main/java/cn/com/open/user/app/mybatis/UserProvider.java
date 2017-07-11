@@ -19,24 +19,15 @@ public class UserProvider {
 		return sb.toString();
 	}
 	
-	public String updateUserCache(UserCache cache) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("update user_cache set");
-		if (cache.getAesPassword() != null && cache.getAesPassword().length()>0) {
-			sb.append(" aes_password='" + cache.getAesPassword() + "'");
-		}
-		sb.append(" where id="+cache.id());
-		return sb.toString();
-	}
-	
-	
-	public String updateUserAccount(UserCache cache) {
+	public String updateUserAccount(Map<String, Object> map) {
+		Integer id=(Integer)map.get("id");
+		String aesPassword=(String)map.get("aesPassword");
 		StringBuffer sb = new StringBuffer();
 		sb.append("update user_account set");
-		if (cache.getAesPassword() != null && cache.getAesPassword().length()>0) {
-			sb.append(" aes_password='" + cache.getAesPassword() + "'");
+		if (aesPassword != null && aesPassword.length()>0) {
+			sb.append(" aes_password='" + aesPassword + "'");
 		}
-		sb.append(" where id="+cache.id());
+		sb.append(" where id="+id);
 		return sb.toString();
 	}
 	

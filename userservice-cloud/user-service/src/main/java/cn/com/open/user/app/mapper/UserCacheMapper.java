@@ -28,15 +28,15 @@ public interface UserCacheMapper {
 	App findIdByClientId(@Param("client_id") String client_id);
 	
 	@Cacheable
-	@Select("select id,user_name username,aes_password aesPassword,md5_password md5Password,sha1_password sha1Password,archived,guid,email,phone from user_cache where user_name=#{username}")
+	@Select("select id,user_name username,aes_password aesPassword,md5_password md5Password,sha1_password sha1Password,md5_salt md5Salt,archived,guid,email,phone from user_cache where user_name=#{username}")
 	ArrayList<User> findUserCacheByUsername(@Param("username") String username);
 	 
 	@Cacheable
 	@Select("select id, user_name,guid,email,phone from user_cache where user_name=#{username} and aes_password=#{password} limit 1")
 	UserMergeVo findByUserCache(@Param("username") String username,@Param("password") String password);
 	
-	@UpdateProvider(method="updateUserCache", type = UserProvider.class)
-	void updateUserCache(User cache);
+	@UpdateProvider(method="updateUserCache", type = UserCacheProvider.class)
+	void updateUserCache(Map<String, Object> map);
 
 	@SelectProvider(method = "findUserCacheList", type = UserCacheProvider.class)
 	ArrayList<UserJsonVo> findUserCacheList(Map<String, Object> map);

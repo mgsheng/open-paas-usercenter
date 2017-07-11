@@ -3,7 +3,7 @@
 	<name>user-serviceimpl</name>
 	<comment>Project user-serviceimpl created by Buildship.</comment>
 	<projects>
-		<project>user-service</project>
+		<project>user-service-old</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
