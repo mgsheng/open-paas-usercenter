@@ -53,7 +53,7 @@ public class UserLoginController extends BaseController{
 	    * @param response
 	    */
 	    @SuppressWarnings("null")
-		@RequestMapping(value = "/usercenter/login", method = RequestMethod.GET)
+		@RequestMapping(value = "/usercenter/login", method = RequestMethod.POST)
 		public void login(HttpServletRequest request, HttpServletResponse response,UserVo user) {
  	     	log.info("UserLoginController usercenter/login username"+user.getUsername()+"password:"+user.getPassword());
 	    	ArrayList<User> cacheList=null;
@@ -159,6 +159,7 @@ public class UserLoginController extends BaseController{
 		        			return ConstantMessage.USER_ONE;
 		        		}
 		    	}else{
+		    		
 		    		    // md5加密方式验证
 			    		if(obj.getMd5Password()!=null&&!"".equals(obj.getMd5Password())){
 			    			aespwd=AESUtil.decrypt(aesPassword,key).trim();
