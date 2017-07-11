@@ -32,9 +32,7 @@ import cn.com.open.user.app.sign.MD5;
 import cn.com.open.user.app.tools.AESUtil;
 import cn.com.open.user.app.tools.DESUtil;
 import cn.com.open.user.app.tools.DateTools;
-import cn.com.open.user.app.tools.OauthSignatureValidateHandler;
 import cn.com.open.user.app.tools.StringTool;
-import cn.com.open.user.app.tools.WebUtils;
 import cn.com.open.user.app.vo.UserJsonVo;
 import cn.com.open.user.app.vo.UserListVo;
 import cn.com.open.user.app.vo.UserMergeVo;
@@ -67,7 +65,7 @@ public class UserLoginController extends BaseController{
 	    * @param response
 	    */
 	    @SuppressWarnings("null")
-		@RequestMapping(value = "/usercenter/login", method = RequestMethod.GET)
+		@RequestMapping(value = "/usercenter/login", method = RequestMethod.POST)
 		public void login(HttpServletRequest request, HttpServletResponse response,UserVo user) {
  	     	log.info("UserLoginController usercenter/login username"+user.getUsername()+"password:"+user.getPassword());
  	     	boolean flag=false;
