@@ -60,7 +60,7 @@ public class UserLoginController extends BaseController{
 	   String app_appSecret;
 	   
 	   @Value("${app.appId}")
-	   String app_appId;
+	   String app_appId; 
 	   
 	   /**
 	    * 登录
