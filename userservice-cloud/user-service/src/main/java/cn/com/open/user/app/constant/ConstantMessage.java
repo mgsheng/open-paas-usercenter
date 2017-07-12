@@ -3,7 +3,7 @@ package cn.com.open.user.app.constant;
 public class ConstantMessage {
 	
 		//APPID
-		public  final static int APPID = 99999999;
+		public  final static int APPID = 9999;
 		
 		//状态
 		public static int STATUS_ON = 1;		//启用

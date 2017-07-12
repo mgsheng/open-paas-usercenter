@@ -40,6 +40,7 @@ import cn.com.open.user.app.vo.UserVo;
 import net.sf.json.JSONObject;
 @RestController
 public class UserLoginController extends BaseController{
+	private static final Logger log = LoggerFactory.getLogger(UserLoginController.class);
 	   @Autowired
 	   UserLoginService userLoginService;
 	   
@@ -55,9 +56,6 @@ public class UserLoginController extends BaseController{
 	   @Value("${app.localhost.url}")
 	   String app_localhost_url;
 	   
-	   
-	    
-	   private static final Logger log = LoggerFactory.getLogger(UserLoginController.class);
 	   
 	   /**
 	    * 登录
@@ -225,7 +223,7 @@ public class UserLoginController extends BaseController{
 	    	}
 			
 			String appsecret=redisService.get(RedisConstant.APP_INFO+ConstantMessage.APPID);
-			if(appsecret==null||"".equals(appsecret)){
+			if(StringUtils.isBlank(appsecret)){
 				appCache=userCacheService.findAppById(ConstantMessage.APPID);
 				if(appCache!=null){
 					appsecret=appCache.getAppsecret();
@@ -233,7 +231,7 @@ public class UserLoginController extends BaseController{
 				}
 			}
 			
-			if(appsecret==null||"".equals(appsecret)){
+			if(StringUtils.isBlank(appsecret)){
 				//用户中心App不存在
 				map.put("error_code", "9");
 	     		map.put("errMsg", "用户中心App信息不存在");
@@ -276,10 +274,10 @@ public class UserLoginController extends BaseController{
 	    		return;
 	    	}
 	    	StringBuffer url = new StringBuffer(app.getWebServerRedirectUri());
+	    	String appSecret = app.getAppsecret();
 	    	//非教师培训App采用des加密方式
 	    	if(app.getId()!=5){
 	    		//time：格式yyyyMMddHHmmss
-	    		String appSecret = app.getAppsecret().substring(0, 8);
 	    		secret = "";
 	    		try {
 	    			secret = DESUtil.encrypt(JSONObject.fromObject(mapJson).toString(), appSecret);
@@ -298,7 +296,7 @@ public class UserLoginController extends BaseController{
 	    	else{
 	    		//salt=4位随机数
 	    		String salt = StringTool.getRandomString(4);
-	    		secret = MD5.Md5(sourceId+salt+appKey+app.getAppsecret());
+	    		secret = MD5.Md5(sourceId+salt+appKey+appId+platform+appSecret);
 	    		url.append("?sourceId=").append(sourceId);
 	    		url.append("&salt=").append(salt);
 	    		url.append("&secret=").append(secret);
@@ -334,8 +332,9 @@ public class UserLoginController extends BaseController{
 		    		    // md5加密方式验证
 			    		if(obj.getMd5Password()!=null&&!"".equals(obj.getMd5Password())){
 			    			aespwd=AESUtil.decrypt(aesPassword,key).trim();
-			    			String pwd=obj.getMd5Password()+obj.getMd5Salt();
-			    			if(pwd.equals(MD5.Md5(aespwd))){
+			    			aespwd=MD5.Md5(aespwd+obj.getMd5Salt());
+			    			String pwd=obj.getMd5Password();
+			    			if(pwd.equals(aespwd)){
 				        		return ConstantMessage.USER_TWO;
 				        	}	
 			    		}else if(obj.getSha1Password()!=null&&!"".equals(obj.getSha1Password())){//sha1_password 密码验证
