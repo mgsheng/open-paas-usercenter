@@ -8,8 +8,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
 import cn.com.open.user.app.sign.MD5;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 public class DESUtil {
 	 
@@ -55,8 +54,8 @@ public class DESUtil {
     public static String base64Encode(byte[] s) {
         if (s == null)
             return null;
-        BASE64Encoder b = new sun.misc.BASE64Encoder();
-        return b.encode(s);
+        Base64 b= new Base64();
+        return b.encodeToString(s);
     }
     public static String getNewSecert(String password){
     	if(password.contains("+")){
@@ -68,9 +67,9 @@ public class DESUtil {
     public static byte[] base64Decode(String s) throws IOException {
         if (s == null)
             return null;
-        BASE64Decoder decoder = new BASE64Decoder();
+        Base64 decoder = new Base64();
         s = new String(s.getBytes("UTF-8"));
-        byte[] b = decoder.decodeBuffer(s);
+        byte[] b = decoder.decode(s);
         return b;
     } 
 
