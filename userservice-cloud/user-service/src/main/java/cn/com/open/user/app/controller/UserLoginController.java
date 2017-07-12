@@ -76,7 +76,7 @@ public class UserLoginController extends BaseController{
 	    	String platform = request.getHeader("platform");
 		   try {
 			   Map<String, Object> map = new HashMap<String, Object>();
-	 	    	if (!paraMandatoryCheck(Arrays.asList(user.getUsername(),user.getPassword()))) {
+	 	    	if (!paraMandatoryCheck(Arrays.asList(user.getUsername(),user.getPassword(),user.getId()+""))) {
 				    paraMandaChkAndReturn(7, response, "必传参数中有空值");
 	 				return;
 	 			}
@@ -239,15 +239,15 @@ public class UserLoginController extends BaseController{
 	      	String appKey=json.getString("appkey");
 	      	String appId=json.getString("appId");
 	      	String platform=json.getString("platform");
-	    	String businessData="";
-	      	if(json.containsKey("businessData"))
-	     	 businessData=json.getString("businessData");
+	    	String businessDate="";
+	      	if(json.containsKey("businessDate"))
+	     	 businessDate=json.getString("businessDate");
 	      	mapJson.put("sourceId", sourceId);
 	      	mapJson.put("time", time);
 	      	mapJson.put("appkey", appKey);
 	      	mapJson.put("appId", appId);
 	      	mapJson.put("platform",platform);
-	      	mapJson.put("businessData",businessData);
+	      	mapJson.put("businessDate",businessDate);
 	    	App app = userLoginService.findIdByClientId(appKey);
 	    	if(app==null){
 	    		//App不存在
@@ -278,7 +278,7 @@ public class UserLoginController extends BaseController{
 	    	else{
 	    		//salt=4位随机数
 	    		String salt = StringTool.getRandomString(4);
-	    		secret = MD5.Md5(sourceId+salt+appKey+appId+platform+key);
+	    		secret = MD5.Md5(JSONObject.fromObject(mapJson).toString());
 	    		url.append("?sourceId=").append(sourceId);
 	    		url.append("&salt=").append(salt);
 	    		url.append("&secret=").append(secret);
