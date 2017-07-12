@@ -258,13 +258,15 @@ public class UserLoginController extends BaseController{
 	      	String appKey=json.getString("appkey");
 	      	String appId=json.getString("appId");
 	      	String platform=json.getString("platform");
-	      	
+	    	String businessData="";
+	      	if(json.containsKey("businessData"))
+	     	 businessData=json.getString("businessData");
 	      	mapJson.put("sourceId", sourceId);
 	      	mapJson.put("time", time);
 	      	mapJson.put("appkey", appKey);
 	      	mapJson.put("appId", appId);
 	      	mapJson.put("platform",platform);
-	    	 
+	      	mapJson.put("businessData",businessData);
 	    	App app = userLoginService.findIdByClientId(appKey);
 	    	if(app==null){
 	    		//App不存在
