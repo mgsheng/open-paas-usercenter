@@ -1,16 +1,16 @@
 spring:
   cloud:
     consul:
-      host: 10.96.142.132
-      port: 8500
+      host: ${CONSUL_HOST}
+      port: ${CONSUL_PORT}
       discovery:
         healthCheckPath: /info
         healthCheckInterval: 15s
         instance-id: user-service
-        hostname: localhost
-        register: true
+        hostname: ${HOST}
+        port: ${PORT}
   application:
      name: user-service
 server:
-  port: 8080
+  port: 80
 serverHost: 127.0.0.1
