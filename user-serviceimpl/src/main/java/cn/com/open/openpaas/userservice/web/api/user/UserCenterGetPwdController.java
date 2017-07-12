@@ -82,10 +82,10 @@ private AppService appService;
 	 			map = checkClientIdOrToken(client_id, access_token, app, tokenServices);
 	 			if (map.get("status").equals("1")) {// client_id,access_token正确	 	
 	 				Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
-	 				if(!hmacSHA1Verification){
+	 				/*if(!hmacSHA1Verification){
 	 					paraMandaChkAndReturn(9, response,"认证失败");
 	 					return;
-	 				}
+	 				}*/
 		    	  if(userName!=null&&!"".equals(userName)){
 		    		userName=userName.toLowerCase();
 		    		log.info("用户："+userName+" 调用时间："+DateTools.getNow()+"调用接口");
@@ -112,18 +112,18 @@ private AppService appService;
 		    		
 			    	 if(user!=null){
 						if(user.getAesPassword()!=null&&!"".equals(user.getAesPassword())){
-							pwd=aesDecrypt(user.getAesPassword(), app.getAppsecret());
+							pwd=user.getAesPassword();
 						}else{
 							if(user.getDesPassword()!=null&&!"".equals(user.getDesPassword()))
-							pwd=user.getDesPassword();
+								pwd=aesDecryptBydesEncrypt(user.getDesPassword(), app.getAppsecret());
 						}
 						log.info("user pwd：" + pwd);
 		    		 }else if(userCache!=null){
 						if(userCache.getAesPassword()!=null&&!"".equals(userCache.getAesPassword())){
-							pwd=aesDecrypt(userCache.getAesPassword(), app.getAppsecret());
+							pwd=userCache.getAesPassword();
 						}else{
 							if(userCache.desPassword()!=null&&!"".equals(userCache.desPassword()))
-							pwd=userCache.desPassword();
+								pwd=aesDecryptBydesEncrypt(userCache.desPassword(), app.getAppsecret());
 						}
 						log.info("userCache pwd：" + pwd);
 		    		 } else{
@@ -146,13 +146,13 @@ private AppService appService;
 	        return ;
 	    }
 		
-		public String aesDecrypt(String pwd,String appsecret){
+		public String aesDecryptBydesEncrypt(String pwd,String appsecret){
 			try {
-				log.info("解密前pwd：" + pwd);
-				pwd = AESUtil.decrypt(pwd, userserviceDev.getAes_userCenter_key()).trim();
-				log.info("AESUtil.decrypt解密后pwd：" + pwd);
-				pwd = DES.encrypt(pwd, appsecret).trim();
-				log.info("DES.encrypt加密后pwd：" + pwd);
+				log.info("DES解密前pwd：" + pwd);
+				pwd = DES.decrypt(pwd, appsecret).trim();
+				log.info("DES.decrypt解密后pwd：" + pwd);
+				pwd = AESUtil.encrypt(pwd, appsecret).trim();
+				log.info("AESUtil.encrypt加密后pwd：" + pwd);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
