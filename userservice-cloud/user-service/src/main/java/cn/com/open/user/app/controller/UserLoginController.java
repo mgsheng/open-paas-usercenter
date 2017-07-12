@@ -76,7 +76,7 @@ public class UserLoginController extends BaseController{
 	    	String platform = request.getHeader("platform");
 		   try {
 			   Map<String, Object> map = new HashMap<String, Object>();
-	 	    	if (!paraMandatoryCheck(Arrays.asList(user.getUsername(),user.getPassword(),user.getId()+""))) {
+	 	    	if (!paraMandatoryCheck(Arrays.asList(user.getUsername(),user.getPassword()))) {
 				    paraMandaChkAndReturn(7, response, "必传参数中有空值");
 	 				return;
 	 			}
