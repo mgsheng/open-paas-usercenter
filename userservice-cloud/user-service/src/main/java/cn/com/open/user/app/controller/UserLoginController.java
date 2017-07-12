@@ -30,7 +30,7 @@ import cn.com.open.user.app.service.UserCacheService;
 import cn.com.open.user.app.service.UserLoginService;
 import cn.com.open.user.app.sign.MD5;
 import cn.com.open.user.app.tools.AESUtil;
-import cn.com.open.user.app.tools.DESUtil;
+import cn.com.open.user.app.tools.DES;
 import cn.com.open.user.app.tools.DateTools;
 import cn.com.open.user.app.tools.StringTool;
 import cn.com.open.user.app.vo.UserJsonVo;
@@ -188,7 +188,7 @@ public class UserLoginController extends BaseController{
 				map.put("appkey", listVo.getAppkey());
 				map.put("appId", listVo.getAppId());
 				map.put("platform",platform);
-				secret = DESUtil.encrypt(JSONObject.fromObject(map).toString(),key);
+				secret = DES.encrypt(JSONObject.fromObject(map).toString(),key);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -221,7 +221,7 @@ public class UserLoginController extends BaseController{
 			 
 			String secretDecrypt = "";
 	    	try {
-				secretDecrypt = DESUtil.decrypt(secret, key.substring(0,8));
+				secretDecrypt = DES.decrypt(secret, key.substring(0,8));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -262,7 +262,7 @@ public class UserLoginController extends BaseController{
 	    		//time：格式yyyyMMddHHmmss
 	    		secret = "";
 	    		try {
-	    			secret = DESUtil.encrypt(JSONObject.fromObject(mapJson).toString(), key);
+	    			secret = DES.encrypt(JSONObject.fromObject(mapJson).toString(), key);
 	    		} catch (Exception e) {
 	    			e.printStackTrace();
 	    			//异常
