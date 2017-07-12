@@ -56,11 +56,8 @@ public class UserLoginController extends BaseController{
 	   @Value("${app.localhost.url}")
 	   String app_localhost_url;
 	   
-	   @Value("${app.appSecret}")
-	   String app_appSecret;
-	   
 	   @Value("${app.appId}")
-	   String app_appId; 
+	   String app_appId;
 	   
 	   /**
 	    * 登录
@@ -68,7 +65,7 @@ public class UserLoginController extends BaseController{
 	    * @param response
 	    */
 	    @SuppressWarnings("null")
-		@RequestMapping(value = "/usercenter/login", method = RequestMethod.POST)
+		@RequestMapping(value = "/usercenter/publicLogin", method = RequestMethod.POST)
 		public void login(HttpServletRequest request, HttpServletResponse response,UserVo user) {
  	     	log.info("UserLoginController usercenter/login username"+user.getUsername()+"password:"+user.getPassword());
  	     	boolean flag=false;
@@ -180,14 +177,9 @@ public class UserLoginController extends BaseController{
 			if( listVo==null){
 				return "";
 			}
-			StringBuffer url = new StringBuffer(app_localhost_url+"/usercenter/userCenterPublicLogin");
+			StringBuffer url = new StringBuffer(app_localhost_url+"/usercenter/validateLogin");
 			//time：格式yyyyMMddHHmmss
 			String time = DateTools.dateToString(new Date(), "yyyyMMddHHmmss");
-			
-			String strRedis=redisService.get(RedisConstant.APP_INFO+ConstantMessage.APPID);
-			if(strRedis==null||"".equals(strRedis)){
-				redisService.set(RedisConstant.APP_INFO+ConstantMessage.APPID,listVo.getAppsecret());
-			}
 			
   		    String secret = "";
 			try {
@@ -196,13 +188,14 @@ public class UserLoginController extends BaseController{
 				map.put("appkey", listVo.getAppkey());
 				map.put("appId", listVo.getAppId());
 				map.put("platform",platform);
-				secret = DESUtil.encrypt(JSONObject.fromObject(map).toString(),listVo.getAppsecret());
+				secret = DESUtil.encrypt(JSONObject.fromObject(map).toString(),key);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			secret = secret.replaceAll("\\+", "%2B");
 			url.append("?secret=").append(secret);
 			log.info("生成回调URL路径"+url);
+			log.info("生成回调json格式"+JSONObject.fromObject(map));
 			return url.toString();
 		}
 	    
@@ -212,11 +205,10 @@ public class UserLoginController extends BaseController{
 	      * @param request
 	      * @param response
 	      */
-    	 @RequestMapping(value = "/usercenter/userCenterPublicLogin", method = RequestMethod.GET)
+    	 @RequestMapping(value = "/usercenter/validateLogin", method = RequestMethod.GET)
  		 public void userCenterPublicLogin(HttpServletRequest request, HttpServletResponse response) {
 	    	Map<String, Object> map=new HashMap<String,Object>();
 	    	Map<String, Object> mapJson=new HashMap<String,Object>();
-	    	App appCache=null;
 	    	map.put("status", "0");
 	    	String secret=request.getParameter("secret");
 	    	if(StringUtils.isBlank(secret)){
@@ -226,26 +218,10 @@ public class UserLoginController extends BaseController{
 	     		writeErrorJson(response,map);
 	    		return;
 	    	}
-			
-			String appsecret=redisService.get(RedisConstant.APP_INFO+ConstantMessage.APPID);
-			if(StringUtils.isBlank(appsecret)){
-				appCache=userCacheService.findAppById(ConstantMessage.APPID);
-				if(appCache!=null){
-					appsecret=appCache.getAppsecret();
-					redisService.set(RedisConstant.APP_INFO+ConstantMessage.APPID,appsecret);
-				}
-			}
-			
-			if(StringUtils.isBlank(appsecret)){
-				//用户中心App不存在
-				map.put("error_code", "9");
-	     		map.put("errMsg", "用户中心App信息不存在");
-	     		writeErrorJson(response,map);
-				return;
-			}
+			 
 			String secretDecrypt = "";
 	    	try {
-				secretDecrypt = DESUtil.decrypt(secret, appsecret.substring(0,8));
+				secretDecrypt = DESUtil.decrypt(secret, key.substring(0,8));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -257,7 +233,7 @@ public class UserLoginController extends BaseController{
 	    		return;
 	    	}
 	    	
-		   JSONObject json = JSONObject.fromObject(secretDecrypt);
+		    JSONObject json = JSONObject.fromObject(secretDecrypt);
 	      	String sourceId=json.getString("sourceId");
 	      	String time=json.getString("time");
 	      	String appKey=json.getString("appkey");
@@ -275,19 +251,18 @@ public class UserLoginController extends BaseController{
 	    	App app = userLoginService.findIdByClientId(appKey);
 	    	if(app==null){
 	    		//App不存在
-	    		map.put("error_code", "10");
+	    		map.put("error_code", "9");
 	     		map.put("errMsg", "该App信息不存在");
 	     		writeErrorJson(response,map);
 	    		return;
 	    	}
 	    	StringBuffer url = new StringBuffer(app.getWebServerRedirectUri());
-	    	String appSecret = app.getAppsecret();
 	    	//非教师培训App采用des加密方式
 	    	if(app.getId()!=5){
 	    		//time：格式yyyyMMddHHmmss
 	    		secret = "";
 	    		try {
-	    			secret = DESUtil.encrypt(JSONObject.fromObject(mapJson).toString(), appSecret);
+	    			secret = DESUtil.encrypt(JSONObject.fromObject(mapJson).toString(), key);
 	    		} catch (Exception e) {
 	    			e.printStackTrace();
 	    			//异常
@@ -303,7 +278,7 @@ public class UserLoginController extends BaseController{
 	    	else{
 	    		//salt=4位随机数
 	    		String salt = StringTool.getRandomString(4);
-	    		secret = MD5.Md5(sourceId+salt+appKey+appId+platform+appSecret);
+	    		secret = MD5.Md5(sourceId+salt+appKey+appId+platform+key);
 	    		url.append("?sourceId=").append(sourceId);
 	    		url.append("&salt=").append(salt);
 	    		url.append("&secret=").append(secret);

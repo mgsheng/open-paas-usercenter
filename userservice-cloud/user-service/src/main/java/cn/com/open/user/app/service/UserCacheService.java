@@ -1,6 +1,8 @@
 package cn.com.open.user.app.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,8 +28,11 @@ public class UserCacheService {
 	
 	public void updateUserCache(UserVo cache) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", cache.getId());
+		SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+		String str = sdf.format(new Date());//日期转字符串
+		map.put("id", 80101850);
 		map.put("aesPassword", cache.getPassword());
+		map.put("lastloginTime", str);
 		usercacheMapper.updateUserCache(map);
 	}
 

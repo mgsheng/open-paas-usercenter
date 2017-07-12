@@ -1,6 +1,8 @@
 package cn.com.open.user.app.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,9 +38,12 @@ public class UserLoginService {
 
 	public void updateUserAccount(UserVo user) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+		String str = sdf.format(new Date());//日期转字符串
 		map.put("id", user.getId());
 		map.put("aesPassword", user.getPassword());
-		 userMapper.updateUserAccount(map);
+		map.put("lastloginTime", str);
+		userMapper.updateUserAccount(map);
 	}
 
 	public ArrayList<UserListVo> findUserAccountList(int userId) {

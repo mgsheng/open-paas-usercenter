@@ -19,11 +19,13 @@ public class UserCacheProvider {
 	public String updateUserCache(Map<String, Object> map) {
 		Integer id=(Integer)map.get("id");
 		String aesPassword=(String)map.get("aesPassword");
+		String lastloginTime=(String)map.get("lastloginTime");
 		StringBuffer sb = new StringBuffer();
 		sb.append("update user_cache set");
 		if (aesPassword != null && aesPassword.length()>0) {
 			sb.append(" aes_password='" + aesPassword + "'");
 		}
+			sb.append(", last_login_time='" + lastloginTime+ "'" );
 		sb.append(" where id="+id);
 		return sb.toString();
 	}
