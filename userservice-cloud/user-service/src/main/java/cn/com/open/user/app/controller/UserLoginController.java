@@ -56,6 +56,11 @@ public class UserLoginController extends BaseController{
 	   @Value("${app.localhost.url}")
 	   String app_localhost_url;
 	   
+	   @Value("${app.appSecret}")
+	   String app_appSecret;
+	   
+	   @Value("${app.appId}")
+	   String app_appId;
 	   
 	   /**
 	    * 登录
