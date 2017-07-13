@@ -21,6 +21,7 @@ import cn.com.open.openpaas.userservice.app.common.model.Common;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.thread.UserLoginThread;
+import cn.com.open.openpaas.userservice.app.tools.DES;
 import cn.com.open.openpaas.userservice.app.tools.DESUtil;
 import cn.com.open.openpaas.userservice.app.tools.HttpTools;
 import cn.com.open.openpaas.userservice.app.tools.PropertiesTool;
@@ -176,7 +177,7 @@ public class BaseDevUserController {
     		//校验登录参数是否正确
     		String secretDecrypt = "";
         	try {
-    			secretDecrypt = DESUtil.decrypt(secret, app.getAppsecret().substring(0,8));
+    			secretDecrypt = DES.decrypt(secret, app.getAppsecret().substring(0,8));
     		} catch (Exception e) {
     			e.printStackTrace();
     		}

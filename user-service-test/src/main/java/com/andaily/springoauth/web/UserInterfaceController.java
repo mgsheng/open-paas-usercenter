@@ -136,7 +136,7 @@ public class UserInterfaceController {
     }
 
      @RequestMapping(value = "smsSend", method = RequestMethod.POST)
-     public String smsSend(String clientId,String accessToken,String phone,String userName) throws Exception {
+     public String smsSend(String clientId,String accessToken,String phone) throws Exception {
 
      	String key=map.get(clientId);
 	    	  String signature="";
@@ -157,7 +157,7 @@ public class UserInterfaceController {
 		  		 	signature=HMacSha1.getNewResult(signature);
 		      	}
 
-          final String fullUri = userSmsSendUri+"?client_id="+clientId+"&phone="+phone+"&userName="+userName+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+          final String fullUri = userSmsSendUri+"?client_id="+clientId+"&phone="+phone+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
           LOG.debug("Send to Oauth-Server URL: {}", fullUri);
           return "redirect:" + fullUri;
      }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
+import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.logic.UserLogicService;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
@@ -51,6 +52,8 @@ public class UserCenterSmsSendController extends BaseControllerUtil {
 	 private UserLogicService userLogicService;
 	 @Autowired
 	 private UserCacheService userCacheService;
+	 @Autowired
+	 private AppUserService appUserService;
   /**
     * 用户账号验证接口
 	* @return Json
@@ -60,9 +63,8 @@ public class UserCenterSmsSendController extends BaseControllerUtil {
 	    	String client_id=request.getParameter("client_id");
 	    	String access_token=request.getParameter("access_token");
 	    	String phone=request.getParameter("phone");
-	    	String userName=request.getParameter("userName");
 	    	Map<String, Object> map=new HashMap<String,Object>();
-	        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,phone,userName))){
+	        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,phone))){
 	            paraMandaChkAndReturn(3, response,"参数传递不全");
 	            return;
 	        }
@@ -80,31 +82,6 @@ public class UserCenterSmsSendController extends BaseControllerUtil {
 	        map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
 			if(map.get("status").equals("1")){
 				boolean flag = false;
-				UserCache userCache=null;
-				Object userCacheInfoObj = redisClient.getObject(RedisConstant.USER_CACHE_INFO+userName);
-				//存在缓存信息，用户存在于用户异常表中
-				if(userCacheInfoObj!=null ){
-					userCache = checkCacheUsername(userName,userCacheService,app.getId());
-					if(userCache!=null){
-		    			if(userCache.userState().equals("2")){
-		    				WebUtils.paraMandaChkAndReturn(6, response,"用户已停用");
-		    				return;
-		    			}else if(!userCache.userState().equals("2")&&(userCache.username()==null||"".equals(userCache.username()))){
-		    				WebUtils.paraMandaChkAndReturn(7, response,"用户名为空");
-		    			}else{
-		    				//发送短信找回密码验证码
-		        			flag = userLogicService.sendResetPassWordPhone(userCache.id(),phone,UserActivated.USERTYPE_USER);
-		    				if(!flag){
-		    					WebUtils.paraMandaChkAndReturn(8, response,"短信发送失败");
-			    				return;
-		    				}else{
-		    					map.put("status", "1");
-		    					writeSuccessJson(response,map);
-		    				    return;
-		    				}	
-		    			}
-					}
-			    }
 	    		User user = userService.findByUsername(phone);
 	    		if(user == null){
 	    			//String desPhone=Help_Encrypt.encrypt(phone);
@@ -114,24 +91,55 @@ public class UserCenterSmsSendController extends BaseControllerUtil {
 	    			}
 	    		}
 	    		if(user != null){
-	    			if(user.userState().equals("2")){
-	    				WebUtils.paraMandaChkAndReturn(6, response,"用户已停用");
-	    				return;
-	    			}else if(!user.userState().equals("2")&&(user.username()==null||"".equals(user.username()))){
-	    				WebUtils.paraMandaChkAndReturn(7, response,"用户名为空");
-	    			}else{
-	    				//发送短信找回密码验证码
-	        			flag = userLogicService.sendResetPassWordPhone(user.getId(),phone,UserActivated.USERTYPE_USER);
-	    				if(!flag){
-	    					WebUtils.paraMandaChkAndReturn(8, response,"短信发送失败");
+	    			AppUser appUser=appUserService.findByCidAUid(app.getId(), user.getId());
+	    			if(appUser!=null){
+	    				if(user.userState().equals("2")){
+		    				WebUtils.paraMandaChkAndReturn(6, response,"用户已停用");
 		    				return;
-	    				}else{
-	    					map.clear();
-	    					map.put("status", "1");
-	    				}	
+		    			}else if(!user.userState().equals("2")&&(user.username()==null||"".equals(user.username()))){
+		    				WebUtils.paraMandaChkAndReturn(7, response,"用户名为空");
+		    			}else{
+		    				//发送短信找回密码验证码
+		        			flag = userLogicService.sendResetPassWordPhone(user.getId(),phone,UserActivated.USERTYPE_USER);
+		    				if(!flag){
+		    					WebUtils.paraMandaChkAndReturn(8, response,"短信发送失败");
+			    				return;
+		    				}else{
+		    					map.clear();
+		    					map.put("status", "1");
+		    				}	
+		    			}
+	    			}else{
+	    				UserCache userCache=null;
+	    				//存在缓存信息，用户存在于用户异常表中
+	    					userCache = checkCacheUsername(phone,userCacheService,app.getId());
+	    					if(userCache!=null){
+	    		    			if(userCache.userState().equals("2")){
+	    		    				WebUtils.paraMandaChkAndReturn(6, response,"用户已停用");
+	    		    				return;
+	    		    			}else if(!userCache.userState().equals("2")&&(userCache.username()==null||"".equals(userCache.username()))){
+	    		    				WebUtils.paraMandaChkAndReturn(7, response,"用户名为空");
+	    		    			}else{
+	    		    				//发送短信找回密码验证码
+	    		        			flag = userLogicService.sendResetPassWordPhone(userCache.id(),phone,UserActivated.USERTYPE_USER);
+	    		    				if(!flag){
+	    		    					WebUtils.paraMandaChkAndReturn(8, response,"短信发送失败");
+	    			    				return;
+	    		    				}else{
+	    		    					map.put("status", "1");
+	    		    					writeSuccessJson(response,map);
+	    		    				    return;
+	    		    				}	
+	    		    			}
+	    					}else{
+	    						WebUtils.paraMandaChkAndReturn(6, response,"用户已停用");
+			    				return;
+	    					}
+	    				
 	    			}
+	    			
 	    		}else{//不存在
-	    			WebUtils.paraMandaChkAndReturn(9, response,"用户不存在");
+	    			WebUtils.paraMandaChkAndReturn(9, response,"手机号找不到");
     				return;
 	    		}
 			}

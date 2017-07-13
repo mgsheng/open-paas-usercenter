@@ -45,17 +45,6 @@
                         
                     </div>
                     
-					<div class="form-group">  
-                        <label class="col-sm-2 control-label">userName</label>
-
-                        <div class="col-sm-10">
-                            <input type="text" name="userName" size="50" id="userName" class="form-control"
-                                   ng-model="userName"/>
-
-                            <p class="help-block">帐号</p>
-                        </div>
-                    </div>
-                    
                     <div class="form-group">
                         <label class="col-sm-2 control-label">phone</label>
 
@@ -88,7 +77,6 @@
         $scope.userSmsSendUri = '${userCenterRegUri}';
         $scope.client_id = 'b62c4d6b6d3b462d9af0194e241512dd';
         $scope.accessToken="e23b86ea-1d4d-427c-a3da-c13a56c87192";
-        $scope.userName='test2';
         $scope.phone="15727398579";
 
         $scope.visible = false;
@@ -114,10 +102,6 @@
 				    alert("请输入accessToken");
 					return;
 				}
-				if(userName==''){
-				    alert("请输入username");
-					return;
-				}
 				$.post("${contextPath}/userCenterReg/getSignature",
 					{
 					clientId:clientId,
@@ -128,7 +112,7 @@
 	   					    var signature=data.signature;
 	   					    var timestamp=data.timestamp;
 	   					    var signatureNonce=data.signatureNonce;
-	   					    var regUri=userSmsSendUri+"?"+"client_id="+clientId+"&access_token="+accessToken+"&userName="+userName+"&phone="+phone+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
+	   					    var regUri=userSmsSendUri+"?"+"client_id="+clientId+"&access_token="+accessToken+"&phone="+phone+"&signature="+signature+"&amptimestamp="+timestamp+"&signatureNonce="+signatureNonce;
 	   						$("#regUri").html(regUri);
 	   					}
 	   					else{

@@ -11,26 +11,21 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
-import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
-import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.DES;
-import cn.com.open.openpaas.userservice.app.tools.DESUtil;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
-import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
 
 /**
  * 验证自动登录地址（不需要accessToken）

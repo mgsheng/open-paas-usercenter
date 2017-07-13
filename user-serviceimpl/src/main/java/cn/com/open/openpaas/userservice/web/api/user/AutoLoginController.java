@@ -125,11 +125,8 @@ public class AutoLoginController {
     				    		 }else{
     				    			 String mcSercrt=app_id+"#"+user.username()+"#"+user.email()+"#"+user.phone()+"#"+user.guid()+"#"+time+"#"+desAppKey+"#"+salt+"#"+desAddress+"#"+studentCode+"#"+realName;
     				    			 String sendMcSercret="";
-    				    			 if(desApp_id.equals("10026")){
-    				    				 sendMcSercret=DESUtil.encrypt(mcSercrt, desAppSecert);
-    				    			 }else{
-    				    				 sendMcSercret=DES.encrypt(mcSercrt, desAppSecert);
-    				    			 }
+    				    			sendMcSercret=DES.encrypt(mcSercrt, desAppSecert);
+    				    			 
     				    			 sendMcSercret=DES.getNewSecert(sendMcSercret);
     				    			 if(!nullEmptyBlankJudge(desAddress)){
     				    				 if(desAppUrl.indexOf("?")>-1){
