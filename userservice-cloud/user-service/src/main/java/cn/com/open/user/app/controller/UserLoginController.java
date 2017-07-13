@@ -68,8 +68,11 @@ public class UserLoginController extends BaseController{
 	    * @param response
 	    */
 	    @SuppressWarnings("null")
-		@RequestMapping(value = "/usercenter/publicLogin", method = RequestMethod.POST)
+		@RequestMapping(value = "/usercenter/publicLogin", method = {RequestMethod.POST,RequestMethod.OPTIONS} )
 		public void login(HttpServletRequest request, HttpServletResponse response,UserVo user) {
+	    	if(request.getMethod().equals(RequestMethod.OPTIONS.name())){
+	    		return;
+	    	}
  	     	log.info("UserLoginController usercenter/login username"+user.getUsername()+"password:"+user.getPassword());
  	     	boolean flag=false;
 	    	ArrayList<User> cacheList=null;
