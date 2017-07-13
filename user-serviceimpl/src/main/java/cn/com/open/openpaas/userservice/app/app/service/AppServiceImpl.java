@@ -15,9 +15,11 @@ import cn.com.open.openpaas.userservice.app.common.model.Common;
 import cn.com.open.openpaas.userservice.app.infrastructure.repository.AppRepository;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
+import cn.com.open.openpaas.userservice.app.tools.DES;
 import cn.com.open.openpaas.userservice.app.tools.DESUtil;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.tools.PropertiesTool;
+import net.sf.json.JSONObject;
 
 
 /**
@@ -100,11 +102,11 @@ public class AppServiceImpl implements AppService {
 	 * @see cc.wdcy.service.AppService#findCallbackUrl(cc.wdcy.domain.app.App, cc.wdcy.domain.appuser.AppUser)
 	 */
 	@Override
-	public String findCallbackUrl(App app, AppUser appUser){
+	public String findCallbackUrl(App app, AppUser appUser,String serverHost,String platform){
 		if(app==null || appUser==null){
 			return "";
 		}
-		StringBuffer url = new StringBuffer(PropertiesTool.getAppPropertieByKey("app.localhost.url")+"/user/userCenterPublicLogin");
+		StringBuffer url = new StringBuffer(serverHost+"user/userCenterPublicLogin");
 		//time：格式yyyyMMddHHmmss
 		String time = DateTools.dateToString(new Date(), "yyyyMMddHHmmss");
 		//appSecret为前8位
@@ -121,7 +123,16 @@ public class AppServiceImpl implements AppService {
 		//Des(（sourceId+“#”+time+“#”+appKey）, appSecret)
 		String secret = "";
 		try {
-			secret = DESUtil.encrypt(appUser.sourceId()+"#"+time+"#"+app.getAppkey(), appSecret);
+			
+			//secret = DESUtil.encrypt(appUser.sourceId()+"#"+time+"#"+app.getAppkey(), appSecret);
+			Map<String, Object> map=new HashMap<String,Object>();
+			map.put("sourceId", appUser.sourceId());
+			map.put("time", time);
+			map.put("appkey", app.getAppkey());
+			map.put("appId", appUser.appId());
+			map.put("platform",platform);
+			secret = DES.encrypt(JSONObject.fromObject(map).toString(),appSecret);
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

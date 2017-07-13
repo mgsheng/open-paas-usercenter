@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,8 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	 final static String  SEPARATOR = "&";
 	 @Autowired
 	 private UserserviceDev userserviceDev;
+	 @Value("#{properties['app.localhost.url']}")
+	 private String serverHost;
 	    /**
 	     * 用户登录接口(通过用户名-密码)
 	     * @return Json
@@ -71,6 +74,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    	String password=request.getParameter("password");
 	    	String pwdtype=request.getParameter("pwdtype");
             String sessionTime=request.getParameter("session_time");/*有效时间，默认是分钟，如果为空则默认30分钟*/
+            String platform=request.getParameter("platform");
 	    	String aesPassword="";
 	    	String oldPassword = password;
 	    	log.info("client_id:"+client_id+"access_token:"+access_token+"grant_type:"+grant_type+"scope:"+scope+"password:"+password+"username:"+username+"Password:"+password);
@@ -88,6 +92,9 @@ public class UserCenterLoginController extends BaseControllerUtil {
 			}
 			map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
 			if(map.get("status").equals("1")){
+				if(nullEmptyBlankJudge(platform)){
+					platform="1";
+				}
 				Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
 				if(!hmacSHA1Verification){
 					paraMandaChkAndReturn(7, response,"认证失败");
@@ -292,7 +299,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    		    Map<String,String> appMap = null;
 	    		    boolean flag=false;
 	    		    //查询父节点的app信息
-					infoList=infoListbyPassWord(Integer.parseInt(pid), app, isCache);
+					infoList=infoListbyPassWord(Integer.parseInt(pid), app, isCache,platform);
 					//查看用户可以访问应用是否包含当前应用
 					appMap = new HashMap<String,String>();
 					for(int i=0;i<infoList.size();i++){
@@ -313,7 +320,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 						if(userList!=null && userList.size()>0){
 							//遍历子节点的app信息
 							for(User userTemp:userList){
-								infoList=infoListbyPassWord(userTemp.getId(), app, isCache);
+								infoList=infoListbyPassWord(userTemp.getId(), app, isCache,platform);
 								if(infoList==null || infoList.size()==0){
 									continue;
 								}
@@ -416,43 +423,18 @@ public class UserCenterLoginController extends BaseControllerUtil {
     /**
      * 登录接口中返回应用列表
      * @param userId
-     * @return
-     */
-    public List<Map<String,String>> infoList(Integer userId){
-    	List<Map<String,String>> infoList=new ArrayList<Map<String,String>>();
-	    List<AppUser> appUsers=appUserService.findByUserId(userId);
-	    if(appUsers!=null){
-	    	for(AppUser au:appUsers){
-	    		Map<String,String> map1=new HashMap<String,String>();
-	    		App app1=appService.findById(au.appId());
-	    		if(app1!=null){
-//		    		map1.put("callbackUrl", app1.getWebServerRedirectUri());
-	    			map1.put("callbackUrl", appService.findCallbackUrl(app1, au));
-		    		map1.put("name", app1.getName());
-		    		map1.put("icon", app1.getIcon());
-	    		}
-	    		map1.put("sourceId", au.sourceId());
-	    		//map1.put("sourceId", au.appId().toString());
-	    		infoList.add(map1);
-	    	}
-	    }
-    	return infoList;
-    }
-    /**
-     * 登录接口中返回应用列表
-     * @param userId
      * @param app
      * @param isCache	是否来自缓存表
      * @return
      */
-    public List<Map<String,String>> infoListbyPassWord(Integer userId, App app, boolean isCache){
+    public List<Map<String,String>> infoListbyPassWord(Integer userId, App app, boolean isCache,String platform){
     	List<Map<String,String>> infoList=new ArrayList<Map<String,String>>();
 	    //List<AppUser> appUsers=appUserService.findByUserId(userId);
 	    List<AppUser> appUsers=appUserService.findAuthoritiesAppsByUserId(userId,app.getAppAuthorities(),app.getId(), isCache);
 	    if(appUsers!=null){
 	    	for(AppUser au:appUsers){
 	    		Map<String,String> map1=new HashMap<String,String>();
-	    		getAppMap(map1, au, app);
+	    		getAppMap(map1, au, app,platform);
 	    		infoList.add(map1);
 	    	}
 	    }
@@ -464,7 +446,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
      * @param au
      * @param app
      */
-    private void getAppMap(Map<String,String> map, AppUser au, App app){
+    private void getAppMap(Map<String,String> map, AppUser au, App app,String platform){
 		App app1=	(App) redisClient.getObject(RedisConstant.APP_INFO+au.appId());
 		if(app1==null){
 			 app1=appService.findById(au.appId());
@@ -472,7 +454,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 		}
 		if(app1!=null){
 //    		map.put("callbackUrl", app1.getWebServerRedirectUri());
-			map.put("callbackUrl", appService.findCallbackUrl(app1, au));
+			map.put("callbackUrl", appService.findCallbackUrl(app1, au,serverHost,platform));
 			map.put("name", app1.getName());
 			map.put("icon", app1.getIcon());
 			

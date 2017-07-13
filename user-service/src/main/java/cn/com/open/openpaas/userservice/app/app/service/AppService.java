@@ -25,5 +25,5 @@ public interface AppService {
 	 * @param appUser
 	 * @return
 	 */
-	String findCallbackUrl(App app, AppUser appUser);
+	String findCallbackUrl(App app, AppUser appUser,String serverHost,String platform);
 }
