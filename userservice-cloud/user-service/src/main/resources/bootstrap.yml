@@ -14,7 +14,4 @@ spring:
 server:
   port: 80
 serverHost: 127.0.0.1
-app:
-    localhost:
-        url: http://pd-userservice-cloud.testyf.ak:8005
 callbackUrl: http://${APP_LOCALHOST_URL}:${APP_LOCALHOST_URL_PORT}
