@@ -58,6 +58,9 @@ public class UserLoginController extends BaseController{
 	   
 	   @Value("${app.appId}")
 	   String app_appId;
+	   @Value("${callbackUrl}")
+	   String callbackUrl;
+	   
 	   
 	   /**
 	    * 登录
@@ -177,7 +180,7 @@ public class UserLoginController extends BaseController{
 			if( listVo==null){
 				return "";
 			}
-			StringBuffer url = new StringBuffer(app_localhost_url+"/usercenter/validateLogin");
+			StringBuffer url = new StringBuffer(callbackUrl+"/usercenter/validateLogin");
 			//time：格式yyyyMMddHHmmss
 			String time = DateTools.dateToString(new Date(), "yyyyMMddHHmmss");
 			

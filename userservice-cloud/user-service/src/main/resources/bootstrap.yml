@@ -17,3 +17,4 @@ serverHost: 127.0.0.1
 app:
     localhost:
         url: http://pd-userservice-cloud.testyf.ak:8005
+callbackUrl: http://pd-userservice-cloud.testyf.ak:8005
