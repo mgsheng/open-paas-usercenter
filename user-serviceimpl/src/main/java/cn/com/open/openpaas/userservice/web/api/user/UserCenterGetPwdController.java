@@ -112,7 +112,7 @@ private AppService appService;
 		    		
 			    	 if(user!=null){
 						if(user.getAesPassword()!=null&&!"".equals(user.getAesPassword())){
-							pwd=user.getAesPassword();
+							pwd=aesDecryptByaesEncrypt(user.getAesPassword(), app.getAppsecret());
 						}else{
 							if(user.getDesPassword()!=null&&!"".equals(user.getDesPassword()))
 								pwd=aesDecryptBydesEncrypt(user.getDesPassword(), app.getAppsecret());
@@ -120,7 +120,7 @@ private AppService appService;
 						log.info("user pwd：" + pwd);
 		    		 }else if(userCache!=null){
 						if(userCache.getAesPassword()!=null&&!"".equals(userCache.getAesPassword())){
-							pwd=userCache.getAesPassword();
+							pwd=aesDecryptByaesEncrypt(userCache.getAesPassword(), app.getAppsecret());
 						}else{
 							if(userCache.desPassword()!=null&&!"".equals(userCache.desPassword()))
 								pwd=aesDecryptBydesEncrypt(userCache.desPassword(), app.getAppsecret());
@@ -145,6 +145,19 @@ private AppService appService;
 	    	  log.info("接口调用查询密码为："+pwd);
 	        return ;
 	    }
+		
+		public String aesDecryptByaesEncrypt(String pwd,String appsecret){
+			try {
+				log.info("DES解密前pwd：" + pwd);
+				pwd = AESUtil.decrypt(pwd, userserviceDev.getAes_userCenter_key()).trim();
+				log.info("DES.decrypt解密后pwd：" + pwd);
+				pwd = AESUtil.encrypt(pwd,appsecret).trim();
+				log.info("AESUtil.encrypt加密后pwd：" + pwd);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return pwd;
+		}
 		
 		public String aesDecryptBydesEncrypt(String pwd,String appsecret){
 			try {
