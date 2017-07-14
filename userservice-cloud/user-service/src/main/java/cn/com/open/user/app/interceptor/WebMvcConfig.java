@@ -21,7 +21,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(verifySignatureInterceptor());
+        registry.addInterceptor(verifySignatureInterceptor()).excludePathPatterns("/dnotdelet/mom.html");
         super.addInterceptors(registry);
     }
 
