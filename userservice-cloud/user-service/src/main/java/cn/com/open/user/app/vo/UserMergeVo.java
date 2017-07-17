@@ -20,8 +20,8 @@ public class UserMergeVo implements Serializable{
 	public UserMergeVo(User u) {
 		this.username = u.getUsername();
 		this.guid = u.getGuid();
-		this.phone = u.getPhone();
-		this.email = u.getEmail();
+		this.phone = "NULL".equals(u.getPhone())?"":u.getPhone();
+		this.email = "NULL".equals(u.getEmail())?"":u.getEmail();
 	}
 	public String getGuid() {
 		return guid;
