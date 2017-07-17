@@ -83,10 +83,10 @@ private AppService appService;
 	 			map = checkClientIdOrToken(client_id, access_token, app, tokenServices);
 	 			if (map.get("status").equals("1")) {// client_id,access_token正确	 	
 	 				Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
-	 			/*	if(!hmacSHA1Verification){
+	 				if(!hmacSHA1Verification){
 	 					paraMandaChkAndReturn(9, response,"认证失败");
 	 					return;
-	 				}*/
+	 				}
 		    	  if(userName!=null&&!"".equals(userName)){
 		    		//userName=userName.toLowerCase();
 		    		log.info("用户："+userName+" 调用时间："+DateTools.getNow()+"调用接口");
