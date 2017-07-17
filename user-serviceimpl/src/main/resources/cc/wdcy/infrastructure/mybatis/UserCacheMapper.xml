@@ -30,6 +30,7 @@
         <result property="userState" column="user_state" />
         <result property="emailActivation" column="email_activation" />
         <result property="aesPassword" column="aes_password"/>
+        <result property="desPassword" column="des_password"/>
 		<result property="sha1Password" column="sha1_password"/>
 		<result property="md5Password" column="md5_password"/>
 		<result property="md5Salt" column="md5_salt"/>
@@ -61,6 +62,7 @@
     	last_login_time,
     	email_activation,
     	aes_password,
+    	des_password,
     	sha1_password,
     	md5_password,
     	md5_salt,

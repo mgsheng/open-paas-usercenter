@@ -24,6 +24,7 @@ import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.DES;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
+import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.model.UserCache;
 import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
@@ -82,10 +83,10 @@ private AppService appService;
 	 			map = checkClientIdOrToken(client_id, access_token, app, tokenServices);
 	 			if (map.get("status").equals("1")) {// client_id,access_token正确	 	
 	 				Boolean hmacSHA1Verification=OauthSignatureValidateHandler.validateSignature(request, app);
-	 				if(!hmacSHA1Verification){
+	 			/*	if(!hmacSHA1Verification){
 	 					paraMandaChkAndReturn(9, response,"认证失败");
 	 					return;
-	 				}
+	 				}*/
 		    	  if(userName!=null&&!"".equals(userName)){
 		    		userName=userName.toLowerCase();
 		    		log.info("用户："+userName+" 调用时间："+DateTools.getNow()+"调用接口");
@@ -148,9 +149,9 @@ private AppService appService;
 		
 		public String aesDecryptByaesEncrypt(String pwd,String appsecret){
 			try {
-				log.info("DES解密前pwd：" + pwd);
+				log.info("AESUtil解密前pwd：" + pwd);
 				pwd = AESUtil.decrypt(pwd, userserviceDev.getAes_userCenter_key()).trim();
-				log.info("DES.decrypt解密后pwd：" + pwd);
+				log.info("AESUtil.decrypt解密后pwd：" + pwd);
 				pwd = AESUtil.encrypt(pwd,appsecret).trim();
 				log.info("AESUtil.encrypt加密后pwd：" + pwd);
 			} catch (Exception e) {
@@ -162,14 +163,18 @@ private AppService appService;
 		public String aesDecryptBydesEncrypt(String pwd,String appsecret){
 			try {
 				log.info("DES解密前pwd：" + pwd);
-				pwd = DES.decrypt(pwd, appsecret).trim();
+				pwd = Help_Encrypt.decrypt(pwd).trim();
 				log.info("DES.decrypt解密后pwd：" + pwd);
-				pwd = AESUtil.encrypt(pwd, appsecret).trim();
+				pwd =AESUtil.encrypt(pwd, appsecret);
 				log.info("AESUtil.encrypt加密后pwd：" + pwd);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return pwd;
+		}
+		
+		public static void main(String[] args) {
+			System.out.println();
 		}
 	 
 }
