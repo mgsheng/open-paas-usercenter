@@ -172,9 +172,4 @@ private AppService appService;
 			}
 			return pwd;
 		}
-		
-		public static void main(String[] args) {
-			System.out.println();
-		}
-	 
 }
