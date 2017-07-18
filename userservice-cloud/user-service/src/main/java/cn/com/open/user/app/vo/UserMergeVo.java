@@ -22,7 +22,7 @@ public class UserMergeVo implements Serializable{
 		this.guid = u.getGuid();
 		this.phone = "NULL".equals(u.getPhone())?"":u.getPhone();
 		this.email = "NULL".equals(u.getEmail())?"":u.getEmail();
-	}
+	} 
 	public String getGuid() {
 		return guid;
 	}
