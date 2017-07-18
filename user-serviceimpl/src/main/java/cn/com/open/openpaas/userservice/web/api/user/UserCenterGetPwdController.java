@@ -116,7 +116,7 @@ private AppService appService;
 							pwd=aesDecryptByaesEncrypt(user.getAesPassword(), app.getAppsecret());
 						}else{
 							if(user.getDesPassword()!=null&&!"".equals(user.getDesPassword()))
-								pwd=desDecryptByaesEncrypt(user.getDesPassword(), app.getAppsecret());
+								pwd=aesDecryptBydesEncrypt(user.getDesPassword(), app.getAppsecret());
 						}
 						log.info("user pwd：" + pwd);
 		    		 }else if(userCache!=null){
@@ -124,7 +124,7 @@ private AppService appService;
 							pwd=aesDecryptByaesEncrypt(userCache.getAesPassword(), app.getAppsecret());
 						}else{
 							if(userCache.desPassword()!=null&&!"".equals(userCache.desPassword()))
-								pwd=desDecryptByaesEncrypt(userCache.desPassword(), app.getAppsecret());
+								pwd=aesDecryptBydesEncrypt(userCache.desPassword(), app.getAppsecret());
 						}
 						log.info("userCache pwd：" + pwd);
 		    		 } else{
@@ -160,7 +160,7 @@ private AppService appService;
 			return pwd;
 		}
 		
-		public String desDecryptByaesEncrypt(String pwd,String appsecret){
+		public String aesDecryptBydesEncrypt(String pwd,String appsecret){
 			try {
 				log.info("DES解密前pwd：" + pwd);
 				pwd = Help_Encrypt.decrypt(pwd).trim();
