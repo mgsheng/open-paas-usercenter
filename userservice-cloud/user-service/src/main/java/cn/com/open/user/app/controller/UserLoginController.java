@@ -269,8 +269,7 @@ public class UserLoginController extends BaseController{
 	    		//time：格式yyyyMMddHHmmss
 	    		secret = "";
 	    		try {
-	    			
-	    			secret = DES.encrypt(JSONObject.fromObject(mapJson).toString(), app.getAppsecret());
+	    		 	secret = DES.encrypt(JSONObject.fromObject(mapJson).toString(), app.getAppsecret());
 	    		} catch (Exception e) {
 	    			e.printStackTrace();
 	    			//异常
