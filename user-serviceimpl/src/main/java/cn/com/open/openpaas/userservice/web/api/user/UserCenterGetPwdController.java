@@ -88,7 +88,7 @@ private AppService appService;
 	 					return;
 	 				}*/
 		    	  if(userName!=null&&!"".equals(userName)){
-		    		userName=userName.toLowerCase();
+		    		//userName=userName.toLowerCase();
 		    		log.info("用户："+userName+" 调用时间："+DateTools.getNow()+"调用接口");
 		    		
 		    		AppUser appUser = appUserService.findByCidSid(app.getId(), source_id);
