@@ -253,6 +253,7 @@ public class UserLoginController extends BaseController{
 	      	mapJson.put("appkey", appKey);
 	      	mapJson.put("appId", appId);
 	      	mapJson.put("platform",platform);
+	      	mapJson.put("type","common");
 	      	mapJson.put("businessDate",businessDate);
 	    	App app = userLoginService.findIdByClientId(appKey);
 	    	if(app==null){
@@ -279,6 +280,7 @@ public class UserLoginController extends BaseController{
 	    		}
 	    		secret = secret.replaceAll("\\+", "%2B");
 	    		url.append("?secret=").append(secret);
+	    		url.append("&type=common");
 	    	}
 	    	//教师培训App采用MD5加密方式
 	    	else{
