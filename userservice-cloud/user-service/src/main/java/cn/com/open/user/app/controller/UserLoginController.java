@@ -253,6 +253,7 @@ public class UserLoginController extends BaseController{
 	      	mapJson.put("appkey", appKey);
 	      	mapJson.put("appId", appId);
 	      	mapJson.put("platform",platform);
+	     // 	mapJson.put("type","common");
 	      	mapJson.put("businessDate",businessDate);
 	    	App app = userLoginService.findIdByClientId(appKey);
 	    	if(app==null){
@@ -268,7 +269,7 @@ public class UserLoginController extends BaseController{
 	    		//time：格式yyyyMMddHHmmss
 	    		secret = "";
 	    		try {
-	    			secret = DES.encrypt(JSONObject.fromObject(mapJson).toString(), key);
+	    		 	secret = DES.encrypt(JSONObject.fromObject(mapJson).toString(), app.getAppsecret());
 	    		} catch (Exception e) {
 	    			e.printStackTrace();
 	    			//异常
@@ -279,6 +280,7 @@ public class UserLoginController extends BaseController{
 	    		}
 	    		secret = secret.replaceAll("\\+", "%2B");
 	    		url.append("?secret=").append(secret);
+	    	//	url.append("&type=common");
 	    	}
 	    	//教师培训App采用MD5加密方式
 	    	else{
