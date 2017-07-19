@@ -79,12 +79,17 @@ public class UserCenterPublicLoginController extends BaseControllerUtil{
       	String appKey=json.getString("appkey");
       	String appId=json.getString("appId");
       	String platform=json.getString("platform");
+      	String businessDate="";
+    	if(json.containsKey("businessDate")){
+    	    businessDate=json.getString("businessDate");
+    	}
       	Map<String, Object> mapJson=new HashMap<String,Object>();
       	mapJson.put("sourceId", sourceId);
       	mapJson.put("time", time);
       	mapJson.put("appkey", appKey);
       	mapJson.put("appId", appId);
       	mapJson.put("platform",platform);
+      	mapJson.put("businessDate",businessDate);
 	   	//验证时间是否超时
 	   	Date timeDate = DateTools.stringtoDate(time, "yyyyMMddHHmmss");
 	   	if(new Date().getTime()-timeDate.getTime()>1800000){

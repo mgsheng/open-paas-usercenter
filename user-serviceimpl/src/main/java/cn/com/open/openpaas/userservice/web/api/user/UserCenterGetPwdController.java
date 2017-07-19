@@ -24,6 +24,7 @@ import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.DES;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
+import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.model.UserCache;
 import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
@@ -87,7 +88,7 @@ private AppService appService;
 	 					return;
 	 				}
 		    	  if(userName!=null&&!"".equals(userName)){
-		    		userName=userName.toLowerCase();
+		    		//userName=userName.toLowerCase();
 		    		log.info("用户："+userName+" 调用时间："+DateTools.getNow()+"调用接口");
 		    		
 		    		AppUser appUser = appUserService.findByCidSid(app.getId(), source_id);
@@ -148,9 +149,9 @@ private AppService appService;
 		
 		public String aesDecryptByaesEncrypt(String pwd,String appsecret){
 			try {
-				log.info("DES解密前pwd：" + pwd);
+				log.info("AESUtil解密前pwd：" + pwd);
 				pwd = AESUtil.decrypt(pwd, userserviceDev.getAes_userCenter_key()).trim();
-				log.info("DES.decrypt解密后pwd：" + pwd);
+				log.info("AESUtil.decrypt解密后pwd：" + pwd);
 				pwd = AESUtil.encrypt(pwd,appsecret).trim();
 				log.info("AESUtil.encrypt加密后pwd：" + pwd);
 			} catch (Exception e) {
@@ -162,14 +163,13 @@ private AppService appService;
 		public String aesDecryptBydesEncrypt(String pwd,String appsecret){
 			try {
 				log.info("DES解密前pwd：" + pwd);
-				pwd = DES.decrypt(pwd, appsecret).trim();
+				pwd = Help_Encrypt.decrypt(pwd).trim();
 				log.info("DES.decrypt解密后pwd：" + pwd);
-				pwd = AESUtil.encrypt(pwd, appsecret).trim();
+				pwd =AESUtil.encrypt(pwd, appsecret);
 				log.info("AESUtil.encrypt加密后pwd：" + pwd);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return pwd;
 		}
-	 
 }
