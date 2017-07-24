@@ -98,7 +98,7 @@ public class VerifyController extends BaseControllerUtil{
 	    		int returnValue; 
 				returnValue=judgeInput(account);
 				if(returnValue==1){
-					map = paraMandaChkAndReturnMap(6, response,"用户名5~20个字符");
+					map = paraMandaChkAndReturnMap(6, response,"用户名5~50个字符");
 					writeErrorJson(response,map);
 					return;
 				}else if(returnValue==2){

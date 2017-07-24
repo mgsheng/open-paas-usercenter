@@ -74,6 +74,9 @@ public class ValidateLoginController extends BaseControllerUtil {
  		if(map.get("status").equals("1")){//client_id,access_token正确
  				try {					
 					//secret=	DESUtil.decrypt(secret, app.getAppsecret());
+ 					
+ 					log.info("解密前 secret："+secret);
+ 					log.info("解密前 appsecret："+app.getAppsecret());
 					secret=	AESUtil.decrypt(secret, app.getAppsecret());
 					log.info("解密后 secret："+secret);
 				    if(WebUtils.nullEmptyBlankJudge(secret)){

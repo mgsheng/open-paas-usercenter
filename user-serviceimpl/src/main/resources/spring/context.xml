@@ -191,6 +191,8 @@
         	<property name="access_token_uri" value="${access-token-uri}"></property>
         	<property name="user_center_getInfoList_uri" value="${user-center-getInfoList-uri}"></property>
         	<property name="single_sign_user" value="${single-sign-user}"></property>
-         <property name="redisExpireTime" value="${redis-expired-time}"></property>
+            <property name="redisExpireTime" value="${redis-expired-time}"></property>
+            <property name="oes_interface_addr" value="${oes_interface_addr}"></property>
+            <property name="oes_interface_key" value="${oes_interface_key}"></property>
         </bean>
 </beans>

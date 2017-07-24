@@ -56,6 +56,8 @@ public class ModiPwdController extends BaseControllerUtil{
 	 private UserCacheService userCacheService;
 	 @Autowired
 	 private UserserviceDev userserviceDev;
+	 @Autowired
+	 private AppUserService appUserService;
 	/**
      * 修改账号密码接口
      * @return Json
@@ -183,6 +185,13 @@ public class ModiPwdController extends BaseControllerUtil{
 		    		user.setPlanPasswordByAes(new_pwd,userserviceDev.getAes_userCenter_key());
 		    		user.setUpdatePwdTime(new Date());
 		    		userService.updateUser(user);
+		    		List<AppUser>appUserList=appUserService.findByUserId(user.getId());
+					try {
+						Thread thread = new Thread(new SendOesThread(new_pwd, userService,appUserList,userserviceDev.getOes_interface_addr(),userserviceDev.getOes_interface_key()));
+						thread.run();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 		    		map.clear();
 		    		map.put("status", "1");
 		    	}

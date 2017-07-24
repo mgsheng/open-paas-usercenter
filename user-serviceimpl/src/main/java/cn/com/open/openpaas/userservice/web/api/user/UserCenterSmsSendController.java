@@ -139,7 +139,7 @@ public class UserCenterSmsSendController extends BaseControllerUtil {
 	    			}
 	    			
 	    		}else{//不存在
-	    			WebUtils.paraMandaChkAndReturn(9, response,"手机号找不到");
+	    			WebUtils.paraMandaChkAndReturn(9, response,"手机号未注册");
     				return;
 	    		}
 			}
