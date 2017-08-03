@@ -53,9 +53,9 @@ public class UserLoginController extends BaseController{
 	   @Value("${aes-userCenter-key}")
 	   String key;
 	   
-	   @Value("${app.localhost.url}")
+	  /* @Value("${app.localhost.url}")
 	   String app_localhost_url;
-	   
+	   */
 	   @Value("${app.appId}")
 	   String app_appId;
 	   @Value("${callbackUrl}")

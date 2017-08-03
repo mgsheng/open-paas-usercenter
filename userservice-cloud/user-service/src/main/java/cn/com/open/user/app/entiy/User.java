@@ -10,7 +10,7 @@ public class User implements Serializable{
 	private String key;
 	
 	private String guid;
-	private String email;
+	private String email; 
 	private String phone;
 	
 	private String aesPassword;

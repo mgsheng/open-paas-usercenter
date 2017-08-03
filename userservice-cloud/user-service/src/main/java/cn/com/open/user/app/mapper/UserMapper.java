@@ -14,7 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import cn.com.open.user.app.entiy.User;
 import cn.com.open.user.app.model.App;
 import cn.com.open.user.app.mybatis.UserProvider;
-import cn.com.open.user.app.vo.UserJsonVo;
+import cn.com.open.user.app.vo.OAUserVo;
 import cn.com.open.user.app.vo.UserListVo;
 import cn.com.open.user.app.vo.UserMergeVo;
 
@@ -42,6 +42,7 @@ public interface UserMapper {
 	@SelectProvider(method = "findUserAccountList", type = UserProvider.class)
 	ArrayList<UserListVo> findUserAccountList(Map<String, Object> map);
  
+	@SelectProvider(method = "getOAUserModel", type = UserProvider.class)
+	OAUserVo getOAUserModel(Map<String, Object> map);
 	
-
 }
