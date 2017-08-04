@@ -15,6 +15,7 @@ import cn.com.open.user.app.http.HttpClientUtil;
 import cn.com.open.user.app.mapper.UserMapper;
 import cn.com.open.user.app.model.App;
 import cn.com.open.user.app.sign.MD5;
+import cn.com.open.user.app.tools.StringTools;
 import cn.com.open.user.app.vo.OAUserVo;
 import cn.com.open.user.app.vo.UserListVo;
 import cn.com.open.user.app.vo.UserMergeVo;
@@ -67,10 +68,12 @@ public class UserLoginService {
 		    OAUserVo userVo=null;
 		    try {
 			    Map<String, String> map = new HashMap<String, String>();
+			    String salt=StringTools.getRandom(100,1);
 		    	map.put("idNo", user.getIdNo());
 		    	map.put("userName", user.getUserName());
-		    	map.put("salt", user.getSalt());
-		    	map.put("secret", md5Init(user, appSercret));
+		    	map.put("salt", salt);
+		    	map.put("secret", md5Init(user,salt, appSercret));
+		    	
 		    	
 		    	
 		    	String backJson = HttpClientUtil.httpPost(url, map);
@@ -116,8 +119,8 @@ public class UserLoginService {
 			return userVo;
 	}
 	
-	public String md5Init(OAUser user,String appSercret) {
-		String md5=user.getUserName()+user.getIdNo()+user.getSalt()+appSercret;
+	public String md5Init(OAUser user,String salt,String appSercret) {
+		String md5=user.getUserName()+user.getIdNo()+salt+appSercret;
 		return MD5.Md5(md5);
 	}
 

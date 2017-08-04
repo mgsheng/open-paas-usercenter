@@ -30,7 +30,7 @@ public class UserCacheService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 		String str = sdf.format(new Date());//日期转字符串
-		map.put("id", 80101850);
+		map.put("id", cache.getId());
 		map.put("aesPassword", cache.getPassword());
 		map.put("lastloginTime", str);
 		usercacheMapper.updateUserCache(map);
