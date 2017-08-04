@@ -162,7 +162,7 @@ public class UserCenterRegController extends BaseControllerUtil {
 						writeErrorJson(response,map);
 						return;
 					}if(returnValue==2){
-						map = paraMandaChkAndReturnMap(7, response,"用户名必须为数字、字母、下划线中最少两个组合");
+						map = paraMandaChkAndReturnMap(7, response,"用户名必须为数字和字母或者下划线的组合");
 						OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 						writeErrorJson(response,map);
 						return;

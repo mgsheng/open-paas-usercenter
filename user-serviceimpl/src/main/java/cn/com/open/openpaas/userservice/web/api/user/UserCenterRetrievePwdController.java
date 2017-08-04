@@ -4,6 +4,7 @@ package cn.com.open.openpaas.userservice.web.api.user;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.com.open.openpaas.userservice.app.app.model.App;
 import cn.com.open.openpaas.userservice.app.app.service.AppService;
+import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
+import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
+import cn.com.open.openpaas.userservice.app.thread.SendOesThread;
 import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
@@ -56,6 +60,8 @@ public class UserCenterRetrievePwdController extends BaseControllerUtil {
 	 private UserserviceDev userserviceDev;
 	 @Autowired
 	 private UserCacheService userCacheService;
+	 @Autowired
+	 private AppUserService appUserService;
 	    
     /**
      * 
@@ -195,13 +201,13 @@ public class UserCenterRetrievePwdController extends BaseControllerUtil {
 	    		    		user.setSha1Password(sha1Password);
 	    		    		user.setUpdatePwdTime(new Date());
 	    		    		userService.updateUser(user);
-	    		    		/*List<AppUser>appUserList=appUserService.findByUserId(user.getId());
+	    		    		List<AppUser>appUserList=appUserService.findByUserId(user.getId());
 	    					try {
-	    						Thread thread = new Thread(new SendOesThread(new_pwd, userService,appUserList,address,key));
+	    						Thread thread = new Thread(new SendOesThread(new_pwd, userService,appUserList,userserviceDev.getOes_interface_addr(),userserviceDev.getOes_interface_key()));
 	    						thread.run();
 	    					} catch (Exception e) {
 	    						e.printStackTrace();
-	    					}*/
+	    					}
 	    		    		map.clear();
 	    		    		map.put("status", "1");
 	    		              		   

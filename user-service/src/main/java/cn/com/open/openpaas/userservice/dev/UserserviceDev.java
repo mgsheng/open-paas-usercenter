@@ -20,8 +20,26 @@ public class UserserviceDev {
 	private String access_token_uri;
 	private String single_sign_user;
 	private String redisExpireTime;
+	private String oes_interface_addr;
+	private String oes_interface_key;
 	
 	
+	public String getOes_interface_addr() {
+		return oes_interface_addr;
+	}
+
+	public void setOes_interface_addr(String oes_interface_addr) {
+		this.oes_interface_addr = oes_interface_addr;
+	}
+
+	public String getOes_interface_key() {
+		return oes_interface_key;
+	}
+
+	public void setOes_interface_key(String oes_interface_key) {
+		this.oes_interface_key = oes_interface_key;
+	}
+
 	public String getUser_center_getInfoList_uri() {
 		return user_center_getInfoList_uri;
 	}

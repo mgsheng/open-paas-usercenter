@@ -114,9 +114,9 @@ public class UserCenterLoginController extends BaseControllerUtil {
 				UserCache userCache = null;
 				User user = null;
 				Map<String,String> errorMap = new LinkedHashMap<String, String>();
-				
-				
-
+				if(nullEmptyBlankJudge(pwdtype)){
+					pwdtype="MD5";
+				}
 				Object userCacheInfoObj = redisClient.getObject(RedisConstant.USER_CACHE_INFO+username);
 				//存在缓存信息，用户存在于用户异常表中
 				if(userCacheInfoObj!=null ){

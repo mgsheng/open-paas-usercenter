@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +64,9 @@ public class ApiCommonController   {
 		//	e.printStackTrace();
 		}
     	WebUtils.writeJson(response, JSONObject.fromObject(map));
+    }
+    @RequestMapping("/dnotdelet/mom.html")
+    public String home() {
+        return "unity/mom";
     }
 }
