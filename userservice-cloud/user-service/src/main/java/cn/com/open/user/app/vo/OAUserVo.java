@@ -12,6 +12,9 @@ public class OAUserVo implements Serializable{
 	private String idNo;
 	private String userId;
 	private String guid;
+	private String workPhone;
+	private String phoneSplitNo;
+	private String sex;
 
 	public String getGuid() {  
 		return guid;
@@ -83,6 +86,30 @@ public class OAUserVo implements Serializable{
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getWorkPhone() {
+		return workPhone;
+	}
+
+	public void setWorkPhone(String workPhone) {
+		this.workPhone = workPhone;
+	}
+
+	public String getPhoneSplitNo() {
+		return phoneSplitNo;
+	}
+
+	public void setPhoneSplitNo(String phoneSplitNo) {
+		this.phoneSplitNo = phoneSplitNo;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
 	} 
 	
 }
