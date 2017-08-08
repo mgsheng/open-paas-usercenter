@@ -66,6 +66,15 @@ public interface UserLogicService {
 	boolean sendResetPassWordPhone(int userId,String phone,int userType);
 	
 	/**
+	 * 发送注册手机短信
+	 * @param code
+	 * @param content
+	 * @param phone
+	 * @param userType
+	 */
+	boolean sendRegPhone(String code,String content,String phone,int userType);
+	
+	/**
 	 *  重置手机号，发送手机短信
 	 * @param phone
 	 * @return

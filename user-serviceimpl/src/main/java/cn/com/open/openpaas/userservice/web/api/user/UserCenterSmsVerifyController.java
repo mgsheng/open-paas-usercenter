@@ -65,8 +65,9 @@ public class UserCenterSmsVerifyController extends BaseControllerUtil {
 	    	String access_token=request.getParameter("access_token");
 	    	String phone=request.getParameter("phone");
 	    	String code=request.getParameter("code");
+	    	String type=request.getParameter("type");
 	    	Map<String, Object> map=new HashMap<String,Object>();
-	        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,phone,code))){
+	        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,phone,code,type))){
 	            paraMandaChkAndReturn(3, response,"参数传递不全");
 	            return;
 	        }
@@ -100,19 +101,29 @@ public class UserCenterSmsVerifyController extends BaseControllerUtil {
 		    						map.put("errMsg", "验证码超时");
 		    						
 		    					}else{
-		    						User user = userService.findUserById(userActivated.getUserId());
-		    						if(null != user && phone.equals(userActivated.getPhone())){
+		    						if(type.equals("1")){
+		    							//找回密码
+		    							User user = userService.findUserById(userActivated.getUserId());
+			    						if(null != user && phone.equals(userActivated.getPhone())){
+			    							map.clear();
+			    							map.put("status", "1");
+				    						map.put("error_code", "");
+				    						map.put("errMsg", "");
+				    						map.put("guid", user.guid());
+			    						}else{
+			    						map.clear();
+		    							map.put("status", "0");
+			    						map.put("error_code", "6");
+			    						map.put("errMsg", "手机号不对应");
+			    					   }	
+		    						}else{
 		    							map.clear();
 		    							map.put("status", "1");
 			    						map.put("error_code", "");
 			    						map.put("errMsg", "");
-			    						map.put("guid", user.guid());
-		    						}else{
-		    						map.clear();
-	    							map.put("status", "0");
-		    						map.put("error_code", "6");
-		    						map.put("errMsg", "手机号不对应");
-		    					   }
+			    						map.put("guid", "");
+		    						}
+		    						
 		    					}
 		    				}else{
 		    					map.clear();
