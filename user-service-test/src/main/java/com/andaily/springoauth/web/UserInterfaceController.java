@@ -136,7 +136,7 @@ public class UserInterfaceController {
     }
 
      @RequestMapping(value = "smsSend", method = RequestMethod.POST)
-     public String smsSend(String clientId,String accessToken,String phone) throws Exception {
+     public String smsSend(String clientId,String accessToken,String phone,String type) throws Exception {
 
      	String key=map.get(clientId);
 	    	  String signature="";
@@ -157,7 +157,7 @@ public class UserInterfaceController {
 		  		 	signature=HMacSha1.getNewResult(signature);
 		      	}
 
-          final String fullUri = userSmsSendUri+"?client_id="+clientId+"&phone="+phone+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+          final String fullUri = userSmsSendUri+"?client_id="+clientId+"&phone="+phone+"&type="+type+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
           LOG.debug("Send to Oauth-Server URL: {}", fullUri);
           return "redirect:" + fullUri;
      }
@@ -174,7 +174,7 @@ public class UserInterfaceController {
      }
 
       @RequestMapping(value = "smsVerify", method = RequestMethod.POST)
-      public String smsVerify(String clientId,String accessToken,String phone,String code) throws Exception {
+      public String smsVerify(String clientId,String accessToken,String phone,String code,String type) throws Exception {
 
       	String key=map.get(clientId);
  	    	  String signature="";
@@ -195,7 +195,7 @@ public class UserInterfaceController {
  		  		 	signature=HMacSha1.getNewResult(signature);
  		      	}
 
-           final String fullUri = userSmsVerify+"?client_id="+clientId+"&phone="+phone+"&code="+code+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+           final String fullUri = userSmsVerify+"?client_id="+clientId+"&phone="+phone+"&code="+code+"&type="+type+"&access_token="+accessToken+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
            LOG.debug("Send to Oauth-Server URL: {}", fullUri);
            return "redirect:" + fullUri;
       }

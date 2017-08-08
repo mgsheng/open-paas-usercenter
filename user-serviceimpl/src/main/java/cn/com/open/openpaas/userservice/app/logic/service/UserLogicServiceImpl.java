@@ -493,6 +493,39 @@ public class UserLogicServiceImpl implements UserLogicService {
 			}
 			return false;
 		}
+
+		@Override
+		public boolean sendRegPhone(String code,String content,String phone, int userType) {
+
+			try {
+				UserActivated activatedReset = new UserActivated();
+				activatedReset.setPhone(phone);
+				List<UserActivated> list=userActivatedService.findByUserActivated(activatedReset);
+				//发送短信
+				String bool = SmsTools.sendSms(phone, content);
+				if(StringUtils.isNotBlank(bool)){
+					if(list!=null&&list.size()>0){
+						for(UserActivated userActivated:list){
+							userActivated.setCreateTime(new Date().getTime());
+							userActivated.setCode(code);
+							activatedReset.setUserType(userType);
+							userActivatedService.updateUserActivated(userActivated);
+						}
+					}else{
+						activatedReset.setUserType(userType);
+						activatedReset.setCode(code);
+						activatedReset.setCreateTime(new Date().getTime());
+						userActivatedService.save(activatedReset);
+					}
+					return true;
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return false;
+		
+		}
 		
 		
 }

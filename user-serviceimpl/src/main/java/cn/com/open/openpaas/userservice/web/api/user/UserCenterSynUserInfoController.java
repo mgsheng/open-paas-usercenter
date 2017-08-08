@@ -34,7 +34,7 @@ import cn.com.open.openpaas.userservice.dev.UserserviceDev;
  * 用户信息同步接口
  */
 @Controller
-@RequestMapping("/user/test")
+@RequestMapping("/user/info")
 public class UserCenterSynUserInfoController extends BaseControllerUtil {
 	private static final Logger log = LoggerFactory.getLogger(UserCenterSynUserInfoController.class);
 	 @Autowired
@@ -49,8 +49,6 @@ public class UserCenterSynUserInfoController extends BaseControllerUtil {
 	 private DefaultTokenServices tokenServices;
 	 @Autowired
 	 private UserserviceDev userserviceDev;
-	 @Autowired
-	 private KafkaProducer  kafkaProducer;
      /**
      * 用户信息同步接口
      * @return Json
