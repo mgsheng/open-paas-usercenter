@@ -132,15 +132,30 @@ public class UserLoginService {
     		 if("1".equals(status)){
     			if(json.containsKey("payload")){
     				JSONObject payload = JSONObject.fromObject(json.getString("payload"));
+    				if(payload.containsKey("deptName"))
     				userVo.setDeptName(payload.getString("deptName"));
+    				if(payload.containsKey("position"))
     				userVo.setPosition(payload.getString("position"));
+    				if(payload.containsKey("phone"))
     				userVo.setPhone(payload.getString("phone"));
+    				if(payload.containsKey("email"))
     				userVo.setEmail(payload.getString("email"));
+    				if(payload.containsKey("userName"))
     				userVo.setUserName(payload.getString("userName"));
+    				if(payload.containsKey("realName"))
     				userVo.setRealName(payload.getString("realName"));
+    				if(payload.containsKey("idNo"))
     				userVo.setIdNo(payload.getString("idNo"));
+    				if(payload.containsKey("userId"))
     				userVo.setUserId(payload.getString("userId"));
+    				if(payload.containsKey("deptName"))
     				userVo.setDeptName(payload.getString("deptName"));
+    				if(payload.containsKey("sex"))
+    				userVo.setSex(payload.getString("sex"));
+    				if(payload.containsKey("workPhone"))
+    				userVo.setWorkPhone(payload.getString("workPhone"));
+    				if(payload.containsKey("phoneSplitNo"))
+    				userVo.setPhoneSplitNo(payload.getString("phoneSplitNo"));
     				userVo.setGuid(oaUserVo.getGuid());
  	    		 }
     		 }
