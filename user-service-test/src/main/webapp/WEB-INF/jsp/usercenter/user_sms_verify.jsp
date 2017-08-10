@@ -63,7 +63,17 @@
                                    ng-model="phone"/>
                         </div>
                     </div>
-                    
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">type</label>
+
+                        <div class="col-sm-10">
+                            <select name="isValidate" ng-model="type" id="type"class="form-control">
+                                <option value="2">注册</option>
+                                <option value="1">找回密码</option>
+                            </select>
+                            <p class="help-block">1注册发送验证码，2找回密码发送验证码</p>
+                        </div>
+                    </div> 
                     <div class="well well-sm">
                          <span class="text-muted">最终发给 spring-oauth-server的 URL:</span>
                         <br/>

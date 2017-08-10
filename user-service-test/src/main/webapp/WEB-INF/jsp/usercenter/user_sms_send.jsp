@@ -54,6 +54,18 @@
                         </div>
                     </div>
                     
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">type</label>
+
+                        <div class="col-sm-10">
+                            <select name="type" ng-model="type" id="type"class="form-control">
+                                <option value="2">注册</option>
+                                <option value="1">找回密码</option>
+                            </select>
+                            <p class="help-block">发送验证码类型</p>
+                        </div>
+                    </div> 
+                    
                     <div class="well well-sm">
                          <span class="text-muted">最终发给 spring-oauth-server的 URL:</span>
                         <br/>
