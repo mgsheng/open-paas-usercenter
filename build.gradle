@@ -30,15 +30,16 @@ configurations.all {
      	     'org.aspectj:aspectjweaver:1.6.10',
      	     'commons-dbcp:commons-dbcp:1.4',
      	     'commons-io:commons-io:2.4',
-     	     'org.springframework:spring-aop:3.1.1.RELEASE',
-     	     'org.springframework:spring-beans:3.1.1.RELEASE',
-     	     'org.springframework:spring-context:3.1.1.RELEASE',
-     	     'org.springframework:spring-core:3.1.1.RELEASE',
-     	     'org.springframework:spring-tx:3.1.1.RELEASE',
-     	     'org.springframework:spring-expression:3.1.1.RELEASE',
-     	     'org.springframework:spring-web:3.1.1.RELEASE',
-     	     'org.springframework:spring-webmvc:3.1.1.RELEASE',
-     	     'org.springframework:spring-context-support:3.1.1.RELEASE',
+     	     'org.springframework:spring-aop:3.2.6.RELEASE',
+     	     'org.springframework:spring-beans:3.2.6.RELEASE',
+     	     'org.springframework:spring-context:3.2.6.RELEASE',
+     	     'org.springframework:spring-core:3.2.6.RELEASE',
+     	     'org.springframework:spring-tx:3.2.6.RELEASE',
+     	     'org.springframework:spring-expression:3.2.6.RELEASE',
+     	     'org.springframework:spring-web:3.2.6.RELEASE',
+     	     'org.springframework:spring-webmvc:3.2.6.RELEASE',
+     	     'org.springframework:spring-context-support:3.2.6.RELEASE',
+     	     'org.springframework:spring-test:3.2.0.RELEASE',
      	     'org.springframework.security:spring-security-core:3.1.0.RELEASE',
      	     'org.springframework.security:spring-security-web:3.1.0.RELEASE',
      	     'org.springframework.security:spring-security-taglibs:3.1.0.RELEASE',
@@ -81,6 +82,8 @@ configurations.all {
 			 'com.sun.xml.ws:webservices-rt:2.0',
 			 'org.glassfish.metro:webservices-extra:2.2',
      	     'net.sf.ezmorph:ezmorph:1.0.6'
+			    testCompile("junit:junit:4.12")
+				testCompile("org.springframework:spring-test")
      	     
   }
   
