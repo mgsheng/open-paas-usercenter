@@ -101,7 +101,7 @@ public class UserCenterSmsVerifyController extends BaseControllerUtil {
 		    						map.put("errMsg", "验证码超时");
 		    						
 		    					}else{
-		    						if(type.equals("1")){
+		    						if(type.equals("1")||type.equals("3")){
 		    							//找回密码
 		    							User user = userService.findUserById(userActivated.getUserId());
 			    						if(null != user && phone.equals(userActivated.getPhone())){

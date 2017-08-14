@@ -137,8 +137,7 @@ public class ModiPwdController extends BaseControllerUtil{
 			old_pwd="";
 			e1.printStackTrace();
 		}
-		
-			map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
+	    map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
 		if(map.get("status").equals("1")){//client_id,access_token正确
 			//判断缓存表中是否存在该用户
 			boolean iscache = false;
@@ -154,6 +153,7 @@ public class ModiPwdController extends BaseControllerUtil{
 					//userCache.setPlanPassword(new_pwd);
 		    		//userCache.setPlanPasswordByAes(new_pwd, app.getAppsecret());
 					userCache.setPlanPasswordByAes(new_pwd, userserviceDev.getAes_userCenter_key());
+					userCache.setUpdatePwdTime(new Date());
 					userCacheService.updateUserCache(userCache);
 		    		map.clear();
 		    		map.put("status", "1");

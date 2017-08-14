@@ -35,6 +35,7 @@
 		<result property="md5Password" column="md5_password"/>
 		<result property="md5Salt" column="md5_salt"/>
         <result property="process" column="process"/>
+        <result property="updatePwdTime" column="update_pwd_time"/>
 
     </resultMap>
     
@@ -66,7 +67,8 @@
     	sha1_password,
     	md5_password,
     	md5_salt,
-    	process
+    	process,
+    	update_pwd_time
     </sql>
 
 	<select id="findByUsername" resultMap="userCacheMap">
@@ -191,10 +193,12 @@
         <if test="process != null" >
             process = #{process},
         </if>
+         <if test="updatePwdTime != null" >
+        update_pwd_time = #{updatePwdTime},
+        </if>
         archived = #{archived},
         default_user = #{defaultUser},
         email_activation = #{emailActivation}
-        
         where id = #{id}
     </update>
         <update id="updateUserStatus">
@@ -213,9 +217,9 @@
 	
 	
 	<insert id="saveUserCache" parameterType="UserCache" useGeneratedKeys="true" keyProperty="id">
-	        insert into user_cache(id,guid,pid,archived,create_time,email,sha1_password,aes_password,user_name,phone, last_login_time,nickname,real_name,head_picture,identify_no,identify_type,user_type,user_sercure,default_user,app_id,card_no,md5_password,md5_salt,process)
+	        insert into user_cache(id,guid,pid,archived,create_time,update_pwd_time,email,sha1_password,aes_password,user_name,phone, last_login_time,nickname,real_name,head_picture,identify_no,identify_type,user_type,user_sercure,default_user,app_id,card_no,md5_password,md5_salt,process)
 	        values
-	        (#{id},#{guid},#{pid},#{archived},#{createTime},#{email},#{sha1Password},#{aesPassword},#{username}, #{phone}, #{lastLoginTime}, #{nickName},#{realName},#{headPicture}, #{identifyNo}, #{identifyType}, #{userType}, #{userSercure},#{defaultUser},#{appId},#{cardNo},#{md5Password},#{md5Salt},#{process})
+	        (#{id},#{guid},#{pid},#{archived},#{createTime},#{updatePwdTime},#{email},#{sha1Password},#{aesPassword},#{username}, #{phone}, #{lastLoginTime}, #{nickName},#{realName},#{headPicture}, #{identifyNo}, #{identifyType}, #{userType}, #{userSercure},#{defaultUser},#{appId},#{cardNo},#{md5Password},#{md5Salt},#{process})
 	</insert>
 	 <update id="updateUserCardNoById">
         update user_cache set

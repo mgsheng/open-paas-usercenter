@@ -198,6 +198,11 @@ public class UserCenterLoginController extends BaseControllerUtil {
 						map.put("guid", userCache.guid()==null?"":userCache.guid());
 						map.put("phone", userCache.phone()==null?"":userCache.phone());
 						map.put("email", userCache.email()==null?"":userCache.email());
+						if(userCache.getUpdatePwdTime()!=null){
+							  map.put("updatePwdTime", DateTools.dateToString(userCache.getUpdatePwdTime(), DateTools.FORMAT_ONE));	
+							}else{
+								map.put("updatePwdTime", "");	
+							}
 						//TODO 补充密码超时验证
 						pwdTimeout = true;
 						isLink = userCache.defaultUser();
@@ -227,6 +232,11 @@ public class UserCenterLoginController extends BaseControllerUtil {
 						map.put("guid", user.guid()==null?"":user.guid());
 						map.put("phone", user.phone()==null?"":user.phone());
 						map.put("email", user.email()==null?"":user.email());
+						if(user.getUpdatePwdTime()!=null){
+						  map.put("updatePwdTime", DateTools.dateToString(user.getUpdatePwdTime(), DateTools.FORMAT_ONE));	
+						}else{
+							map.put("updatePwdTime", "");	
+						}
 						pwdTimeout = true;
 						if(null != user.getUpdatePwdTime()){
 							Long detectPasswordTime = Long.valueOf(userserviceDev.getDetect_password_time());

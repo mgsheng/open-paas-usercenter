@@ -61,6 +61,7 @@
                             <select name="type" ng-model="type" id="type"class="form-control">
                                 <option value="2">注册</option>
                                 <option value="1">找回密码</option>
+                                <option value="3">修改密码</option>
                             </select>
                             <p class="help-block">发送验证码类型</p>
                         </div>

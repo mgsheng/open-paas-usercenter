@@ -68,7 +68,7 @@
 					jQuery('#pwd_new_error').html('请输入密码');
 				}else if(checkTS($("#pwd_new").val())<=0){
 				    jQuery('#pwd_new').addClass('frm_error');
-					jQuery('#pwd_new_error').html('不能输入除下划线以为的特殊字符');
+					jQuery('#pwd_new_error').html('不能输入除下划线以外的特殊字符');
 				}else if(checkCSZ($("#pwd_new").val())<=0){
 				    jQuery('#pwd_new').addClass('frm_error');
 					jQuery('#pwd_new_error').html('密码不能为纯数字');

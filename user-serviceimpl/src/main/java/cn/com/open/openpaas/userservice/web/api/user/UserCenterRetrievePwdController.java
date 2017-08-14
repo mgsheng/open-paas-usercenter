@@ -137,6 +137,7 @@ public class UserCenterRetrievePwdController extends BaseControllerUtil {
 				if(userCache!=null)
 				{
 					userCache.setPlanPasswordByAes(new_pwd, userserviceDev.getAes_userCenter_key());
+					userCache.setUpdatePwdTime(new Date());
 					userCacheService.updateUserCache(userCache);
 		    		map.clear();
 		    		map.put("status", "1");

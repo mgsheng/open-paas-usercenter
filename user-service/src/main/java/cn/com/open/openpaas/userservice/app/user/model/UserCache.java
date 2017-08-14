@@ -60,6 +60,17 @@ public class UserCache{
     private String sha1Password;
     private String md5Password;
     private String md5Salt;
+    private Date updatePwdTime;
+    
+    
+	public Date getUpdatePwdTime() {
+		return updatePwdTime;
+	}
+
+	public void setUpdatePwdTime(Date updatePwdTime) {
+		this.updatePwdTime = updatePwdTime;
+	}
+
     
     private List<Privilege> privileges = new ArrayList<Privilege>();
     

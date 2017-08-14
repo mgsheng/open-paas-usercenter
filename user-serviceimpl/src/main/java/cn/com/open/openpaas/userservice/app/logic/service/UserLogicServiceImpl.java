@@ -421,7 +421,6 @@ public class UserLogicServiceImpl implements UserLogicService {
 								parentUser.setUpdatePwdTime(new Date());
 								userService.updateUser(parentUser);
 							}
-							
 						}
 					}else{
 						//刷新盐值，重新加密
