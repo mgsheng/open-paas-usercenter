@@ -160,12 +160,8 @@
         <if test="identifyType != null and identifyType>-1">
         identify_type = #{identifyType},
         </if>
-        <if test="phone != null and phone !=''" >
         phone = #{phone},
-        </if>
-        <if test="email != null and email !=''" >
         email = #{email},
-        </if>
         <if test="userType != null and userType>-1" >
         user_type = #{userType},
         </if>
