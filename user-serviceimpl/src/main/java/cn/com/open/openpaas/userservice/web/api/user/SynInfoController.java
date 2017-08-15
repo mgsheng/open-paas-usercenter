@@ -25,6 +25,8 @@ import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
+import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.web.WebUtils;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
@@ -47,6 +49,8 @@ public class SynInfoController extends BaseControllerUtil{
 	 private DefaultTokenServices tokenServices;
 	 @Autowired
 	 private RedisClientTemplate redisClient;
+	 @Autowired
+	 private UserCacheService userCacheService;
 	 @Autowired
 	 private UserserviceDev userserviceDev;
     @RequestMapping("synUserInfo")
@@ -87,7 +91,7 @@ public class SynInfoController extends BaseControllerUtil{
                             User user = userService.findUserById(appUser.userId());
                            
                             if (null != user) {
-                            	username=user.getUsername();
+                            	     username=user.getUsername();
                             		//绑定
                             		if("0".equals(userCenterReg.getWhetherBind())){
                             			 user.phone(userCenterReg.getPhone());	
@@ -98,12 +102,23 @@ public class SynInfoController extends BaseControllerUtil{
                                 userService.updateUser(user);
                                 map.put("guid", user.guid());
                             }else{
-                            	 map.clear();
-                                 map.put("status", "0");
-                                 map.put("errMsg","source_id不存在");
-                                 map.put("error_code", "4");//source_id不存在	
+                            	
+                            	UserCache userCache=userCacheService.findUserById(appUser.userId());
+                            	if(userCache!=null){
+                            		//绑定
+                            		if("0".equals(userCenterReg.getWhetherBind())){
+                            			userCache.phone(userCenterReg.getPhone());	
+                            		}if("1".equals(userCenterReg.getWhetherBind())){
+                            			userCache.email(userCenterReg.getEmail());	
+                           		     }
+                            		userCacheService.updateUserCache(userCache);
+                                     map.put("guid", userCache.guid());
+                            	}else{
+                            		  map.put("status", "0");
+                                      map.put("errMsg","source_id不存在");
+                                      map.put("error_code", "4");//source_id不存在
+                            	}
                             }
-                           
                         }catch(Exception e){
                             map.clear();
                             map.put("status", "0");
