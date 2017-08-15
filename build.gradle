@@ -1,6 +1,8 @@
-
 allprojects{
   apply plugin: 'java'
+  
+  apply plugin: "jacoco"
+  
   
   compileJava {
         sourceCompatibility = 1.7
