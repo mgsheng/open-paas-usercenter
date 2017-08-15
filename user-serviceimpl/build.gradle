@@ -1,3 +1,24 @@
+plugins {
+  id "org.sonarqube" version "2.5"
+}
+
+sonarqube {
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+    }
+}
+
+
+sonarqube {
+        properties {
+            property "sonar.sources", "./src/main"
+            property "sonar.tests", "./src/test"
+            property "sonar.projectName", "用户中心:serviceimpl"
+            property "sonar.projectKey", "用户中心:serviceimpl:project"
+        }
+    }
+
+
 apply plugin: 'war'
 dependencies {
   	 providedCompile  'javax.servlet.jsp:jsp-api:2.1@jar',
