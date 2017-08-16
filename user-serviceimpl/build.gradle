@@ -11,7 +11,7 @@ sonarqube {
 
 sonarqube {
         properties {
-            properties["sonar.sources"] += "./src/main/java/cn/com/open/openpaas/userservice/web/api/user"
+            properties["sonar.sources"] = "./src/main/java/cn/com/open/openpaas/userservice/web/api/user"
             properties["sonar.sources"] += "./src/main/java/cn/com/open/openpaas/userservice/app/user/service"
             //property "sonar.sources", "./src/main"
             property "sonar.tests", "./src/test"
