@@ -66,6 +66,9 @@ public class UserCenterSmsSendController extends BaseControllerUtil {
 	    	String access_token=request.getParameter("access_token");
 	    	String phone=request.getParameter("phone");
 	    	String type=request.getParameter("type");
+	    	if(nullEmptyBlankJudge(type)){
+	    		type="1";
+	    	}
 	    	Map<String, Object> map=new HashMap<String,Object>();
 	        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,phone,type))){
 	            paraMandaChkAndReturn(3, response,"参数传递不全");

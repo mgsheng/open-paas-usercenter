@@ -66,6 +66,9 @@ public class UserCenterSmsVerifyController extends BaseControllerUtil {
 	    	String phone=request.getParameter("phone");
 	    	String code=request.getParameter("code");
 	    	String type=request.getParameter("type");
+	    	if(nullEmptyBlankJudge(type)){
+	    		type="1";
+	    	}
 	    	Map<String, Object> map=new HashMap<String,Object>();
 	        if(!paraMandatoryCheck(Arrays.asList(client_id,access_token,phone,code,type))){
 	            paraMandaChkAndReturn(3, response,"参数传递不全");
