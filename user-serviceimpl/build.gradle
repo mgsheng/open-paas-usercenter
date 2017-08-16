@@ -11,10 +11,10 @@ sonarqube {
 
 sonarqube {
         properties {
-            property "sonar.sources", "./src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserDictServiceImpl.java"
-            //property "sonar.sources", "./src/main/java/cn/com/open/openpaas/userservice/web/api/user, ./src/main/java/cn/com/open/openpaas/userservice/app/user/service"
+            //property "sonar.sources", "./src/main/java/cn/com/open/openpaas/userservice/app/user/service/UserDictServiceImpl.java"
+            property "sonar.sources", "./src/main/java/cn/com/open/openpaas/userservice/web/api/user, ./src/main/java/cn/com/open/openpaas/userservice/app/user/service"
             
-            property "sonar.tests", "./src/test"
+            property "sonar.tests", "./src/main/test/cn/com/open/test"
             property "sonar.projectName", "用户中心:serviceimpl"
             property "sonar.projectKey", "usercenter:serviceimpl:project"
         }
