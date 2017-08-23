@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.com.open.user.app.entiy.OAUser;
-import cn.com.open.user.app.http.HttpClientUtil;
+import cn.com.open.user.app.log.ThirdPartyCallAssistant;
 import cn.com.open.user.app.mapper.UserMapper;
 import cn.com.open.user.app.service.OAUserService;
 import cn.com.open.user.app.sign.MD5;
@@ -20,6 +20,11 @@ import net.sf.json.JSONObject;
 public class OAUserServiceimpl implements OAUserService {
 	@Autowired
 	UserMapper userMapper;
+	
+	@Autowired
+	ThirdPartyCallAssistant thirdPartyCallAssistant;
+	
+	
 	 
 	@Override
 	public OAUserVo getOAUserModel(int userId,String appId) {
@@ -40,8 +45,9 @@ public class OAUserServiceimpl implements OAUserService {
 		    	map.put("salt", salt);
 		    	map.put("secret", md5Init(user,salt, appSercret));
 		    	
-		    	
-		    	String backJson = HttpClientUtil.httpPost(url, map);
+		    	String backJson= thirdPartyCallAssistant.doOAPost(url,map);
+				 
+		    //	String backJson = HttpClientUtil.httpPost(url, map);
 		    	if(backJson!=null&&!"".equals(backJson)){
 			    	 JSONObject json = JSONObject.fromObject(backJson);
 			    	 if(json.containsKey("status")){
