@@ -90,7 +90,7 @@ public abstract class WebUtils {
 	    map.clear();
 	    map.put("status", "0");
 	    map.put("error_code", errorNum);
-	    map.put("errMsg", errMsg);
+	    map.put("message", errMsg);
 	    return map;
 	}
 

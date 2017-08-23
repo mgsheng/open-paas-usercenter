@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.com.open.user.app.constant.ConstantMessage;
+import cn.com.open.user.app.entiy.OAUser;
 import cn.com.open.user.app.entiy.User;
 import cn.com.open.user.app.model.App;
 import cn.com.open.user.app.redis.RedisConstant;
@@ -58,6 +59,14 @@ public class UserLoginController extends BaseController{
 	   @Value("${callbackUrl}")
 	   String callbackUrl;
 	   
+	   @Value("${loginFaliureTime}")//失败次数默认5次
+	   String loginFaliureTime;
+	   
+	   @Value("${loginValidateTime}")//2小时锁定失败信息失效
+	   String loginValidateTime;
+	   
+	   @Value("${loginFrozenTime}")//24小时解锁
+	   String loginFrozenTime;
 	   
 	   /**
 	    * 登录
@@ -85,6 +94,14 @@ public class UserLoginController extends BaseController{
 	 				return;
 	 			}
 	 	    	
+	 	    	//验证用户是否已锁定
+		 	    map= userLoginService.lockUserNames(redisService, user.getUsername(),loginFaliureTime,loginFrozenTime);
+		 	    String status=(String)map.get("status");
+				if(map!=null&&status!=null){//说明该用户已锁定 显示锁定信息
+					 writeSuccessJson(response,map);
+					 return;
+				}
+	 	    	
 	 	    	Object userCacheInfoObj = redisService.get(RedisConstant.USER_CACHE_INFO+user.getUsername());
 	 	    	//获取缓存数据
 				if(userCacheInfoObj!=null ){
@@ -94,7 +111,9 @@ public class UserLoginController extends BaseController{
 							int i=checkPasswodByAes(user.getPassword(), cache, key);
 							if(i==ConstantMessage.USER_ZERO)continue;
 							if(user.getId()>0){//一个密码能登录俩用户时
-								paraMandaChkAndReturn(5, response,"登陆异常!");
+							//	paraMandaChkAndReturn(5, response,"登陆异常!");
+								map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,5,"登录异常!");
+								writeSuccessJson(response,map);
 								return;
 							}
 							user.setId(cache.getId());
@@ -110,14 +129,18 @@ public class UserLoginController extends BaseController{
 				if(!flag){//查询数据库信息
 					ArrayList<User> accountList=userLoginService.findUserAccountByUsername(user);
 					if(accountList==null||accountList.size()==0){
-						paraMandaChkAndReturn(2, response,"用户不存在!");
+					//	paraMandaChkAndReturn(2, response,"用户不存在!");
+						map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,2,"用户不存在!");
+		    			writeSuccessJson(response,map);
 						return;
 					}else{
 						for (User userAccount : accountList) {
 							int i=checkPasswodByAes(user.getPassword(), userAccount, key);
 							if(i==ConstantMessage.USER_ZERO)continue;
 							if(user.getId()>0){//一个密码能登录俩用户时
-								paraMandaChkAndReturn(5, response,"登陆异常!");
+					//			paraMandaChkAndReturn(6, response,"登陆异常!");
+								map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,6,"登录异常!");
+				    			writeSuccessJson(response,map);
 								return;
 							}
 							user.setId(userAccount.getId());
@@ -128,7 +151,9 @@ public class UserLoginController extends BaseController{
 							flag=true;
 						}
 						if(user.getId()==0){
-							paraMandaChkAndReturn(3, response,"密码错误!");
+					//		paraMandaChkAndReturn(3, response,"密码错误!");
+							map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,3,"密码错误!");
+			    			writeSuccessJson(response,map);
 							return;
 						}
 						user.setType(ConstantMessage.USER_TWO);
@@ -147,19 +172,23 @@ public class UserLoginController extends BaseController{
 					   }
 					   map.clear();
 					   map.put("status", "1");//接口返回状态：1-正确 0-错误
-					   map.put("msg","登陆成功");
+					   map.put("message","登陆成功");
 					   map.put("errorCode","");
 					   mergeVo.setInfoList(jsonList);
 					   map.put("payload", mergeVo);
 					   writeSuccessJson(response,map);
 				   }else{
-					   paraMandaChkAndReturn(6, response,"登陆失败!");
+					//   paraMandaChkAndReturn(5, response,"登陆失败!");
+					   map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,5,"登录失败!");
+		    		   writeSuccessJson(response,map);
 				   }
 			   }else{
-				   map.clear();
+				   /*map.clear();
 				   map.put("status", "2");//接口返回状态：1-正确 2-失败
-				   map.put("msg","密码错误");
-				   map.put("errorCode","3");
+				   map.put("message","密码错误");
+				   map.put("errorCode","3");*/
+				   map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,3,"密码错误!");
+	    		   writeSuccessJson(response,map);
 			   }
 		   } catch (Exception e) {
 			   paraMandaChkAndReturn(6, response,"系统异常!");
@@ -170,7 +199,6 @@ public class UserLoginController extends BaseController{
 		}
 	    
 	    
-
 		/*
 		 * 根据App和AppUser生成回调URL
 		 * DES加密方式
@@ -218,7 +246,7 @@ public class UserLoginController extends BaseController{
 	    	if(StringUtils.isBlank(secret)){
 	    		//参数错误
 	     		map.put("error_code", "8");
-	     		map.put("errMsg", "参数错误");
+	     		map.put("message", "参数错误");
 	     		writeErrorJson(response,map);
 	    		return;
 	    	}
@@ -232,7 +260,7 @@ public class UserLoginController extends BaseController{
 	    	if(StringUtils.isBlank(secretDecrypt)){
 	    		//参数解密错误
 	    		map.put("error_code", "8");
-	     		map.put("errMsg", "参数解密错误");
+	     		map.put("message", "参数解密错误");
 	     		writeErrorJson(response,map);
 	    		return;
 	    	}
@@ -257,7 +285,7 @@ public class UserLoginController extends BaseController{
 	    	if(app==null){
 	    		//App不存在
 	    		map.put("error_code", "9");
-	     		map.put("errMsg", "该App信息不存在");
+	     		map.put("message", "该App信息不存在");
 	     		writeErrorJson(response,map);
 	    		return;
 	    	}
@@ -272,7 +300,7 @@ public class UserLoginController extends BaseController{
 	    			e.printStackTrace();
 	    			//异常
 	        		map.put("error_code", "6");
-	         		map.put("errMsg", "系统异常");
+	         		map.put("message", "系统异常");
 	         		writeErrorJson(response,map);
 	        		return;
 	    		}
@@ -295,7 +323,7 @@ public class UserLoginController extends BaseController{
 				e.printStackTrace();
 				//异常
 	    		map.put("error_code", "6");
-	     		map.put("errMsg", "系统异常");
+	     		map.put("message", "系统异常");
 	     		writeErrorJson(response,map);
 	    		return;
 			} 
@@ -340,5 +368,25 @@ public class UserLoginController extends BaseController{
 	    	return ConstantMessage.USER_ZERO;
 	    }
 	    
-	   
+	    	/**
+		    * 清空redis登录锁定限制缓存(该方法不对外提供)
+		    * @param request
+		    * @param response
+		    */
+			@RequestMapping(value = "/usercenter/redisInit", method = {RequestMethod.GET} )
+			public void login(HttpServletRequest request, HttpServletResponse response,OAUser user) {
+			   try {
+				   Map<String, Object> map = new HashMap<String, Object>();
+				   userLoginService.redisInit(redisService,user.getUserName());
+	    			 map.clear();
+	    			 map.put("status", "1");//接口返回状态：1-正确 0-错误
+	    			 map.put("message","缓存初始化成功");
+	    			 map.put("errorCode","");
+	    			 writeSuccessJson(response,map);
+			   } catch (Exception e) {
+				   e.printStackTrace();
+			   }
+				return ;
+			}
+	    
 }

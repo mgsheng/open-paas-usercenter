@@ -1,5 +1,6 @@
 package cn.com.open.user.app.tools;
 
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -468,5 +469,43 @@ public class DateTools {
 	    c.add(Calendar.DATE,-1);
 	    return c;
 	}
+	
+	
+	
+	public static long getDateMin(String endTime,int type) {
+		SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		long min=0;
+		long between=0;
+		try {
+			Date begin = dfs.parse(getNow());
+			Date end = dfs.parse(endTime);
+			if(type==1){//当前时间-endTime
+				between=(begin.getTime()-end.getTime())/1000;//除以1000是为了转换成秒
+			}else if(type==0){//endTime-当前时间
+				between=(end.getTime()-begin.getTime())/1000;//除以1000是为了转换成秒
+			}
+			min=between/60;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return min;
+		}
+		return min;
+	}
+	
+	/**
+     * 获取多少分钟后的时间
+     * @param minute
+     * @return
+     */
+    public static String getTimeByMinute(int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, minute);
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
+    }
+	
+	public static void main(String[] args) {
+		System.out.println(getDateMin("2017-08-23 18:08:31",0));
+	}
+
 	
 }

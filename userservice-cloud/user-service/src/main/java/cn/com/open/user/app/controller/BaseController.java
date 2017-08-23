@@ -32,25 +32,25 @@ public class BaseController {
         }
         return true;
     }
-    protected void paraMandaChkAndReturn(int errorNum,HttpServletResponse response,String errMsg){
-        Map<String, Object> map=paraMandaChkAndReturnMap(errorNum, response, errMsg);
+    protected void paraMandaChkAndReturn(int errorNum,HttpServletResponse response,String message){
+        Map<String, Object> map=paraMandaChkAndReturnMap(errorNum, response, message);
         writeErrorJson(response,map);
     }
     
-    protected Map<String, Object> paraMandaChkAndReturnMap(int errorNum,HttpServletResponse response,String errMsg){
+    protected Map<String, Object> paraMandaChkAndReturnMap(int errorNum,HttpServletResponse response,String message){
         Map<String, Object> map=new HashMap<String,Object>();
         map.clear();
         map.put("status", "0");
         map.put("errorCode", errorNum);
-        map.put("errMsg", errMsg);
+        map.put("message", message);
         return map;
     }
     
-    protected Map<String, Object> paraMandaChkAndReturnMap(Map<String, Object> map,int errorNum,HttpServletResponse response,String errMsg){
+    protected Map<String, Object> paraMandaChkAndReturnMap(Map<String, Object> map,int errorNum,HttpServletResponse response,String message){
         map.clear();
         map.put("status", "0");
         map.put("errorCode", errorNum);
-        map.put("errMsg", errMsg);
+        map.put("message", message);
         return map;
     }
     
@@ -129,7 +129,7 @@ public class BaseController {
 	    }
     
 	    
-	    protected  Map<String, Object> paramMapAndReturn(Map<String, Object> map,int errorNum,HttpServletResponse response,String errMsg){
-	    	return paraMandaChkAndReturnMap(map,errorNum, response, errMsg);
+	    protected  Map<String, Object> paramMapAndReturn(Map<String, Object> map,int errorNum,HttpServletResponse response,String message){
+	    	return paraMandaChkAndReturnMap(map,errorNum, response, message);
 	    }
 }
