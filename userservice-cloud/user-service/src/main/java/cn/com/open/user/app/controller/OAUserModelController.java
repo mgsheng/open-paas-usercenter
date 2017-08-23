@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.com.open.user.app.constant.ConstantMessage;
 import cn.com.open.user.app.entiy.OAUser;
 import cn.com.open.user.app.service.OAUserService;
-import cn.com.open.user.app.service.UserLoginService;
 import cn.com.open.user.app.vo.OAUserVo;
 @RestController
+@RequestMapping("/usercenter")
 public class OAUserModelController extends BaseController{
 	private static final Logger log = LoggerFactory.getLogger(OAUserModelController.class);
 	   @Autowired
@@ -40,7 +40,7 @@ public class OAUserModelController extends BaseController{
 	    * @param request
 	    * @param response
 	    */
-		@RequestMapping(value = "/usercenter/GetOAUserModel", method = {RequestMethod.POST} )
+		@RequestMapping(value = "/GetOAUserModel", method = {RequestMethod.POST} )
 		public void login(HttpServletRequest request, HttpServletResponse response,OAUser user) {
  	     	log.info("OAUserModelController usercenter/GetOAUserModel IdNo"+user.getIdNo()+"UserName:"+user.getUserName()+"Salt:"+user.getSalt());
  	     	OAUserVo userVo=null;
