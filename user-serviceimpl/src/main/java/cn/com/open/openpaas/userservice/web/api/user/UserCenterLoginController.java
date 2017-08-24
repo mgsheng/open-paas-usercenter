@@ -475,10 +475,10 @@ public class UserCenterLoginController extends BaseControllerUtil {
 		    			  validateLoginMap.put("lastLoginTime",DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
 		    			  validateLoginMap.put("faliureTimes", faliureTimes+1);
 		    			  validateLoginMap.put("tryTimes",app.getLoginFaliureTime()-(faliureTimes+1));
-		    			  validateLoginMap.put("frozenTime","");
 			    		  redisClient.setObjectByTime(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username, JSON.toJSONString(validateLoginMap),app.getLoginValidateTime()-c);
 		    			}
-		    			map.put("faliureTimes", faliureTimes+1);
+		    			map.put("faliureTimes",faliureTimes+1);
+		    			map.put("frozenTime","");
 		    			map.put("tryTimes", app.getLoginFaliureTime()-(faliureTimes+1));
 	    			}else if(tryTimes==1){
 	    				//添加用户锁定信息
@@ -486,9 +486,9 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    				frozenLoginMap.put("appId",validateJson.get("appId"));
 	    				frozenLoginMap.put("userName", validateJson.get("userName"));
 	    				frozenLoginMap.put("frozenTime", DateTools.getTimeByMinute(app.getLoginFrozenTime()));
-	    				frozenLoginMap.put("faliureTimes", app.getLoginFaliureTime());
-	    				frozenLoginMap.put("tryTimes", 0);
 		    			map.put("frozenTime", DateTools.getTimeByMinute(app.getLoginFrozenTime()));
+		    			map.put("faliureTimes",app.getLoginFaliureTime());
+		    			map.put("tryTimes",0);
 	    				redisClient.setObjectByTime(RedisConstant.USER_SERVICE_FORZENLOGIN+app.getId()+"_"+username, JSON.toJSONString(frozenLoginMap),app.getLoginFrozenTime());
 	    				redisClient.del(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username);
 	    			}
