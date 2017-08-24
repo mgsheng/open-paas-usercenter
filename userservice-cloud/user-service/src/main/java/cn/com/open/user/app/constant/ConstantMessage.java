@@ -18,4 +18,8 @@ public class ConstantMessage {
 	   public final static int USER_ONE=1;
 	   public final static int USER_TWO=2;
 	   public final static int USER_THREE=3;
+	   
+	   public final static String USERSERVICE_VALIDATELOGIN_APPID ="userService_validateLogin_appid_";
+	   public final static String USERSERVICE_FROZENLOGIN_APPID ="userService_frozenLogin_appid";
+	   
 }

@@ -11,19 +11,17 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.com.open.user.app.constant.ConstantMessage;
 import cn.com.open.user.app.entiy.LoginVaildate;
 import cn.com.open.user.app.entiy.LoginValidatefrozen;
 import cn.com.open.user.app.entiy.OAUser;
 import cn.com.open.user.app.entiy.User;
-import cn.com.open.user.app.http.HttpClientUtil;
 import cn.com.open.user.app.mapper.UserMapper;
 import cn.com.open.user.app.model.App;
 import cn.com.open.user.app.redis.RedisServiceImpl;
 import cn.com.open.user.app.service.UserLoginService;
 import cn.com.open.user.app.sign.MD5;
 import cn.com.open.user.app.tools.DateTools;
-import cn.com.open.user.app.tools.StringTools;
-import cn.com.open.user.app.vo.OAUserVo;
 import cn.com.open.user.app.vo.UserListVo;
 import cn.com.open.user.app.vo.UserMergeVo;
 import cn.com.open.user.app.vo.UserVo;
@@ -71,8 +69,8 @@ public class UserLoginServiceimpl implements UserLoginService {
 	@Override
 	public Map<String, Object> lockUserNames(RedisServiceImpl redisService, String userName,String loginFaliureTime,String loginFrozenTime){
 		Map<String, Object> map = new HashMap<String, Object>();
-		String failNum=redisService.get("userService_validateLogin_appid_"+userName);//登录失败次数
-		String lockInfo=redisService.get("userService_frozenLogin_appid_"+userName);//登录失败信息json格式
+		String failNum=redisService.get(ConstantMessage.USERSERVICE_VALIDATELOGIN_APPID+userName);//登录失败次数
+		String lockInfo=redisService.get(ConstantMessage.USERSERVICE_FROZENLOGIN_APPID+userName);//登录失败信息json格式
 		 if(!nullAndEmpty(failNum)&&!nullAndEmpty(lockInfo)){
 			 JSONObject jsonObjet = JSONObject.fromObject(lockInfo);
 			 if(jsonObjet.containsKey("frozenTime")){
@@ -107,7 +105,7 @@ public class UserLoginServiceimpl implements UserLoginService {
     	String firstTime="";
     	try {
     		//将登陆失败次数以及失败信息存缓存
-			String lockInfo=redisService.get("userService_frozenLogin_appid_"+userName);
+			String lockInfo=redisService.get(ConstantMessage.USERSERVICE_FROZENLOGIN_APPID+userName);
 			 if(!nullAndEmpty(lockInfo)){
 				 jsonObjet = JSONObject.fromObject(lockInfo);
 				 if(jsonObjet.containsKey("firstLoginTime")){
@@ -122,7 +120,7 @@ public class UserLoginServiceimpl implements UserLoginService {
 				 }
 			 }
     		
-			String failNum=redisService.get("userService_validateLogin_appid_"+userName);
+			String failNum=redisService.get(ConstantMessage.USERSERVICE_VALIDATELOGIN_APPID+userName);
     		String firstTimes="";
     		String nums="";
     		int num=1;
@@ -141,8 +139,8 @@ public class UserLoginServiceimpl implements UserLoginService {
 	    		
 	    		//将登陆失败次数以及失败信息存缓存
 	    		jsonObjet=JSONObject.fromObject(vaildateFrozen);
-	    		redisService.set("userService_frozenLogin_appid_"+userName,jsonObjet.toString());//失败信息 json格式
-	    		redisService.set("userService_validateLogin_appid_"+userName,nums);//登陆失败 赋值+1
+	    		redisService.set(ConstantMessage.USERSERVICE_FROZENLOGIN_APPID+userName,jsonObjet.toString());//失败信息 json格式
+	    		redisService.set(ConstantMessage.USERSERVICE_VALIDATELOGIN_APPID+userName,nums);//登陆失败 赋值+1
 	    		
 	    		map.clear();
    			 	map.put("status", "0");//接口返回状态：1-正确 0-错误
@@ -166,8 +164,8 @@ public class UserLoginServiceimpl implements UserLoginService {
 				vaildate.setTryTimes(Integer.parseInt(tryTimes));
 				
 				jsonObjet=JSONObject.fromObject(vaildate);
-				redisService.set("userService_frozenLogin_appid_"+userName,jsonObjet.toString());//失败信息 json格式
-				redisService.set("userService_validateLogin_appid_"+userName,nums);//登陆失败 赋值+1
+				redisService.set(ConstantMessage.USERSERVICE_FROZENLOGIN_APPID+userName,jsonObjet.toString());//失败信息 json格式
+				redisService.set(ConstantMessage.USERSERVICE_VALIDATELOGIN_APPID+userName,nums);//登陆失败 赋值+1
 				map.clear();
    			 	map.put("status", "0");//接口返回状态：1-正确 0-错误
    			 	map.put("errorCode",code);
@@ -189,8 +187,8 @@ public class UserLoginServiceimpl implements UserLoginService {
     */
 	@Override
 	public void redisInit(RedisServiceImpl redisService,String userName) {
-		 redisService.set("userService_validateLogin_appid_"+userName,"");
-		 redisService.set("userService_frozenLogin_appid_"+userName,"");
+		 redisService.set(ConstantMessage.USERSERVICE_VALIDATELOGIN_APPID+userName,"");
+		 redisService.set(ConstantMessage.USERSERVICE_FROZENLOGIN_APPID+userName,"");
   }
 	public String md5Init(OAUser user,String salt,String appSercret) {
 		String md5=user.getUserName()+user.getIdNo()+salt+appSercret;
