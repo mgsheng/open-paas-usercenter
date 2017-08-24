@@ -12,7 +12,6 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return DataSourceSwitcher.getDataSource();  
     }
 
-	@Override
 	public Logger getParentLogger() {
 		// TODO Auto-generated method stub
 		return null;

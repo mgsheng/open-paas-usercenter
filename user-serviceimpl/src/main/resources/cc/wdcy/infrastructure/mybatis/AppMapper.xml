@@ -32,6 +32,9 @@
         <result property="additionalInformation" column="additionalInformation"/>
         <result property="icon" column="icon"/>
          <result property="indexUrl" column="indexUrl"/>
+         <result property="loginValidateTime" column="loginValidateTime"/>
+         <result property="loginFaliureTime" column="loginFaliureTime"/>
+         <result property="loginFrozenTime" column="loginFrozenTime"/>
     </resultMap>
 			
     <!-- <select id="findIdByClientId" parameterType="Integer" resultMap="appMap">
@@ -40,7 +43,7 @@
 	</select> -->
 	
 	<select id="findIdByClientId" resultMap="appMap">
-         select id,appsecret,app_authorities,webServerRedirectUri from app
+         select id,appsecret,app_authorities,webServerRedirectUri,loginValidateTime,loginFaliureTime,loginFrozenTime from app
          where  appkey = #{client_Id}
 	</select>
 	

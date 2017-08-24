@@ -53,8 +53,37 @@ public class App implements Serializable {
 	private String icon;
 	private String indexUrl;
 	private String callbackUrl;
+	private Integer loginValidateTime;
+	private Integer loginFaliureTime;
+	private Integer  loginFrozenTime;
+	
+	
 
-    public App() {
+    public Integer getLoginValidateTime() {
+		return loginValidateTime;
+	}
+
+	public void setLoginValidateTime(Integer loginValidateTime) {
+		this.loginValidateTime = loginValidateTime;
+	}
+
+	public Integer getLoginFaliureTime() {
+		return loginFaliureTime;
+	}
+
+	public void setLoginFaliureTime(Integer loginFaliureTime) {
+		this.loginFaliureTime = loginFaliureTime;
+	}
+
+	public Integer getLoginFrozenTime() {
+		return loginFrozenTime;
+	}
+
+	public void setLoginFrozenTime(Integer loginFrozenTime) {
+		this.loginFrozenTime = loginFrozenTime;
+	}
+
+	public App() {
     	
     }
 

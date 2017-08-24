@@ -90,6 +90,39 @@ public class UserCenterLoginController extends BaseControllerUtil {
 				 app=appService.findIdByClientId(client_id);
 				 redisClient.setObject(RedisConstant.APP_INFO+client_id, app);
 			}
+	        //判断是否锁定用户
+	        String  frozenLoginInfo = (String) redisClient.getObject(RedisConstant.USER_SERVICE_FORZENLOGIN+app.getId()+"_"+username);
+    		if(!nullEmptyBlankJudge(frozenLoginInfo)){
+    			JSONObject  validateJson=JSONObject.parseObject(frozenLoginInfo);
+    			long timeSub= DateTools.timeSub(DateTools.dateToString(new Date(), DateTools.FORMAT_ONE),validateJson.get("frozenTime").toString());
+    			if((int)timeSub>0){
+    				long c = Math.abs(timeSub)/1000;
+    				map.clear();
+    			    map.put("status", "0");
+    			    map.put("error_code", 8);
+    			    map.put("frozenTime",String.valueOf(c));
+    			    map.put("errMsg", "您的账号已经锁定请"+c+"分钟后在进行尝试登陆！");
+    				paraMandaChkAndReturn(response,map);
+    	            return;
+    			}
+    		}
+	        //判断是否在规定时间内超过登陆失败次数
+	        String  validateInfo = (String) redisClient.getObject(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username);
+    		if(!nullEmptyBlankJudge(validateInfo)){
+    			JSONObject  validateJson=JSONObject.parseObject(validateInfo);
+    			long timeSub= DateTools.timeSub(validateJson.get("firstLoginTime").toString(),DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
+    			int faliureTimes=validateJson.getIntValue("faliureTimes");
+    			if((int)timeSub>0&&faliureTimes==app.getLoginFaliureTime()){
+    				map.clear();
+    			    map.put("status", "0");
+    			    map.put("error_code", 8);
+    			    map.put("faliureTimes",app.getLoginFaliureTime());
+    			    map.put("tryTimes",0);
+    			    map.put("errMsg", "您的账号"+app.getLoginValidateTime()+"分钟内连续登陆失败"+app.getLoginFaliureTime()+"次,请"+app.getLoginFrozenTime()+"分钟后再尝试！");
+    				paraMandaChkAndReturn(response,map);
+    	            return;
+    			}
+    		}
 			map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
 			if(map.get("status").equals("1")){
 				if(nullEmptyBlankJudge(platform)){
@@ -423,8 +456,56 @@ public class UserCenterLoginController extends BaseControllerUtil {
 				}
 			}
 	    	if(map.get("status")=="0"){
+	    		if(!nullEmptyBlankJudge(validateInfo)){
+	    			JSONObject  validateJson=JSONObject.parseObject(validateInfo);
+	    			Map<String ,Object> validateLoginMap=new HashMap<String,Object>();	
+	    			validateLoginMap.put("appId",validateJson.get("appId"));
+	    			validateLoginMap.put("userName", validateJson.get("userName"));
+	    			validateLoginMap.put("firstLoginTime", validateJson.get("firstLoginTime"));
+	    			validateLoginMap.put("ip", validateJson.get("ip"));
+	    			int tryTimes=validateJson.getIntValue("tryTimes");
+	    			if(tryTimes>1){
+	    				//判断密码登陆次数是否超过可尝试次数
+	    				int faliureTimes=validateJson.getIntValue("faliureTimes");
+	    				long timeSub= DateTools.timeSub(validateJson.get("firstLoginTime").toString(),DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
+	    				int c =(int) Math.abs(timeSub)/60;
+		    			if(c<app.getLoginValidateTime()){
+		    			  validateLoginMap.put("lastLoginTime",DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
+		    			  validateLoginMap.put("faliureTimes", faliureTimes+1);
+		    			  validateLoginMap.put("tryTimes",app.getLoginFaliureTime()-(faliureTimes+1));
+			    		  redisClient.setObjectByTime(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username, JSON.toJSONString(validateLoginMap),app.getLoginValidateTime()-c);
+		    			}
+		    			map.put("faliureTimes", faliureTimes+1);
+		    			map.put("tryTimes", app.getLoginFaliureTime()-(faliureTimes+1));
+	    			}else if(tryTimes==1){
+	    				//添加用户锁定信息
+	    				Map<String ,Object> frozenLoginMap=new HashMap<String,Object>();
+	    				validateLoginMap.put("appId",validateJson.get("appId"));
+		    			validateLoginMap.put("userName", validateJson.get("userName"));
+		    			validateLoginMap.put("frozenTime", DateTools.getTimeByMinute(app.getLoginFrozenTime()));
+		    			map.put("frozenTime", DateTools.getTimeByMinute(app.getLoginFrozenTime()));
+	    				redisClient.setObjectByTime(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username, JSON.toJSONString(frozenLoginMap),app.getLoginValidateTime());
+	    				redisClient.del(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username);
+	    			}
+	    		}else{
+	    			//创建登录失败信息
+	    			Map<String ,Object> validateLoginMap=new HashMap<String,Object>();	
+	    			validateLoginMap.put("appId", app.getId());
+	    			validateLoginMap.put("userName", username);
+	    			validateLoginMap.put("firstLoginTime", DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
+	    			validateLoginMap.put("lastLoginTime",DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
+	    			validateLoginMap.put("ip", "");
+	    			validateLoginMap.put("faliureTimes", 1);
+	    			validateLoginMap.put("tryTimes", app.getLoginFaliureTime()-1);
+	    			redisClient.setObjectByTime(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username, JSON.toJSONString(validateLoginMap),app.getLoginValidateTime());
+	    			map.put("faliureTimes", 1);
+	    			map.put("tryTimes", app.getLoginFaliureTime()-1);
+	    		}
 	    		writeErrorJson(response,map);
 	    	}else{
+	    		if(!nullEmptyBlankJudge(validateInfo)){
+	    			redisClient.del(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username);
+	    		}
 	    		writeSuccessJson(response,map);
 	    	}
 	    	OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
