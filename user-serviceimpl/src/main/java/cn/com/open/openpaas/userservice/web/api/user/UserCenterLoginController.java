@@ -96,7 +96,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
     			JSONObject  validateJson=JSONObject.parseObject(frozenLoginInfo);
     			long timeSub= DateTools.timeSub(DateTools.dateToString(new Date(), DateTools.FORMAT_ONE),validateJson.get("frozenTime").toString());
     			if((int)timeSub>0){
-    				long c = Math.abs(timeSub)/1000;
+    				long c = Math.abs(timeSub)/60;
     				map.clear();
     			    map.put("status", "0");
     			    map.put("error_code", 8);
@@ -480,11 +480,11 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    			}else if(tryTimes==1){
 	    				//添加用户锁定信息
 	    				Map<String ,Object> frozenLoginMap=new HashMap<String,Object>();
-	    				validateLoginMap.put("appId",validateJson.get("appId"));
-		    			validateLoginMap.put("userName", validateJson.get("userName"));
-		    			validateLoginMap.put("frozenTime", DateTools.getTimeByMinute(app.getLoginFrozenTime()));
+	    				frozenLoginMap.put("appId",validateJson.get("appId"));
+	    				frozenLoginMap.put("userName", validateJson.get("userName"));
+	    				frozenLoginMap.put("frozenTime", DateTools.getTimeByMinute(app.getLoginFrozenTime()));
 		    			map.put("frozenTime", DateTools.getTimeByMinute(app.getLoginFrozenTime()));
-	    				redisClient.setObjectByTime(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username, JSON.toJSONString(frozenLoginMap),app.getLoginValidateTime());
+	    				redisClient.setObjectByTime(RedisConstant.USER_SERVICE_FORZENLOGIN+app.getId()+"_"+username, JSON.toJSONString(frozenLoginMap),app.getLoginFrozenTime());
 	    				redisClient.del(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username);
 	    			}
 	    		}else{
