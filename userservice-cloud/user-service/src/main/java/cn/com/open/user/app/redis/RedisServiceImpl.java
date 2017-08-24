@@ -10,13 +10,11 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
-
 import com.alibaba.fastjson.JSONObject;
 
-import cn.com.open.user.app.entiy.User;
 
 @Component
-public class RedisServiceImpl implements RedisService{  
+public class RedisServiceImpl     implements RedisService{  
     
     @Autowired  
     private RedisTemplate<String, ?> redisTemplate;  
@@ -33,7 +31,7 @@ public class RedisServiceImpl implements RedisService{
         });  
         return result;  
     }  
-    
+  
     public String get(final String key){  
         String result = redisTemplate.execute(new RedisCallback<String>() {  
             @Override  
@@ -107,20 +105,6 @@ public class RedisServiceImpl implements RedisService{
         });  
         return result;  
     }  
-    
-   
-    
-    
-    
-    RedisTemplate<String, User> redisTemplates;  
-    public RedisTemplate<String, User> getRedisTemplate() {  
-        return redisTemplates;  
-    }  
   
-    public void setRedisTemplate(RedisTemplate<String, User> redisTemplate) {  
-        this.redisTemplate = redisTemplate;  
-    }  
-      
-    
 }  
 

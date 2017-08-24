@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cn.com.open.user.app.constant.ConstantMessage;
 import cn.com.open.user.app.entiy.OAUser;
-import cn.com.open.user.app.service.UserLoginService;
+import cn.com.open.user.app.service.OAUserService;
 import cn.com.open.user.app.vo.OAUserVo;
 @RestController
+@RequestMapping("/usercenter")
 public class OAUserModelController extends BaseController{
 	private static final Logger log = LoggerFactory.getLogger(OAUserModelController.class);
 	   @Autowired
-	   UserLoginService userLoginService;
+	   OAUserService oaUserService;
 	   
 	   @Value("${oa-url}")
 	   String url;
@@ -39,7 +40,7 @@ public class OAUserModelController extends BaseController{
 	    * @param request
 	    * @param response
 	    */
-		@RequestMapping(value = "/usercenter/GetOAUserModel", method = {RequestMethod.POST} )
+		@RequestMapping(value = "/GetOAUserModel", method = {RequestMethod.POST} )
 		public void login(HttpServletRequest request, HttpServletResponse response,OAUser user) {
  	     	log.info("OAUserModelController usercenter/GetOAUserModel IdNo"+user.getIdNo()+"UserName:"+user.getUserName()+"Salt:"+user.getSalt());
  	     	OAUserVo userVo=null;
@@ -50,14 +51,14 @@ public class OAUserModelController extends BaseController{
 	 				return;*/
 	 			}
 	 	    	
-	 	   	    userVo=userLoginService.GetOAUserModel(user,maps,url,appSercret,appId);
-	 	    	if(maps.containsKey("msg")){
+	 	   	    userVo=oaUserService.GetOAUserModel(user,maps,url,appSercret,appId);
+	 	    	if(maps.containsKey("message")){
 	 	    		int status=Integer.parseInt(maps.get("status").toString());
-	 	    		paraMandaChkAndReturn(status, response,maps.get("msg").toString());
+	 	    		paraMandaChkAndReturn(status, response,maps.get("message").toString());
 	 	    	}else{
 	 	    		maps.clear();
  	    			maps.put("status", "1");//接口返回状态：1-正确 2-错误
- 	    			maps.put("msg","查询成功");
+ 	    			maps.put("message","查询成功");
  	    			maps.put("errorCode","");
  	    			maps.put("payload", userVo);
 				    writeSuccessJson(response,maps);
