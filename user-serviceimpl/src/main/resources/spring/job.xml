@@ -31,9 +31,9 @@
 		<property name="jobDetail">
 			<ref bean="analyticalLogTask" />
 		</property>
-		<!-- 每天00:30分执行 更具体时间配置请搜索CronTriggerBean说明  --> 
+		<!-- 每天03:30分执行 更具体时间配置请搜索CronTriggerBean说明  --> 
 		<property name="cronExpression">
-			<value>0 30 0 * * ?</value>
+			<value>0 30 3 * * ?</value>
 		</property>
 	</bean>
 	

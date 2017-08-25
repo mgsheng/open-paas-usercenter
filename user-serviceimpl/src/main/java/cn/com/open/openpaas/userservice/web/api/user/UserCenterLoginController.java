@@ -75,6 +75,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    	String pwdtype=request.getParameter("pwdtype");
             String sessionTime=request.getParameter("session_time");/*有效时间，默认是分钟，如果为空则默认30分钟*/
             String platform=request.getParameter("platform");
+            String ip=request.getParameter("ip");
 	    	String aesPassword="";
 	    	String oldPassword = password;
 	    	log.info("client_id:"+client_id+"access_token:"+access_token+"grant_type:"+grant_type+"scope:"+scope+"password:"+password+"username:"+username+"Password:"+password);
@@ -475,7 +476,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 		    			  validateLoginMap.put("lastLoginTime",DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
 		    			  validateLoginMap.put("faliureTimes", faliureTimes+1);
 		    			  validateLoginMap.put("tryTimes",app.getLoginFaliureTime()-(faliureTimes+1));
-			    		  redisClient.setObjectByTime(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username, JSON.toJSONString(validateLoginMap),app.getLoginValidateTime()-c);
+			    		  redisClient.setObjectByTime(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username, JSON.toJSONString(validateLoginMap),(app.getLoginValidateTime()-c)*60);
 		    			}
 		    			map.put("faliureTimes",faliureTimes+1);
 		    			map.put("frozenTime","");
@@ -486,10 +487,10 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    				frozenLoginMap.put("appId",validateJson.get("appId"));
 	    				frozenLoginMap.put("userName", validateJson.get("userName"));
 	    				frozenLoginMap.put("frozenTime", DateTools.getTimeByMinute(app.getLoginFrozenTime()));
-		    			map.put("frozenTime", DateTools.getTimeByMinute(app.getLoginFrozenTime()));
+		    			map.put("frozenTime",app.getLoginFrozenTime());
 		    			map.put("faliureTimes",app.getLoginFaliureTime());
 		    			map.put("tryTimes",0);
-	    				redisClient.setObjectByTime(RedisConstant.USER_SERVICE_FORZENLOGIN+app.getId()+"_"+username, JSON.toJSONString(frozenLoginMap),app.getLoginFrozenTime());
+	    				redisClient.setObjectByTime(RedisConstant.USER_SERVICE_FORZENLOGIN+app.getId()+"_"+username, JSON.toJSONString(frozenLoginMap),app.getLoginFrozenTime()*60);
 	    				redisClient.del(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username);
 	    			}
 	    		}else{
@@ -499,11 +500,12 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    			validateLoginMap.put("userName", username);
 	    			validateLoginMap.put("firstLoginTime", DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
 	    			validateLoginMap.put("lastLoginTime",DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
-	    			validateLoginMap.put("ip", "");
+	    			validateLoginMap.put("ip", ip);
 	    			validateLoginMap.put("faliureTimes", 1);
 	    			validateLoginMap.put("tryTimes", app.getLoginFaliureTime()-1);
-	    			redisClient.setObjectByTime(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username, JSON.toJSONString(validateLoginMap),app.getLoginValidateTime());
+	    			redisClient.setObjectByTime(RedisConstant.USER_SERVICE_VALIDATELOGIN+app.getId()+"_"+username, JSON.toJSONString(validateLoginMap),app.getLoginValidateTime()*60);
 	    			map.put("faliureTimes", 1);
+	    			map.put("frozenTime","");
 	    			map.put("tryTimes", app.getLoginFaliureTime()-1);
 	    		}
 	    		writeErrorJson(response,map);
