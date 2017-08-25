@@ -7,6 +7,7 @@ public class UserVo implements Serializable{
 	private int type=1;//1 查询缓存数据 2查询本地数据
 	private String username;
 	private String password;
+	private String ip;
 	
 	public int getId() {
 		return id;
@@ -32,6 +33,12 @@ public class UserVo implements Serializable{
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getIp() {
+		return ip;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 }

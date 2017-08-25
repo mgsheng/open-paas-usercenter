@@ -56,8 +56,12 @@ public class UserLoginController extends BaseController{
 	   
 	   @Value("${app.appId}")
 	   String app_appId;
+	   
 	   @Value("${callbackUrl}")
 	   String callbackUrl;
+	   
+	   @Value("${api.base.request.url}")
+	    private String apiBaseRequestUrl;
 	   
 	   @Value("${loginFaliureTime}")//失败次数默认5次
 	   String loginFaliureTime;
@@ -89,13 +93,22 @@ public class UserLoginController extends BaseController{
 	    	
 		   try {
 			   Map<String, Object> map = new HashMap<String, Object>();
+			   Map<String, String> maps = new HashMap<String, String>();
 	 	    	if (!paraMandatoryCheck(Arrays.asList(user.getUsername(),user.getPassword()))) {
 				    paraMandaChkAndReturn(7, response, "必传参数中有空值");
 	 				return;
 	 			}
 	 	    	
+	 	    	
+	 	    	maps.put("appId", app_appId);
+	 	    	maps.put("ip", user.getIp());
+	 	    	maps.put("userName", user.getUsername());
+	 	    	maps.put("loginFaliureTime", loginFaliureTime);
+	 	    	maps.put("loginValidateTime", loginValidateTime);
+	 	    	maps.put("loginFrozenTime", loginFrozenTime);
+	 	    	
 	 	    	//验证用户是否已锁定
-		 	    map= userLoginService.lockUserNames(redisService, user.getUsername(),loginFaliureTime,loginFrozenTime);
+		 	    map= userLoginService.lockUserNames(redisService, maps);
 		 	    String status=(String)map.get("status");
 				if(map!=null&&status!=null){//说明该用户已锁定 显示锁定信息
 					 writeSuccessJson(response,map);
@@ -112,7 +125,9 @@ public class UserLoginController extends BaseController{
 							if(i==ConstantMessage.USER_ZERO)continue;
 							if(user.getId()>0){//一个密码能登录俩用户时
 							//	paraMandaChkAndReturn(5, response,"登陆异常!");
-								map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,5,"登录异常!");
+								maps.put("status", "5");
+					 	    	maps.put("message", "登录异常!");
+								map=userLoginService.loginValidates(redisService,maps);
 								writeSuccessJson(response,map);
 								return;
 							}
@@ -130,7 +145,9 @@ public class UserLoginController extends BaseController{
 					ArrayList<User> accountList=userLoginService.findUserAccountByUsername(user);
 					if(accountList==null||accountList.size()==0){
 					//	paraMandaChkAndReturn(2, response,"用户不存在!");
-						map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,2,"用户不存在!");
+						maps.put("status", "2");
+			 	    	maps.put("message", "用户不存在!");
+						map=userLoginService.loginValidates(redisService,maps);
 		    			writeSuccessJson(response,map);
 						return;
 					}else{
@@ -139,7 +156,9 @@ public class UserLoginController extends BaseController{
 							if(i==ConstantMessage.USER_ZERO)continue;
 							if(user.getId()>0){//一个密码能登录俩用户时
 					//			paraMandaChkAndReturn(6, response,"登陆异常!");
-								map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,6,"登录异常!");
+								maps.put("status", "6");
+					 	    	maps.put("message", "登录异常!");
+								map=userLoginService.loginValidates(redisService,maps);
 				    			writeSuccessJson(response,map);
 								return;
 							}
@@ -152,7 +171,9 @@ public class UserLoginController extends BaseController{
 						}
 						if(user.getId()==0){
 					//		paraMandaChkAndReturn(3, response,"密码错误!");
-							map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,3,"密码错误!");
+							maps.put("status", "3");
+				 	    	maps.put("message", "密码错误!");
+							map=userLoginService.loginValidates(redisService,maps);
 			    			writeSuccessJson(response,map);
 							return;
 						}
@@ -170,6 +191,9 @@ public class UserLoginController extends BaseController{
 						   jsonVo=new UserJsonVo(listVo,findCallbackUrl(listVo,platform));
 						   jsonList.add(jsonVo);
 					   }
+					   
+					   userLoginService.redisInit(redisService,app_appId,user.getUsername());//清空登录次数
+					   
 					   map.clear();
 					   map.put("status", "1");//接口返回状态：1-正确 0-错误
 					   map.put("message","登陆成功");
@@ -179,7 +203,9 @@ public class UserLoginController extends BaseController{
 					   writeSuccessJson(response,map);
 				   }else{
 					//   paraMandaChkAndReturn(5, response,"登陆失败!");
-					   map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,5,"登录失败!");
+					   maps.put("status", "5");
+			 	       maps.put("message", "登录失败!");
+					   map=userLoginService.loginValidates(redisService,maps);
 		    		   writeSuccessJson(response,map);
 				   }
 			   }else{
@@ -187,7 +213,9 @@ public class UserLoginController extends BaseController{
 				   map.put("status", "2");//接口返回状态：1-正确 2-失败
 				   map.put("message","密码错误");
 				   map.put("errorCode","3");*/
-				   map=userLoginService.loginValidates(redisService,user.getUsername(),app_appId,loginFaliureTime,loginValidateTime,loginFrozenTime,3,"密码错误!");
+				   maps.put("status", "3");
+		 	       maps.put("message", "密码错误!");
+				   map=userLoginService.loginValidates(redisService,maps);
 	    		   writeSuccessJson(response,map);
 			   }
 		   } catch (Exception e) {
@@ -209,7 +237,8 @@ public class UserLoginController extends BaseController{
 			if( listVo==null){
 				return "";
 			}
-			StringBuffer url = new StringBuffer(callbackUrl+"/usercenter/validateLogin");
+			
+			StringBuffer url = new StringBuffer(callbackUrl+apiBaseRequestUrl+"/usercenter/validateLogin");
 			//time：格式yyyyMMddHHmmss
 			String time = DateTools.dateToString(new Date(), "yyyyMMddHHmmss");
 			
@@ -377,7 +406,7 @@ public class UserLoginController extends BaseController{
 			public void login(HttpServletRequest request, HttpServletResponse response,OAUser user) {
 			   try {
 				   Map<String, Object> map = new HashMap<String, Object>();
-				   userLoginService.redisInit(redisService,user.getUserName());
+				   userLoginService.redisInit(redisService,app_appId,user.getUserName());
 	    			 map.clear();
 	    			 map.put("status", "1");//接口返回状态：1-正确 0-错误
 	    			 map.put("message","缓存初始化成功");

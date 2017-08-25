@@ -33,6 +33,8 @@ public class UserLoginServiceimpl implements UserLoginService {
 	@Autowired
 	UserMapper userMapper;
 	
+	 private final static String SEPARATOR="_"; 
+	
 	@Override
 	public  UserMergeVo  findUserAccount(User entity){
 		return userMapper.findUserAccount(entity.getUsername(),entity.getPassword());
@@ -67,10 +69,14 @@ public class UserLoginServiceimpl implements UserLoginService {
 	 
 	//验证该用户是否已经锁定，超过24小时自动解除锁
 	@Override
-	public Map<String, Object> lockUserNames(RedisServiceImpl redisService, String userName,String loginFaliureTime,String loginFrozenTime){
+	public Map<String, Object> lockUserNames(RedisServiceImpl redisService,Map<String, String> maps){
+		  String appId= maps.get("appId");
+		  String userName=maps.get("userName");
+		  String loginFaliureTime=maps.get("loginFaliureTime");
+		Map<String, Long> timeMap = new HashMap<String, Long>();
 		Map<String, Object> map = new HashMap<String, Object>();
-		String failNum=redisService.get(ConstantMessage.USERSERVICE_VALIDATELOGIN_APPID+userName);//登录失败次数
-		String lockInfo=redisService.get(ConstantMessage.USERSERVICE_FROZENLOGIN_APPID+userName);//登录失败信息json格式
+		String failNum=redisService.get(ConstantMessage.USERSERVICE_VALIDATELOGIN+appId+SEPARATOR+userName);//登录失败次数
+		String lockInfo=redisService.get(ConstantMessage.USERSERVICE_FROZENLOGIN+appId+SEPARATOR+userName);//登录失败信息json格式
 		 if(!nullAndEmpty(failNum)&&!nullAndEmpty(lockInfo)){
 			 JSONObject jsonObjet = JSONObject.fromObject(lockInfo);
 			 if(jsonObjet.containsKey("frozenTime")){
@@ -79,13 +85,17 @@ public class UserLoginServiceimpl implements UserLoginService {
 			//		 int time=Integer.parseInt(loginFrozenTime);
 					 long lockmin=DateTools.getDateMin(frozenTime,0);
 					 if(lockmin>0){//未到24小时 锁定中
+						timeMap.put("faliureTimes", Long.valueOf(failNum));
+						timeMap.put("tryTimes",0l);
+						timeMap.put("frozenTime", lockmin);
+				    		
 						 map.clear();
 						 map.put("status", "0");//接口返回状态：1-正确 0-错误
 						 map.put("message",userName+"用户已锁定");
 						 map.put("errorCode","10");
-						 map.put("frozenTime",frozenTime);
+						 map.put("payload",timeMap);
 					 }else{//解锁
-						 redisInit(redisService,userName);
+						 redisInit(redisService,appId,userName);
 					 }
 				 }
 			 }
@@ -94,10 +104,22 @@ public class UserLoginServiceimpl implements UserLoginService {
 	}
 	
 
-    //清空所以缓存
-	@Override
-	public Map<String, Object> loginValidates(RedisServiceImpl redisService, String userName, String app_appId,
-			String loginFaliureTime, String loginValidateTime, String loginFrozenTime,int code,String message) {
+	    //清空所有缓存
+		@Override
+		public Map<String, Object> loginValidates(RedisServiceImpl redisService,Map<String, String> maps) {
+		  Map<String, Integer> timeMap = new HashMap<String, Integer>();
+		  int code=0;
+		  String appId= maps.get("appId");
+		  String ip= maps.get("ip");
+		  String userName=maps.get("userName");
+		  String loginFaliureTime=maps.get("loginFaliureTime");
+		  String loginValidateTime=	maps.get("loginValidateTime");
+		  String loginFrozenTime=maps.get("loginFrozenTime");
+		  String status=maps.get("status");
+		  if(!nullAndEmpty(status))code=Integer.parseInt(status);
+		  String message=maps.get("message");
+		
+		
 		Map<String, Object> map = new HashMap<String, Object>();
     	LoginVaildate vaildate=null;
     	JSONObject jsonObjet=null;
@@ -105,7 +127,7 @@ public class UserLoginServiceimpl implements UserLoginService {
     	String firstTime="";
     	try {
     		//将登陆失败次数以及失败信息存缓存
-			String lockInfo=redisService.get(ConstantMessage.USERSERVICE_FROZENLOGIN_APPID+userName);
+			String lockInfo=redisService.get(ConstantMessage.USERSERVICE_FROZENLOGIN+appId+SEPARATOR+userName);
 			 if(!nullAndEmpty(lockInfo)){
 				 jsonObjet = JSONObject.fromObject(lockInfo);
 				 if(jsonObjet.containsKey("firstLoginTime")){
@@ -114,13 +136,13 @@ public class UserLoginServiceimpl implements UserLoginService {
 						 long firstTimes=Integer.parseInt(loginValidateTime);
 						 long min120=DateTools.getDateMin(firstTime,1);
 						 if(min120>firstTimes){
-							 redisInit(redisService,userName);//登陆第一次时间和最后一次超过了2小时，清空之前失败信息
+							 redisInit(redisService,appId,userName);//登陆第一次时间和最后一次超过了2小时，清空之前失败信息
 						 }
 					 }
 				 }
 			 }
     		
-			String failNum=redisService.get(ConstantMessage.USERSERVICE_VALIDATELOGIN_APPID+userName);
+			String failNum=redisService.get(ConstantMessage.USERSERVICE_VALIDATELOGIN+appId+SEPARATOR+userName);
     		String firstTimes="";
     		String nums="";
     		int num=1;
@@ -131,49 +153,53 @@ public class UserLoginServiceimpl implements UserLoginService {
     			num=Integer.parseInt(failNum)+1;
     		}
     		nums=num+"";
+    		
+    		String tryTimes=(Integer.parseInt(loginFaliureTime)-num)+"";
+    		
     		if(nums.equals(loginFaliureTime)){
 	    		vaildateFrozen=new LoginValidatefrozen();
-	    		vaildateFrozen.setAppId(app_appId);
+	    		vaildateFrozen.setAppId(appId);
 	    		vaildateFrozen.setUserName(userName);
 	    		vaildateFrozen.setFrozenTime(DateTools.getTimeByMinute(Integer.parseInt(loginFrozenTime)));
 	    		
 	    		//将登陆失败次数以及失败信息存缓存
 	    		jsonObjet=JSONObject.fromObject(vaildateFrozen);
-	    		redisService.set(ConstantMessage.USERSERVICE_FROZENLOGIN_APPID+userName,jsonObjet.toString());//失败信息 json格式
-	    		redisService.set(ConstantMessage.USERSERVICE_VALIDATELOGIN_APPID+userName,nums);//登陆失败 赋值+1
+	    		redisService.set(ConstantMessage.USERSERVICE_FROZENLOGIN+appId+SEPARATOR+userName,jsonObjet.toString());//失败信息 json格式
+	    		redisService.set(ConstantMessage.USERSERVICE_VALIDATELOGIN+appId+SEPARATOR+userName,nums);//登陆失败 赋值+1
+	    		
+	    		timeMap.put("faliureTimes", num);
+				timeMap.put("tryTimes", Integer.parseInt(tryTimes));
+				timeMap.put("frozenTime", Integer.parseInt(loginFrozenTime));
 	    		
 	    		map.clear();
    			 	map.put("status", "0");//接口返回状态：1-正确 0-错误
    			 	map.put("errorCode","10");
    				map.put("message",userName+"用户已锁定");
-   				map.put("frozenTime",DateTools.getTimeByMinute(Integer.parseInt(loginFrozenTime)));
+   				map.put("payload",timeMap);
 			}else{
-				InetAddress address=null;
-				address=InetAddress.getLocalHost();
-				
-				String tryTimes=(Integer.parseInt(loginFaliureTime)-num)+"";
-				
 				vaildate=new LoginVaildate();
 				vaildate.setFaliureTimes(num);//失败次数
-				vaildate.setAppId(app_appId);
+				vaildate.setAppId(appId);
 				vaildate.setUserName(userName);
 				vaildate.setFirstLoginTime(firstTimes);
 				vaildate.setLastLoginTime(DateTools.getNow());
-				vaildate.setIp(address+"");
+				vaildate.setIp(ip);
 				vaildate.setFaliureTimes(num);
 				vaildate.setTryTimes(Integer.parseInt(tryTimes));
 				
 				jsonObjet=JSONObject.fromObject(vaildate);
-				redisService.set(ConstantMessage.USERSERVICE_FROZENLOGIN_APPID+userName,jsonObjet.toString());//失败信息 json格式
-				redisService.set(ConstantMessage.USERSERVICE_VALIDATELOGIN_APPID+userName,nums);//登陆失败 赋值+1
+				redisService.set(ConstantMessage.USERSERVICE_FROZENLOGIN+appId+SEPARATOR+userName,jsonObjet.toString());//失败信息 json格式
+				redisService.set(ConstantMessage.USERSERVICE_VALIDATELOGIN+appId+SEPARATOR+userName,nums);//登陆失败 赋值+1
+				timeMap.put("faliureTimes", num);
+				timeMap.put("tryTimes", Integer.parseInt(tryTimes));
+				
 				map.clear();
    			 	map.put("status", "0");//接口返回状态：1-正确 0-错误
    			 	map.put("errorCode",code);
    				map.put("message",message);
-   				map.put("faliureTimes",num);
-   				map.put("tryTimes",Integer.parseInt(tryTimes));
+   				map.put("payload",timeMap);
 			}
-    	} catch (UnknownHostException e) {
+    	} catch (Exception e) {
     		e.printStackTrace();
     	}
 		return map;
@@ -186,9 +212,9 @@ public class UserLoginServiceimpl implements UserLoginService {
     * @param response
     */
 	@Override
-	public void redisInit(RedisServiceImpl redisService,String userName) {
-		 redisService.set(ConstantMessage.USERSERVICE_VALIDATELOGIN_APPID+userName,"");
-		 redisService.set(ConstantMessage.USERSERVICE_FROZENLOGIN_APPID+userName,"");
+	public void redisInit(RedisServiceImpl redisService,String appId,String userName) {
+		 redisService.delete(ConstantMessage.USERSERVICE_VALIDATELOGIN+appId+SEPARATOR+userName);
+		 redisService.delete(ConstantMessage.USERSERVICE_FROZENLOGIN+appId+SEPARATOR+userName);
   }
 	public String md5Init(OAUser user,String salt,String appSercret) {
 		String md5=user.getUserName()+user.getIdNo()+salt+appSercret;
@@ -198,4 +224,5 @@ public class UserLoginServiceimpl implements UserLoginService {
         return null==str||str.isEmpty()||"".equals(str.trim());
     }
 	
+	 
 }
