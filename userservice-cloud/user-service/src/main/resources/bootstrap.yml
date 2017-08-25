@@ -1,17 +1,32 @@
 spring:
   cloud:
+    config:
+      discovery:
+         enabled: true
+         serviceId: consul-config
+      label: master
+      profile: ${CONFIG_ENV}
     consul:
       host: ${CONSUL_HOST}
       port: ${CONSUL_PORT}
       discovery:
         healthCheckPath: /info
         healthCheckInterval: 15s
-        instance-id: user-service
+        instance-id: user-service-cloud
         hostname: ${HOST}
         port: ${PORT}
   application:
-     name: user-service
+     name: user-service-cloud
 server:
   port: 80
-serverHost: 127.0.0.1 
+ribbon:
+   ServerListRefreshInterval: 1000
+endpoints:
+    health:
+      sensitive: false
+    restart:
+      enabled: true
+    shutdown:
+      enabled: true
+
 callbackUrl: http://${APP_LOCALHOST_URL}:${APP_LOCALHOST_URL_PORT}
