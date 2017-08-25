@@ -17,5 +17,11 @@ public interface RedisService {
       
     public long rpush(String key,Object obj);  
       
-    public String lpop(String key);  
+    public String lpop(String key);
+
+    public void deleteAll(String key);
+
+    public void delete(List<String> keys);
+
+    public void delete(String key);  
 }

@@ -1,7 +1,5 @@
 package cn.com.open.user.app.service.impl;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

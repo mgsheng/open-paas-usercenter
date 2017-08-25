@@ -106,19 +106,19 @@ public class RedisServiceImpl     implements RedisService{
         });  
         return result;  
     }  
-    
+    @Override  
     public void deleteAll(String key) {
         List<String> list = new ArrayList<String>();
         list.add(key);
         delete(list);
     }
-
+    @Override  
     public void delete(List<String> keys) {
         redisTemplate.delete(keys);
     }
-    
-    public void delete(String keys) {
-        redisTemplate.delete(keys);
+    @Override  
+    public void delete(String key) {
+        redisTemplate.delete(key);
     }
   
 }  
