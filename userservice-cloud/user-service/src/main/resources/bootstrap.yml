@@ -29,4 +29,4 @@ endpoints:
     shutdown:
       enabled: true
 
-callbackUrl: http://${APP_LOCALHOST_URL}:${APP_LOCALHOST_URL_PORT}
+callbackUrl: http://pd-userservice-cloud.testyf.ak:8005/api/usercloudservice/v1
