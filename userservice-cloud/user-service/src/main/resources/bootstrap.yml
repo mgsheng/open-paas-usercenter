@@ -12,11 +12,11 @@ spring:
       discovery:
         healthCheckPath: /info
         healthCheckInterval: 15s
-        instance-id: user-service-cloud
+        instance-id: user-service
         hostname: ${HOST}
         port: ${PORT}
   application:
-     name: user-service-cloud
+     name: user-service
 server:
   port: 80
 ribbon:
