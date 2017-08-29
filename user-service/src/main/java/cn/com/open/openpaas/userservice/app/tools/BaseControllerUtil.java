@@ -466,6 +466,16 @@ public class BaseControllerUtil {
         return map;
     }
     
+    
+    /**
+	  * 根据错误码以及错误讯息向前端返回信息
+	  * @param errorNum
+	  * @param response
+	  * @param errMsg
+	  */
+    public void paraMandaChkAndReturn(HttpServletResponse response,Map<String, Object> map){
+       writeErrorJson(response,map);
+   }
     /**
      * 
      * 验证密码强度

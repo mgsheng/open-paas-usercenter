@@ -18,4 +18,5 @@ public class ConstantMessage {
 	   public final static int USER_ONE=1;
 	   public final static int USER_TWO=2;
 	   public final static int USER_THREE=3;
+	   
 }

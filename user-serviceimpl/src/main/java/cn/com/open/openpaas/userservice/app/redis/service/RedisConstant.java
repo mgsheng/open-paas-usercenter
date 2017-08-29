@@ -17,4 +17,8 @@ public class RedisConstant {
  public static final String USER_SERVICE_COOKIENAME="cookie_username";
  
  public static final String SSO_USER_CHECK="sso_user_check_";
+ 
+ public static final String USER_SERVICE_VALIDATELOGIN="userService_validateLogin_";//userService_validateLogin_appid_username ： 登录失败次数
+ public static final String USER_SERVICE_FORZENLOGIN="userService_frozenLogin_";//userService_frozenLogin_appid_username ：用户被锁定信息
+ 
 }

@@ -23,20 +23,17 @@ public interface UserLoginService {
 	public void updateUserAccount(UserVo user) ;
 
 	public ArrayList<UserListVo> findUserAccountList(int userId);
-	
-	//验证该用户是否已经锁定，超过24小时自动解除锁
-	public Map<String, Object> lockUserNames(RedisServiceImpl redisService, String userName,String loginFaliureTime,String loginFrozenTime);
-	
-    //清空所以缓存
-	public Map<String, Object> loginValidates(RedisServiceImpl redisService, String userName, String app_appId,
-			String loginFaliureTime, String loginValidateTime, String loginFrozenTime,int code,String message);
-	
 	/**
     * 清空redis登录锁定限制缓存
     * @param request
     * @param response
     */
-	public void redisInit(RedisServiceImpl redisService,String userName);
+	public void redisInit(RedisServiceImpl redisService, String appId, String userName);
+	//验证该用户是否已经锁定，超过24小时自动解除锁
+	public Map<String, Object> lockUserNames(RedisServiceImpl redisService, Map<String, String> maps);
+	 //清空所以缓存
+	public Map<String, Object> loginValidates(RedisServiceImpl redisService, Map<String, String> maps);
+
 	 
 	
 }

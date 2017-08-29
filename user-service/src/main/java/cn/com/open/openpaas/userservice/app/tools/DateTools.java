@@ -494,5 +494,17 @@ public class DateTools {
 	    Date date= new Date(millSec);
 	    return sdf.format(date);
     }
-	
+    /**
+     * 获取多少分钟后的时间
+     * @param minute
+     * @return
+     */
+    public static String getTimeByMinute(int minute) {
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.add(Calendar.MINUTE, minute);
+
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
+    }
 }

@@ -1,5 +1,6 @@
 package cn.com.open.user.app.redis;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -105,6 +106,20 @@ public class RedisServiceImpl     implements RedisService{
         });  
         return result;  
     }  
+    @Override  
+    public void deleteAll(String key) {
+        List<String> list = new ArrayList<String>();
+        list.add(key);
+        delete(list);
+    }
+    @Override  
+    public void delete(List<String> keys) {
+        redisTemplate.delete(keys);
+    }
+    @Override  
+    public void delete(String key) {
+        redisTemplate.delete(key);
+    }
   
 }  
 
