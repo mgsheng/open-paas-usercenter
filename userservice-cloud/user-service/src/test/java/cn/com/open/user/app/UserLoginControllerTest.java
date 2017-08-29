@@ -30,7 +30,7 @@ public class UserLoginControllerTest {
 
 	@Test
 	public void login() {
-		String url = "http://localhost:" + port + "/usercenter/publicLogin";
+		String url = "http://localhost:" + port + "/api/usercloudservice/v1/usercenter/publicLogin";
 		MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
 		param.add("password", "WTwVJ6Id3EEQffjhw0Re1A==");
 		param.add("username", "xiaoli");

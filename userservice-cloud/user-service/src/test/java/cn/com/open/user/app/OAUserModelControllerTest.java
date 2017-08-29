@@ -30,7 +30,7 @@ public class OAUserModelControllerTest {
 
 	@Test
 	public void getOAUserModel() {
-		String url = "http://localhost:" + port + "usercenter/GetOAUserModel";
+		String url = "http://localhost:" + port + "/api/usercloudservice/v1/usercenter/GetOAUserModel";
 		MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
 		param.add("idNo", "");
 		param.add("username", "wangshuaia");
