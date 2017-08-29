@@ -260,16 +260,14 @@ public class UserLoginController extends BaseController{
 			return url.toString();
 		}
 	    
+	    
 	     /**
 	      * 用户中心公共登录接口
 	      * @param request
 	      * @param response
 	      */
-    	 @RequestMapping(value = "/usercenter/validateLogin",  method = {RequestMethod.GET,RequestMethod.OPTIONS})
+    	 @RequestMapping(value = "/usercenter/validateLogin", method = RequestMethod.GET)
  		 public void userCenterPublicLogin(HttpServletRequest request, HttpServletResponse response) {
-    		 if(request.getMethod().equals(RequestMethod.OPTIONS.name())){
- 	    		return;
- 	    	}
 	    	Map<String, Object> map=new HashMap<String,Object>();
 	    	Map<String, Object> mapJson=new HashMap<String,Object>();
 	    	map.put("status", "0");

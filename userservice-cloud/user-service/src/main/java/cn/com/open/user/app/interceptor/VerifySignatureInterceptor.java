@@ -12,6 +12,8 @@ import cn.com.open.user.app.tools.ParamUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,7 +45,14 @@ public class VerifySignatureInterceptor implements HandlerInterceptor {
             String signatureNonce = request.getHeader("signatureNonce");
             String platform = request.getHeader("platform");
             String signature = request.getHeader("signature");
-
+            
+            
+            if(request.getMethod().equals(RequestMethod.OPTIONS.name())){
+	    		return true;
+	    	}
+        //    HandlerMethod handlerMethod = (HandlerMethod) handler;  
+        //    System.out.println(handlerMethod.getMethod().getName());  
+            
             if (!ParamUtil.paramMandatoryCheck(Arrays.asList(appKey, timestamp, signature, signatureNonce, platform))) { //存在空参数
                 Result result = new Result(Result.ERROR, ExceptionEnum.CommonParmeterError.getMessage(), ExceptionEnum.CommonParmeterError.getCode(), null);
                 String resultJson = JSONObject.toJSONString(result);
