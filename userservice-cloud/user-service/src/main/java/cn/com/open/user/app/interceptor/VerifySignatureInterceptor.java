@@ -36,20 +36,21 @@ public class VerifySignatureInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    	
     	   response.addHeader("Access-Control-Allow-Origin", "*");
     	   response.addHeader("Access-Control-Allow-Headers"," Origin, X-Requested-With, Content-Type, Accept,appKey,timestamp,signatureNonce,platform,signature");
-    	if ("on".equals(onOff)) { //开关
+    	
+    	   //OPTIONS 请求方式直接返回
+           if(request.getMethod().equals(RequestMethod.OPTIONS.name())){
+	    		return true;
+	    	}
+    	   
+    	   if ("on".equals(onOff)) { //开关
             String appKey = request.getHeader("appKey");
             String timestamp = request.getHeader("timestamp");
             String signatureNonce = request.getHeader("signatureNonce");
             String platform = request.getHeader("platform");
             String signature = request.getHeader("signature");
             
-            
-            if(request.getMethod().equals(RequestMethod.OPTIONS.name())){
-	    		return true;
-	    	}
         //    HandlerMethod handlerMethod = (HandlerMethod) handler;  
         //    System.out.println(handlerMethod.getMethod().getName());  
             
