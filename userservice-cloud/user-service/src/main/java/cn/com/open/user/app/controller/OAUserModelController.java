@@ -41,7 +41,7 @@ public class OAUserModelController extends BaseController{
 	    * @param response
 	    */
 		@RequestMapping(value = "/GetOAUserModel", method = {RequestMethod.POST} )
-		public void login(HttpServletRequest request, HttpServletResponse response,OAUser user) {
+		public void GetOAUserModel(HttpServletRequest request, HttpServletResponse response,OAUser user) {
  	     	log.info("OAUserModelController usercenter/GetOAUserModel IdNo"+user.getIdNo()+"UserName:"+user.getUserName()+"Salt:"+user.getSalt());
  	     	OAUserVo userVo=null;
 		   try {

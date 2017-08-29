@@ -29,6 +29,19 @@ public class UserProvider {
 		return sb.toString();
 	}
 	
+	public String getOAUserCacheModel(Map<String, Object> map ) {
+		Integer userId=(Integer)map.get("userId");
+		String  appId=(String)map.get("appId");
+		StringBuilder sb = new StringBuilder();
+		sb.append("select au.source_id sourceId,ua.guid");
+		sb.append(" from user_cache ua,app_user au ");
+		sb.append(" where ua.id=au.user_id");
+		if (userId >0) {
+			sb.append(" and au.app_id = "+appId);
+			sb.append(" and au.source_id = "+userId+" limit 1");
+		} 
+		return sb.toString();
+	}
 	
 	public String getOAUserModel(Map<String, Object> map ) {
 		Integer userId=(Integer)map.get("userId");

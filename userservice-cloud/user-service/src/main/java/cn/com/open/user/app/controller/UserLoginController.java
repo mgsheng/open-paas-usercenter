@@ -79,7 +79,7 @@ public class UserLoginController extends BaseController{
 	    */
 	    @SuppressWarnings("null")
 		@RequestMapping(value = "/usercenter/publicLogin", method = {RequestMethod.POST,RequestMethod.OPTIONS} )
-		public void login(HttpServletRequest request, HttpServletResponse response,UserVo user) {
+		public void publicLogin(HttpServletRequest request, HttpServletResponse response,UserVo user) {
 	    	if(request.getMethod().equals(RequestMethod.OPTIONS.name())){
 	    		return;
 	    	}

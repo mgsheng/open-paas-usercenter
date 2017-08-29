@@ -28,10 +28,14 @@ public class OAUserServiceimpl implements OAUserService {
 	 
 	@Override
 	public OAUserVo getOAUserModel(int userId,String appId) {
+		OAUserVo oaUserVo=new OAUserVo();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("userId", userId);
 		map.put("appId", appId);
-		return userMapper.getOAUserModel(map);
+		oaUserVo=userMapper.getOAUserCacheModel(map);
+		if(oaUserVo==null)
+		oaUserVo=userMapper.getOAUserModel(map);
+		return oaUserVo;
 	}
 	@Override
 	public OAUserVo GetOAUserModel(OAUser user, Map<String, Object> maps,String url,String appSercret,String appId) {

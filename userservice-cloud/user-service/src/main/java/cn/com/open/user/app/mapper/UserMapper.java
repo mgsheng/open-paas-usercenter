@@ -42,6 +42,9 @@ public interface UserMapper {
 	@SelectProvider(method = "findUserAccountList", type = UserProvider.class)
 	ArrayList<UserListVo> findUserAccountList(Map<String, Object> map);
  
+	@SelectProvider(method = "getOAUserCacheModel", type = UserProvider.class)
+	OAUserVo getOAUserCacheModel(Map<String, Object> map);
+	
 	@SelectProvider(method = "getOAUserModel", type = UserProvider.class)
 	OAUserVo getOAUserModel(Map<String, Object> map);
 	
