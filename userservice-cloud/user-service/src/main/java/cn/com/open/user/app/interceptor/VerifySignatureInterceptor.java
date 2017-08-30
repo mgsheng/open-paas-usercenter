@@ -10,10 +10,11 @@ import cn.com.open.user.app.sign.MD5;
 import cn.com.open.user.app.tools.HtmlUtil;
 import cn.com.open.user.app.tools.ParamUtil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,6 +29,7 @@ import java.util.Arrays;
  * Created by guxuyang on 05/07/2017.
  */
 public class VerifySignatureInterceptor implements HandlerInterceptor {
+	private static final Logger log = LoggerFactory.getLogger(VerifySignatureInterceptor.class);
 
     @Autowired
     private AppService appService;
@@ -50,7 +52,11 @@ public class VerifySignatureInterceptor implements HandlerInterceptor {
             String signatureNonce = request.getHeader("signatureNonce");
             String platform = request.getHeader("platform");
             String signature = request.getHeader("signature");
+            String appSecret = appService.findAppSecretByAppkey(appKey);
             
+            log.info("VerifySignatureInterceptor preHandle appKey="+appKey+"&signature="+signature);
+ 	     	log.info("VerifySignatureInterceptor preHandle+++++++ timestamp="+timestamp+"&signatureNonce="+signatureNonce+"&platform="+platform+"&appSecret="+appSecret);
+
         //    HandlerMethod handlerMethod = (HandlerMethod) handler;  
         //    System.out.println(handlerMethod.getMethod().getName());  
             
@@ -67,7 +73,6 @@ public class VerifySignatureInterceptor implements HandlerInterceptor {
                 return false;
             }
 
-            String appSecret = appService.findAppSecretByAppkey(appKey);
             if (appSecret == null) {
                 Result result = new Result(Result.ERROR, ExceptionEnum.E1000001.getMessage(), ExceptionEnum.E1000001.getCode(), null);
                 String resultJson = JSONObject.toJSONString(result);	
@@ -91,6 +96,7 @@ public class VerifySignatureInterceptor implements HandlerInterceptor {
      */
     private boolean verifySignature(String timestamp, String signatureNonce, String platform, String appSecret, String signature) {
         String str = String.format("timestamp=%s&signatureNonce=%s&platform=%s&appSecret=%s", timestamp, signatureNonce, platform, appSecret);
+        signature=signature.toLowerCase();
         return signature.equals(MD5.Md5(str));
     }
 
