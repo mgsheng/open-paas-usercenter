@@ -121,6 +121,7 @@ public interface UserService extends UserDetailsService {
     public Boolean updateUserLastLoginTimeById(int id, Date lastLoginTime);
     public Boolean updatePhoneById(int id, String phone);
     public Boolean updateUserCardNoById(int id, String cardNo);
+    public Boolean updateEmailById(int id, String email);
     public Boolean updateDefaultUserById(int id, Boolean defaultUser);
     public Boolean updateAesPwdById(int id, String pwd);
     public Boolean updateSha1PwdById(int id, String pwd);

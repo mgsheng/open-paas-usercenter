@@ -2,7 +2,7 @@
 <div class="layout top_banner">
 	<div class="w_1200">
     	<div class="logo fl">
-        	<a href="${pageContext.request.contextPath}/main.html"><img src="${pageContext.request.contextPath}/images/logo.png" /></a>
+        	<img src="${pageContext.request.contextPath}/images/logo.png" /></a>
             <span class="usercent-bt"> | 用户中心</span>
         </div>
         <div class="nav fl">
@@ -23,7 +23,7 @@
 	        	<span><a href="${pageContext.request.contextPath}/logout">退出</a></span>
         	</c:if>
         	<c:if test="${currentUsername==null }">
-        		<span><a href="http://www.open.com.cn" target="_self"><i class="iconbg useravatar"></i>返回官网</a></span> 
+        		<span><a href="http://www.iopen.com.cn" target="_self"><i class="iconbg useravatar"></i>返回官网</a></span> 
         	</c:if>
         </div>
 	</div>

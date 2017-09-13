@@ -194,5 +194,10 @@
             <property name="redisExpireTime" value="${redis-expired-time}"></property>
             <property name="oes_interface_addr" value="${oes_interface_addr}"></property>
             <property name="oes_interface_key" value="${oes_interface_key}"></property>
+            <property name="app_localhost_url" value="${app_localhost_url}"></property>
+            <property name="email_verify_valid" value="${email_verify_valid}"></property>
+            <property name="username_verify_valid" value="${username_verify_valid}"></property>
+            
+            
         </bean>
 </beans>

@@ -56,6 +56,8 @@ public class UserCenterSmsSendController extends BaseControllerUtil {
 	 private UserCacheService userCacheService;
 	 @Autowired
 	 private AppUserService appUserService;
+	 @Autowired
+	 private UserserviceDev userserviceDev;
   /**
     * 用户账号验证接口
 	* @return Json
@@ -91,7 +93,7 @@ public class UserCenterSmsSendController extends BaseControllerUtil {
 				if(type.equals("2")){
 					//注册发送验证码
 					String code=StringTool.getRandomNum(6);
-					int validTime = Integer.valueOf(PropertiesTool.getAppPropertieByKey("email.verify.valid"));
+					int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
 					String content = "当前注册验证码："+code+"，验证码时效为"+validTime+"分钟,请在规定时间完成验证操作！";
 					flag = userLogicService.sendRegPhone(code,content,phone,UserActivated.USERTYPE_USER);
 					if(!flag){
@@ -208,7 +210,7 @@ public class UserCenterSmsSendController extends BaseControllerUtil {
 			    			}else{
 			    				//发送短信找回密码验证码
 			    				String code=StringTool.getRandomNum(6);
-								int validTime = Integer.valueOf(PropertiesTool.getAppPropertieByKey("email.verify.valid"));
+								int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
 								String content = "当前修改密码验证码："+code+"，验证码时效为"+validTime+"分钟,请在规定时间完成验证操作！";
 								flag = userLogicService.sendRegPhone(code,content,phone,UserActivated.USERTYPE_USER);
 								if(!flag){
@@ -234,7 +236,7 @@ public class UserCenterSmsSendController extends BaseControllerUtil {
 	    	    		    			}else{
 	    	    		    				//发送短信找回密码验证码
 	    	    		    				String code=StringTool.getRandomNum(6);
-	    	    							int validTime = Integer.valueOf(PropertiesTool.getAppPropertieByKey("email.verify.valid"));
+	    	    							int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
 	    	    							String content = "当前修改密码验证码："+code+"，验证码时效为"+validTime+"分钟,请在规定时间完成验证操作！";
 	    	    							flag = userLogicService.sendRegPhone(code,content,phone,UserActivated.USERTYPE_USER);
 	    	    							if(!flag){

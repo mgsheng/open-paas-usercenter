@@ -3,6 +3,7 @@ package cn.com.open.openpaas.userservice.web.api.user;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -94,12 +95,57 @@ public class SynInfoController extends BaseControllerUtil{
                             	     username=user.getUsername();
                             		//绑定
                             		if("0".equals(userCenterReg.getWhetherBind())){
-                            			 user.phone(userCenterReg.getPhone());	
+
+            						 	List<User> userList = userService.findByPhone(userCenterReg.getPhone());
+            						 	String pid="";
+            	     	                if(userList!=null && userList.size()>0){
+            	     	                	for(int i=0;i<userList.size();i++){
+            	     	                		User userPhone=userList.get(i);
+            	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userPhone.getId());
+            	     	                		if(appUsernew!=null){
+            	     	                			//更新原有手机号为phone+"_bak"
+            	     			           			userService.updatePhoneById(userPhone.getId(),userCenterReg.getPhone()+"_bak");
+            	     			           			//更新查询出的手机号为输入的手机号
+            	     			           		    userService.updatePhoneById(user.getId(),userCenterReg.getPhone());
+            	     	                		}else{
+            	     	                			userService.updateDefaultUserById(userPhone.getId(), true);
+            	                    				pid=String.valueOf(user.getId());
+            	                    				user.setPid(pid);
+            	                    				user.setPhone("");
+            	                    				user.setDefaultUser(true);
+            	                    				userService.updateUser(user);
+            	     	                		}
+            	     	                	}
+            	     	                }
+            	     	               user.phone(userCenterReg.getPhone());	
                             		}if("1".equals(userCenterReg.getWhetherBind())){
-                            			user.email(userCenterReg.getEmail());	
+
+
+            						 	List<User> userList = userService.findByEmail(userCenterReg.getEmail());
+            						 	String pid="";
+            	     	                if(userList!=null && userList.size()>0){
+            	     	                	for(int i=0;i<userList.size();i++){
+            	     	                		User userEmail=userList.get(i);
+            	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userEmail.getId());
+            	     	                		if(appUsernew!=null){
+            	     	                			//更新原有手机号为phone+"_bak"
+            	     			           			userService.updateEmailById(userEmail.getId(),userCenterReg.getEmail()+"_bak");
+            	     			           			//更新查询出的手机号为输入的手机号
+            	     			           		    userService.updateEmailById(user.getId(),userCenterReg.getEmail());
+            	     	                		}else{
+            	     	                			userService.updateDefaultUserById(userEmail.getId(), true);
+            	                    				pid=String.valueOf(userEmail.getId());
+            	                    				user.setPid(pid);
+            	                    				user.setEmail("");
+            	                    				user.setDefaultUser(true);
+            	                    				userService.updateUser(user);
+            	     	                		}
+            	     	                	}
+            	     	                }
+                            			//user.email(userCenterReg.getEmail());	
                            		     }
                             	 
-                                userService.updateUser(user);
+                                //userService.updateUser(user);
                                 map.put("guid", user.guid());
                             }else{
                             	
@@ -107,11 +153,57 @@ public class SynInfoController extends BaseControllerUtil{
                             	if(userCache!=null){
                             		//绑定
                             		if("0".equals(userCenterReg.getWhetherBind())){
-                            			userCache.phone(userCenterReg.getPhone());	
+
+            						 	List<UserCache> userList = userCacheService.findByPhone(userCenterReg.getPhone());
+            						 	String pid="";
+            	     	                if(userList!=null && userList.size()>0){
+            	     	                	for(int i=0;i<userList.size();i++){
+            	     	                		UserCache userPhone=userList.get(i);
+            	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userPhone.id());
+            	     	                		if(appUsernew!=null){
+            	     	                			//更新原有手机号为phone+"_bak"
+            	     	                			userCacheService.updatePhoneById(userPhone.id(),userCenterReg.getPhone()+"_bak");
+            	     			           			//更新查询出的手机号为输入的手机号
+            	     	                			userCacheService.updatePhoneById(userCache.id(),userCenterReg.getPhone());
+            	     	                		}else{
+            	     	                			userCacheService.updateDefaultUserById(userPhone.id(), true);
+            	                    				pid=String.valueOf(userCache.id());
+            	                    				userCache.pid(pid);
+            	                    				userCache.phone("");
+            	                    				userCache.setDefaultUser(true);
+            	                    				userCacheService.updateUserCache(userCache);
+            	     	                		}
+            	     	                	}
+            	     	                }
+            	     	            
+                            			//userCache.phone(userCenterReg.getPhone());	
                             		}if("1".equals(userCenterReg.getWhetherBind())){
-                            			userCache.email(userCenterReg.getEmail());	
+
+
+            						 	List<UserCache> userList = userCacheService.findByEmail(userCenterReg.getEmail());
+            						 	String pid="";
+            	     	                if(userList!=null && userList.size()>0){
+            	     	                	for(int i=0;i<userList.size();i++){
+            	     	                		UserCache userEmail=userList.get(i);
+            	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userEmail.id());
+            	     	                		if(appUsernew!=null){
+            	     	                			//更新原有手机号为phone+"_bak"
+            	     	                			userCacheService.updateEmailById(userEmail.id(),userCenterReg.getEmail()+"_bak");
+            	     			           			//更新查询出的手机号为输入的手机号
+            	     	                			userCacheService.updateEmailById(userCache.id(),userCenterReg.getEmail());
+            	     	                		}else{
+            	     	                			userCacheService.updateDefaultUserById(userEmail.id(), true);
+            	                    				pid=String.valueOf(userEmail.id());
+            	                    				userCache.pid(pid);
+            	                    				userCache.email("");
+            	                    				userCache.setDefaultUser(true);
+            	                    				userCacheService.updateUserCache(userCache);
+            	     	                		}
+            	     	                	}
+            	     	                }
+                            			//userCache.email(userCenterReg.getEmail());	
                            		     }
-                            		userCacheService.updateUserCache(userCache);
+                            		//userCacheService.updateUserCache(userCache);
                                      map.put("guid", userCache.guid());
                             	}else{
                             		  map.put("status", "0");

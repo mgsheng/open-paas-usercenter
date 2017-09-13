@@ -70,7 +70,37 @@
     	process,
     	update_pwd_time
     </sql>
-
+   <sql id="SQL_Column_List">
+    	id,
+    	a.app_id as app_id,
+    	a.user_id as user_id,
+    	pid,
+    	guid,
+    	user_name,
+    	nickname,
+    	real_name,
+    	head_picture,
+    	identify_type,
+    	identify_no,
+    	phone,
+    	email,
+    	card_no,
+    	user_type,
+    	user_state,
+    	user_sercure,
+    	a.create_time as create_time,
+    	archived,
+    	default_user,
+    	last_login_time,
+    	email_activation,
+    	aes_password,
+    	des_password,
+    	sha1_password,
+    	md5_password,
+    	md5_salt,
+    	process,
+    	update_pwd_time
+    </sql>
 	<select id="findByUsername" resultMap="userCacheMap">
          select 
          <include refid="Column_List" />
@@ -80,11 +110,12 @@
 	</select>
 	<select id="findByUserInfo" resultMap="userCacheMap">
          select 
-         <include refid="Column_List" />
-         from user_cache
-         where user_name = #{username, jdbcType=VARCHAR}
-         and app_id=#{appid}
-         and archived = 0 limit 1
+         <include refid="SQL_Column_List" />
+         from user_cache a,app_user b
+         where a.id=b.user_id
+         and a.user_name = #{username, jdbcType=VARCHAR}
+         and b.app_id=#{appid}
+         and a.archived = 0 limit 1
 	</select>
 	
 	<select id="findByEmail" resultMap="userCacheMap">
@@ -243,4 +274,25 @@
             update user_cache set process = 1 where id = #{item.id}
         </foreach>
     </update>
+     <select id="findByGuid" parameterType="String" resultMap="userCacheMap">
+         select 
+         <include refid="Column_List" />
+         from user_cache where  guid = #{guid}  limit 1
+	</select>
+	 <update id="updatePhoneById">
+        update user_cache set
+        phone = #{phone}
+        where id = #{id}
+    </update>
+     <update id="updateEmailById">
+        update user_cache set
+        email = #{email}
+        where id = #{id}
+    </update>
+    	<select id="findByPid" parameterType="String" resultMap="userCacheMap">
+         select
+         <include refid="Column_List" />
+         from user_cache
+         where pid = #{pid}
+	</select>
 </mapper>

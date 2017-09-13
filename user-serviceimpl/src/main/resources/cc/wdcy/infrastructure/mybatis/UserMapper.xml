@@ -261,6 +261,12 @@
         phone = #{phone}
         where id = #{id}
     </update>
+    
+      <update id="updateEmailById">
+        update user_account set
+        email = #{email}
+        where id = #{id}
+    </update>
      <update id="updateDefaultUserById">
         update user_account set
         default_user = #{defaultUser}

@@ -250,8 +250,13 @@ public class UserCache{
     public boolean defaultUser() {
         return defaultUser;
     }
+    
 
-    public List<Privilege> privileges() {
+    public void setDefaultUser(boolean defaultUser) {
+		this.defaultUser = defaultUser;
+	}
+
+	public List<Privilege> privileges() {
         return privileges;
     }
 

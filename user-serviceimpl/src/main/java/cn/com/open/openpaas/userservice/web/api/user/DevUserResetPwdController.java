@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
 import cn.com.open.openpaas.userservice.app.user.model.UserProblem;
 import cn.com.open.openpaas.userservice.app.user.service.UserActivatedService;
+import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserProblemService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.useractivated.model.UserActivated;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 
 /**
  * 
@@ -32,8 +35,11 @@ public class DevUserResetPwdController extends BaseDevUserController {
     private UserProblemService userProblemService;
     @Autowired
     private UserActivatedService userActivatedService;
-    @Value("#{properties['email.verify.valid']}")
-    private String emailVerifyValid;
+    
+    @Autowired
+	 private UserserviceDev userserviceDev;
+	@Autowired
+	private UserCacheService userCacheService;
     
     @RequestMapping("/findpwd")
     public String findpwd(HttpServletRequest request,HttpServletResponse response,Map<String,Object> model) {
@@ -70,7 +76,7 @@ public class DevUserResetPwdController extends BaseDevUserController {
     @RequestMapping(value = "/dev/user/activated_reset_password_email.html")
 	public String activated_reset_password_email(HttpServletRequest request,HttpServletResponse response,Map<String,Object> model,String code) {
     	//激活有效数据
-    	int validTime = Integer.valueOf(emailVerifyValid);
+    	int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
     	boolean flag = false;
     	String errorCode = "";
     	UserActivated userActivated = userActivatedService.findByCode(code);
@@ -116,7 +122,7 @@ public class DevUserResetPwdController extends BaseDevUserController {
     	}
     	else{
     		//激活有效数据
-        	int validTime = Integer.valueOf(emailVerifyValid);
+        	int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
         	UserActivated userActivated = new UserActivated();
         	userActivated.setCode(code);
         	userActivated.setPhone(phone);
@@ -135,7 +141,16 @@ public class DevUserResetPwdController extends BaseDevUserController {
     		        		model.put("type","2");
     		        		return "../../findpwdreset";
     		    		}else{
-    		    			errorCode = "invalid_phone";
+							UserCache usercache = userCacheService.findUserById(userActivated.getUserId());
+							if(usercache != null && phone.equals(userActivated.getPhone())){
+								userActivatedService.moveUserActivated(userActivated);
+	    		        		model.put("code", userActivated.getCode());
+	    		        		model.put("phone", userActivated.getPhone());
+	    		        		model.put("type","2");
+	    		        		return "../../findpwdreset";
+						  }else{
+							  errorCode = "invalid_phone";
+						  }
     		    		}
     	    		}
     	    	}else{

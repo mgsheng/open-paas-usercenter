@@ -24,6 +24,8 @@ import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
+import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
@@ -47,6 +49,8 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
 	 private DefaultTokenServices tokenServices;
 	 @Autowired
 	 private UserserviceDev userserviceDev;
+	 @Autowired
+	 private UserCacheService userCacheService;
     /**
      * 用户信息绑定接口
      * @return Json
@@ -85,35 +89,19 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
 				paraMandaChkAndReturn(6, response,"认证失败");
 				return;
 			}
-            User user = new User();
-            if((null==user||user.id()<1)&&!nullEmptyBlankJudge(guid)){
-          	  user = userService.findByGuid(guid);
+            User user = userService.findByGuid(guid);
+            UserCache userCache = null;
+          	  
+            if(null==user){
+              userCache = userCacheService.findByGuid(guid);
             }
-            if((null==user||user.getId()<1)&&!nullEmptyBlankJudge(phone)){
-            	List<User> userList = userService.findByPhone(phone);
-            	if(userList!=null && userList.size()>0){
-            		user = userList.get(0);
-            	}
-            }
-            if((null==user||user.getId()<1)&&!nullEmptyBlankJudge(email)){
-            	List<User> userList = userService.findByEmail(email);
-                if(userList!=null && userList.size()>0){
-            		user = userList.get(0);
-            	}
-            }
-			if(user==null){
+			if(user==null&&userCache==null){
 				map.clear();
 				map.put("status","0");
 				map.put("error_code", "5");//单独请求接口时，用户名绑定
 				map.put("errMsg", "guid不存在");//单独请求接口时，用户名绑定
 			}else{
-				//appUser
-				AppUser appUser;
-				if(source_id==null || source_id.length()==0){
-					appUser=null;
-				}else{
-					appUser=appUserService.findByCidSid(app.getId(), source_id);
-				}
+				AppUser	appUser	=appUserService.findByCidSid(app.getId(), source_id);
 				if(appUser!=null){
 					//删除已插入的user
 //					userService.deleteUser(user.id());
@@ -122,20 +110,124 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
 					map.put("error_code", "4");//source_id已存在 
 					map.put("errMsg", "原业务系统用户已经绑定");//单独请求接口时，用户名绑定
 				}else{
-					if(null==source_id||"".equals(source_id.trim())){
-						appUser=new AppUser(app.getId(),user.getId(),user.guid());
-					}else{
+					String returnGuid="";
+					if(user!=null){
 						appUser=new AppUser(app.getId(),user.getId(),source_id);
-					}
-					Boolean f=appUserService.saveAppUser(appUser);
-					if(f){
 						if(!nullEmptyBlankJudge(card_no)){
 							userService.updateUserCardNoById(user.getId(),card_no);
 						}
 						if(!nullEmptyBlankJudge(phone)){
-							userService.updatePhoneById(user.getId(), phone);
+						 	List<User> userList = userService.findByPhone(phone);
+						 	String pid="";
+	     	                if(userList!=null && userList.size()>0){
+	     	                	for(int i=0;i<userList.size();i++){
+	     	                		User userPhone=userList.get(i);
+	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userPhone.getId());
+	     	                		if(appUsernew!=null){
+	     	                			//更新原有手机号为phone+"_bak"
+	     			           			userService.updatePhoneById(userPhone.getId(),phone+"_bak");
+	     			           			//更新查询出的手机号为输入的手机号
+	     			           		    userService.updatePhoneById(user.getId(),phone);
+	     	                		}else{
+	     	                			userService.updateDefaultUserById(userPhone.getId(), true);
+	                    				pid=String.valueOf(user.getId());
+	                    				user.setPid(pid);
+	                    				user.setPhone("");
+	                    				user.setDefaultUser(true);
+	                    				userService.updateUser(user);
+	     	                		}
+	     	                	}
+	     	                }else{
+	     	                	userService.updatePhoneById(user.getId(),phone);
+	     	                }
+	     	            }
+						if(!nullEmptyBlankJudge(email)){
+
+						 	List<User> userList = userService.findByEmail(email);
+						 	String pid="";
+	     	                if(userList!=null && userList.size()>0){
+	     	                	for(int i=0;i<userList.size();i++){
+	     	                		User userEmail=userList.get(i);
+	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userEmail.getId());
+	     	                		if(appUsernew!=null){
+	     	                			//更新原有手机号为phone+"_bak"
+	     			           			userService.updateEmailById(userEmail.getId(),email+"_bak");
+	     			           			//更新查询出的手机号为输入的手机号
+	     			           		    userService.updateEmailById(user.getId(),email);
+	     	                		}else{
+	     	                			userService.updateDefaultUserById(userEmail.getId(), true);
+	                    				pid=String.valueOf(userEmail.getId());
+	                    				user.setPid(pid);
+	                    				user.setEmail("");
+	                    				user.setDefaultUser(true);
+	                    				userService.updateUser(user);
+	     	                		}
+	     	                	}
+	     	                }else{
+	     	                	userService.updateEmailById(user.getId(), email);
+	     	                }
 						}
-	            		map.put("guid", user.guid());
+						returnGuid=user.guid();
+					}else if(userCache!=null){
+						if(!nullEmptyBlankJudge(card_no)){
+							userCacheService.updateUserCardNoById(userCache.id(),card_no);
+						}
+						if(!nullEmptyBlankJudge(phone)){
+						 	List<UserCache> userList = userCacheService.findByPhone(phone);
+						 	String pid="";
+	     	                if(userList!=null && userList.size()>0){
+	     	                	for(int i=0;i<userList.size();i++){
+	     	                		UserCache userPhone=userList.get(i);
+	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userPhone.id());
+	     	                		if(appUsernew!=null){
+	     	                			//更新原有手机号为phone+"_bak"
+	     	                			userCacheService.updatePhoneById(userPhone.id(),phone+"_bak");
+	     			           			//更新查询出的手机号为输入的手机号
+	     	                			userCacheService.updatePhoneById(userCache.id(),phone);
+	     	                		}else{
+	     	                			userCacheService.updateDefaultUserById(userPhone.id(), true);
+	                    				pid=String.valueOf(userCache.id());
+	                    				userCache.pid(pid);
+	                    				userCache.phone("");
+	                    				userCache.setDefaultUser(true);
+	                    				userCacheService.updateUserCache(userCache);
+	     	                		}
+	     	                	}
+	     	                }else{
+	     	                	userCacheService.updatePhoneById(userCache.id(),phone);
+	     	                }
+	     	            }
+						if(!nullEmptyBlankJudge(email)){
+
+						 	List<UserCache> userList = userCacheService.findByEmail(email);
+						 	String pid="";
+	     	                if(userList!=null && userList.size()>0){
+	     	                	for(int i=0;i<userList.size();i++){
+	     	                		UserCache userEmail=userList.get(i);
+	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userEmail.id());
+	     	                		if(appUsernew!=null){
+	     	                			//更新原有手机号为phone+"_bak"
+	     	                			userCacheService.updateEmailById(userEmail.id(),email+"_bak");
+	     			           			//更新查询出的手机号为输入的手机号
+	     	                			userCacheService.updateEmailById(userCache.id(),email);
+	     	                		}else{
+	     	                			userCacheService.updateDefaultUserById(userEmail.id(), true);
+	                    				pid=String.valueOf(userEmail.id());
+	                    				userCache.pid(pid);
+	                    				userCache.email("");
+	                    				userCache.setDefaultUser(true);
+	                    				userCacheService.updateUserCache(userCache);
+	     	                		}
+	     	                	}
+	     	                }else{
+	     	                	userCacheService.updateEmailById(userCache.id(),email);
+	     	                }
+						}
+						returnGuid=userCache.guid();
+					}
+					Boolean f=appUserService.saveAppUser(appUser);
+					if(f){
+						map.put("guid", returnGuid);
 					}
 				}
 			}

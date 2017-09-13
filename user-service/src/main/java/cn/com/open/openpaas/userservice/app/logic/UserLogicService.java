@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
 import cn.com.open.openpaas.userservice.app.useractivated.model.UserActivated;
 
 
@@ -103,6 +104,8 @@ public interface UserLogicService {
 	 */
 	Boolean userResetPwd(User user,String newPwd);
 	Boolean userResetPwdByPhone(User user, String password);
+	Boolean userResetPwdByPhone(UserCache userCache, String password);
 	Boolean userResetPwdByEmail(User user, String password);
+	Boolean userResetPwdByEmail(UserCache userCache, String password);
 	
 }

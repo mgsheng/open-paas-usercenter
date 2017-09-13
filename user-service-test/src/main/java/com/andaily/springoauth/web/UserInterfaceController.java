@@ -467,7 +467,7 @@ public class UserInterfaceController {
          			 	signature=HMacSha1.getNewResult(signature);
          	      		
          	   }
-         fullUri = bindUserInfoUri+"?access_token="+access_token+"&client_id="+client_id+"&guid="+guid+"&source_id="+source_id+"&grant_type="+grant_type+"&scope="+scope+"& phone="+ phone+"&email="+email+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
+         fullUri = bindUserInfoUri+"?access_token="+access_token+"&client_id="+client_id+"&guid="+guid+"&source_id="+source_id+"&grant_type="+grant_type+"&scope="+scope+"&phone="+phone+"&email="+email+"&signature="+signature+"&timestamp="+timestamp+"&signatureNonce="+signatureNonce;
          LOG.debug("Send to Oauth-Server URL: {}", fullUri);
          return "redirect:" + fullUri;
       }  

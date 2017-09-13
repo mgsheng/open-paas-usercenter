@@ -111,9 +111,9 @@
 							        system.ipad = (navigator.userAgent.match(/iPad/i) != null)?true:false;
 							        //跳转语句，如果是手机访问就自动跳转到wap.baidu.com页面
 							        if (system.win || system.mac || system.xll||system.ipad) {
-							          window.location.href='http://www.open.com.cn/login.aspx';
+							          window.location.href='http://www.iopen.com.cn/login.aspx';
 							        } else {
-							          window.location.href='http://www.open.com.cn';
+							          window.location.href='http://www.iopen.com.cn';
 							        }
 		   					}
 		   					else if(data.errorCode=='time_out'){

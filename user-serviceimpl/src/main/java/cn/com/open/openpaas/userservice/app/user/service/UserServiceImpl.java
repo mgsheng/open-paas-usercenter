@@ -423,4 +423,14 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 	}
+
+	@Override
+	public Boolean updateEmailById(int id, String email) {
+		try {
+			userRepository.updateEmailById(id,email);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }

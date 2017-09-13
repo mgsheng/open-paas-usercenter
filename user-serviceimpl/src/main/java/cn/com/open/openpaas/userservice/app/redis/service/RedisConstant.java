@@ -20,5 +20,6 @@ public class RedisConstant {
  
  public static final String USER_SERVICE_VALIDATELOGIN="userService_validateLogin_";//userService_validateLogin_appid_username ： 登录失败次数
  public static final String USER_SERVICE_FORZENLOGIN="userService_frozenLogin_";//userService_frozenLogin_appid_username ：用户被锁定信息
+ public static final String USER_REG_INFO="userReg_info_";//userReg_info_username ：用户注册信息
  
 }

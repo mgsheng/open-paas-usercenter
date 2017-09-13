@@ -33,10 +33,12 @@ import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.tools.Help_Encrypt;
 import cn.com.open.openpaas.userservice.app.tools.HttpTools;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
 import cn.com.open.openpaas.userservice.app.user.model.UserDict;
 import cn.com.open.openpaas.userservice.app.user.model.UserProblem;
 import cn.com.open.openpaas.userservice.app.user.service.UserActivatedHisService;
 import cn.com.open.openpaas.userservice.app.user.service.UserActivatedService;
+import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserDictService;
 import cn.com.open.openpaas.userservice.app.user.service.UserProblemService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
@@ -72,14 +74,11 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
 	 private AppUserService appUserService;
     @Autowired
 	 private AppService appService; 
-	@Value("#{properties['oes-interface-addr']}")
-    private String address;
-    @Value("#{properties['oes-interface-key']}")
-    private String key;
-    @Value("#{properties['email.verify.valid']}")
-    private String emailVerifyValid;
     @Autowired
 	private UserserviceDev userserviceDev;
+    
+	@Autowired
+	private UserCacheService userCacheService;
     /**
      * 用户找回密码，发送邮件
      * @param request
@@ -162,7 +161,29 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
     			}
 				
     		}else{//不存在
+    			UserCache usercache = userCacheService.findByUsername(phone);
+        		if(usercache == null){
+        			//String desPhone=Help_Encrypt.encrypt(phone);
+        			List<UserCache> userCacheList = userCacheService.findByPhone(phone);
+        			if(userCacheList != null&&userCacheList.size()>0){
+        				usercache = userCacheList.get(0);
+        			}
+        		}
+        		if(usercache != null){
+        			if(usercache.userState().equals("2")){
+        				errorCode = "invalid_stat";
+        			}else if(!usercache.userState().equals("2")&&(usercache.username()==null||"".equals(usercache.username()))){
+        				errorCode = "invalid_name";
+        			}else{
+        				//发送短信找回密码验证码
+            			flag = userLogicService.sendResetPassWordPhone(usercache.id(),phone,UserActivated.USERTYPE_USER);
+        				if(!flag){
+        					errorCode = "send_error";
+        				}	
+        			}
+    		}else{
     			errorCode = "invalid_phone";
+    		}
     		}
     	}
     	Map<String, Object> map = new LinkedHashMap<String, Object>();
@@ -188,7 +209,7 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
     	}
     	else{
         	//激活有效数据
-        	int validTime = Integer.valueOf(emailVerifyValid);
+        	int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
         	try {
     			UserActivated userActivated = new UserActivated();
     	    	userActivated.setCode(code);
@@ -205,7 +226,13 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
     				    		flag = true;
     				    		map.put("code", userActivated.getCode());
     						}else{
-    							errorCode = "invalid_phone";
+    							UserCache usercache = userCacheService.findUserById(userActivated.getUserId());
+    							if(usercache != null && phone.equals(userActivated.getPhone())){
+        				    		flag = true;
+        				    		map.put("code", userActivated.getCode());
+    						  }else{
+    							  errorCode = "invalid_phone";
+    						  }
     						}
     					}
     				}else{
@@ -281,48 +308,107 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
     		}else{
     			list= userActivatedHisService.getByCodeAndPhone(code,phone);
     		}
-    		int validTime = Integer.valueOf(emailVerifyValid);
+    		int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
     		if(list != null && list.size()>0){
     			UserActivatedHis	userActivatedHis = list.get(0);
         	if(null != userActivatedHis){
         		if(DateTools.timeDiffCurr(userActivatedHis.getCreateTime())< (validTime*60*1000)){
         		User user = userService.findUserById(userActivatedHis.getUserId());
-        		
-        		List<AppUser>appUserList=appUserService.findByUserId(user.getId());
-        		if(null != user && "1".equals(type)){
-        			if(user.getEmail().equals(userActivatedHis.getEmail())){
-            			//重置密码
-        				username=user.getUsername();
-        				userLogicService.userResetPwdByEmail(user, password);
-        				UserResetPwdControllerLog.log(type,user);
-        				//send_password(password, appUserList);
-        				flag = true;
-            		}else{
-            			errorCode = "invalid_data";
-            		}
+        		int userId=0;
+        		boolean isUser = false;
+        		boolean isCache= false;
+        		UserCache usercache =null;
+        		if(user!=null){
+        			userId=user.getId();
+        			isUser=true;
+        		}else{
+        			usercache= userCacheService.findUserById(userActivatedHis.getUserId());
+        			if(usercache!=null){
+        				userId=usercache.id();
+        				isCache=true;
+        			}
         		}
-        		else if(null != user && "2".equals(type)){
-        			if(user.getUsername().equals(userActivatedHis.getPhone()) || user.getPhone().equals(userActivatedHis.getPhone())){
-            			//重置密码
-        				username=user.getUsername();
-        				//手机号为空时，设置用户名为手机号
-        				if(user.getPhone()==null)
-        				{
-        					user.setPhone(user.getUsername());
-        				}
-        				userLogicService.userResetPwdByPhone(user, password);
-        				UserResetPwdControllerLog.log(type,user);
-        				try {
-							Thread thread = new Thread(new SendOesThread(password, userService,appUserList,address,key));
-							thread.run();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-        				//flag = send_oes(password,appUserList);
-        				flag = true;	
-            		}else{
+        		List<AppUser>appUserList=appUserService.findByUserId(userId);
+        		if( "1".equals(type)){
+        			if(isUser){
+        				if(user.getEmail().equals(userActivatedHis.getEmail())){
+                			//重置密码
+            				username=user.getUsername();
+            				userLogicService.userResetPwdByEmail(user, password);
+            				UserResetPwdControllerLog.log(type,username);
+            				//send_password(password, appUserList);
+            				flag = true;
+                		}else{
+                			errorCode = "invalid_data";
+                		}	
+        			}else{
+
+        				if(usercache.email().equals(userActivatedHis.getEmail())){
+                			//重置密码
+            				username=usercache.username();
+            				userLogicService.userResetPwdByEmail(usercache, password);
+            				UserResetPwdControllerLog.log(type,username);
+            				//send_password(password, appUserList);
+            				flag = true;
+                		}else{
+                			errorCode = "invalid_data";
+                		}	
+        			
+        			}
+        			
+        		}
+        		else if("2".equals(type)){
+        			if(isUser){
+        				if(user.getUsername().equals(userActivatedHis.getPhone()) || user.getPhone().equals(userActivatedHis.getPhone())){
+                			//重置密码
+            				username=user.getUsername();
+            				//手机号为空时，设置用户名为手机号
+            				if(nullEmptyBlankJudge(user.getPhone()))
+            				{
+            					user.setPhone(user.getUsername());
+            				}
+            				userLogicService.userResetPwdByPhone(user, password);
+            				UserResetPwdControllerLog.log(type,username);
+            				try {
+    							Thread thread = new Thread(new SendOesThread(password, userService,appUserList,userserviceDev.getOes_interface_addr(),userserviceDev.getOes_interface_key()));
+    							thread.run();
+    						} catch (Exception e) {
+    							e.printStackTrace();
+    						}
+            				//flag = send_oes(password,appUserList);
+            				flag = true;	
+                		}else{
+                			errorCode = "invalid_data";
+                		}	
+        			}else if(isCache){
+                        //缓存表数据
+        				if(usercache.username().equals(userActivatedHis.getPhone()) || usercache.phone().equals(userActivatedHis.getPhone())){
+                			//重置密码
+            				username=usercache.username();
+            				//手机号为空时，设置用户名为手机号
+            				if(nullEmptyBlankJudge(usercache.phone()))
+            				{
+            					usercache.phone(usercache.username());
+            				}
+            				userLogicService.userResetPwdByPhone(usercache, password);
+            				UserResetPwdControllerLog.log(type,username);
+            				try {
+    							Thread thread = new Thread(new SendOesThread(password, userService,appUserList,userserviceDev.getOes_interface_addr(),userserviceDev.getOes_interface_key()));
+    							thread.run();
+    						} catch (Exception e) {
+    							e.printStackTrace();
+    						}
+            				//flag = send_oes(password,appUserList);
+            				flag = true;	
+                		}else{
+                			errorCode = "invalid_data";
+                		}	
+        			
+        				
+        			}else{
             			errorCode = "invalid_data";
             		}
+        			
         		 }
         		else{
         			errorCode = "invalid_data";
@@ -344,7 +430,7 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
     			//重置密码
     			username=user.getUsername();
     			userLogicService.userResetPwd(user, password);
-    			UserResetPwdControllerLog.log(type,user);
+    			UserResetPwdControllerLog.log(type,username);
 	    		flag = true;
     		}
     		else{
@@ -380,7 +466,7 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
 				if(appid==1||appid==8){
 					List<Map<String,String>> infoList=new ArrayList<Map<String,String>>();
 					app=appService.findById(appid);
-					String url=address+key;
+					String url=userserviceDev.getOes_interface_addr()+userserviceDev.getOes_interface_key();
 					try {
 						pwd=Help_Encrypt.encrypt(password);
 					} catch (Exception e1) {
@@ -434,7 +520,7 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
 				if(appid==1||appid==8){
 					List<Map<String,String>> infoList=new ArrayList<Map<String,String>>();
 					App app=appService.findById(appid);
-					String url=address+key;
+					String url=userserviceDev.getOes_interface_addr()+userserviceDev.getOes_interface_key();
 					String pwd="";
 					try {
 						pwd=Help_Encrypt.encrypt(pwd);

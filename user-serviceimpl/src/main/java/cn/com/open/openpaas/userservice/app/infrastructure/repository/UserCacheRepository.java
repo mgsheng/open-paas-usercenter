@@ -37,6 +37,11 @@ public interface UserCacheRepository extends Repository {
 	void deleteUser(Integer id);
 	void updateParentUser(@Param("username")String username,@Param("phone")String phone,@Param("email")String email,@Param("cardno")String cardno,@Param("id")int id);
 	void updateUserCardNoById(@Param("id")int id,@Param("cardNo")String cardNo);
+	void updatePhoneById(@Param("id")int id,@Param("phone")String phone);
+	void updateEmailById(@Param("id")int id,@Param("email")String email);
     List<UserCache> findUnprocessed();
 	void updateUserCacheUnprocessed(@Param("userCaches") List<UserCache> userCaches);
+	List<UserCache> findByPid(String pid);
+	void updateDefaultUserById(@Param("id")int id,@Param("defaultUser")Boolean defaultUser);
+	UserCache findByGuid(String guid);
 }

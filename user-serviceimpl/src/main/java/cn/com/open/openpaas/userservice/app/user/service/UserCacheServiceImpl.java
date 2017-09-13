@@ -19,7 +19,7 @@ public class UserCacheServiceImpl implements UserCacheService {
 	@Override
 	public UserCache findByUsername(String username) {
 		// TODO Auto-generated method stub
-		return null;
+		return userCacheRepository.findByUsername(username);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class UserCacheServiceImpl implements UserCacheService {
 	@Override
 	public List<UserCache> findByPhone(String account) {
 		// TODO Auto-generated method stub
-		return null;
+		return userCacheRepository.findByPhone(account);
 	}
 
 	@Override
@@ -147,6 +147,50 @@ public class UserCacheServiceImpl implements UserCacheService {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	@Override
+	public UserCache findByGuid(String guid) {
+		// TODO Auto-generated method stub
+		return userCacheRepository.findByGuid(guid);
+	}
+
+	@Override
+	public Boolean updatePhoneById(int id, String phone) {
+		try{
+			userCacheRepository.updatePhoneById(id, phone);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
+	}
+
+	@Override
+	public Boolean updateEmailById(int id, String email) {
+		// TODO Auto-generated method stub
+		try{
+			userCacheRepository.updateEmailById(id, email);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
+	}
+
+	@Override
+	public List<UserCache> findByPid(String pid) {
+		// TODO Auto-generated method stub
+		return  userCacheRepository.findByPid(pid);
+	}
+
+	@Override
+	public boolean updateDefaultUserById(int id, boolean b) {
+		try{
+			userCacheRepository.updateDefaultUserById(id, b);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
+		
 	}
 
 }

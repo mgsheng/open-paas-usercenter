@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.com.open.openpaas.userservice.app.logic.SendEmailLogicService;
@@ -13,12 +14,15 @@ import cn.com.open.openpaas.userservice.app.tools.PropertiesTool;
 import cn.com.open.openpaas.userservice.app.user.model.User;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.useractivated.model.UserActivated;
+import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 
 @Service("sendEmailLogicService")
 public class SendEmailLogicServiceImpl implements SendEmailLogicService {
 
 	@Resource
 	UserService userService;
+	@Autowired
+    private UserserviceDev userserviceDev;
 	
 	/**
 	 * 发送邮件激活
@@ -28,8 +32,8 @@ public class SendEmailLogicServiceImpl implements SendEmailLogicService {
 	public boolean emailActivated(UserActivated userActivated){
 		User user = userService.findUserById(userActivated.getUserId());
 		String title = "奥鹏用户中心-邮箱激活";
-		int validTime = Integer.valueOf(PropertiesTool.getAppPropertieByKey("email.verify.valid")); 
-		String localhost = PropertiesTool.getAppPropertieByKey("app.localhost.url");
+		int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid()); 
+		String localhost = userserviceDev.getApp_localhost_url();
 		Map<String,String> map = new HashMap<String, String>();
 		map.put("username", user==null?"用户":user.getNickName());
 		map.put("url", localhost+"/dev/user/activated_email.html?code="+userActivated.getCode());
@@ -45,8 +49,8 @@ public class SendEmailLogicServiceImpl implements SendEmailLogicService {
 	public boolean sendResetPassWordEmail(UserActivated userActivated){
 		User user = userService.findUserById(userActivated.getUserId());
 		String title = "奥鹏用户中心-找回密码";
-		int validTime = Integer.valueOf(PropertiesTool.getAppPropertieByKey("email.verify.valid")); 
-		String localhost = PropertiesTool.getAppPropertieByKey("app.localhost.url");
+		int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid()); 
+		String localhost = userserviceDev.getApp_localhost_url();
 		Map<String,String> map = new HashMap<String, String>();
 		map.put("username", user==null?"用户":(user.getNickName()==null?user.getUsername():user.getNickName()));
 		map.put("url", localhost+"/dev/user/activated_reset_password_email.html?code="+userActivated.getCode());

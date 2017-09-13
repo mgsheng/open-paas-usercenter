@@ -22,8 +22,6 @@ import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 public class UserCenterTestLoginController {
 	 @Autowired
 	 private UserserviceDev userserviceDev;
-	 @Value("#{properties['detect.password.time']}")
-	  private String detect;
 		
 	/**
 	 * 用户登录接口(通过用户名-密码)
@@ -33,7 +31,7 @@ public class UserCenterTestLoginController {
 	@RequestMapping("/test/userCenterPassword")
 	public void userCenterPasswordtest(HttpServletRequest request,
 			HttpServletResponse response) {
-		WebUtils.writeJson(response, userserviceDev.detect_password_time+":"+detect);
+		WebUtils.writeJson(response, userserviceDev.detect_password_time+":"+userserviceDev.getDetect_password_time());
 		return;
 	}
 }

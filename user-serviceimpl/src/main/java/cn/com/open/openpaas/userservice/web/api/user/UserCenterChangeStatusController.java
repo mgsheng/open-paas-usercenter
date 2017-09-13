@@ -96,7 +96,7 @@ public class UserCenterChangeStatusController extends BaseControllerUtil {
 				userService.updateUserStatus(guid,Integer.parseInt(status));	
 				
 			}else{
-					UserCache userCache = checkCacheUsername(username,userCacheService,app.getId());
+					UserCache userCache = userCacheService.findByGuid(guid);
 					if(userCache!=null)
 					{
 						userCacheService.updateUserStatus(guid, status);

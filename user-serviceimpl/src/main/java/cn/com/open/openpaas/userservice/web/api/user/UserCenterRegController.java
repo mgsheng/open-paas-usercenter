@@ -174,122 +174,133 @@ public class UserCenterRegController extends BaseControllerUtil {
 					}
 					user=userService.findByUsername(username); 
             }
-            
+           
 	            if(user==null){
-	             String  pid="0";
-	             Boolean defaultUser = false;
-	            if(!nullEmptyBlankJudge(phone)){
-//	            	try {
-//	        			desPhone=Help_Encrypt.decrypt(phone);
-//	        			log.info("解密后 desPhone："+desPhone);
-//	        		} catch (Exception e1) {
-//	        			  e1.printStackTrace();
-//	        			  map = paraMandaChkAndReturnMap(8, response,"手机号加密失败");
-//	        	          OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
-//	        		}
-	            	List<User> userList = userService.findByPhone(phone);
-	                if(userList!=null && userList.size()>0){
-	                	for(int i=0;i<userList.size();i++){
-	                		user=userList.get(i);
-	                		AppUser appUser=appUserService.findByCidAUid(app.getId(), user.getId());
-	                		if(appUser!=null){
-//	                			 String bakDesPhone="";
-//		                		   try {
-//		                			   bakDesPhone=Help_Encrypt.encrypt(desPhone+"_bak");
-//								} catch (Exception e) {
-//									// TODO Auto-generated catch block
-//									e.printStackTrace();
-//								}
-			           			userService.updatePhoneById(user.getId(),desPhone+"_bak");
-	                		}else{
-	                			userService.updateDefaultUserById(user.getId(), true);
-                				pid=String.valueOf(user.getId());
-                				phone="";
-                				defaultUser=true;
-	                		}
-	                		
-	                	}
-	                }
-	            }
-	            if(!nullEmptyBlankJudge(email)){
-	            	List<User> userList = userService.findByEmail(email);
-	                if(userList!=null && userList.size()>0){
-	                	user = userList.get(0);
-	                	map = paraMandaChkAndReturnMap(3, response,"邮箱已经绑定");
-	    				OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
-	    				writeErrorJson(response,map);
-	    	        	return;
-	
-	                }
-	            }
-					//appUser
-				   AppUser appUser;
-					if(source_id==null || source_id.length()==0){
-						appUser=null;
-					}else{
-						appUser=appUserService.findByCidSid(app.getId(), source_id);
-					}
-					if(appUser!=null){
-						//删除已插入的user
-//						userService.deleteUser(user.id());
-						map.clear();
-						map.put("status","0");
-						map.put("error_code", "4");//source_id已存在 
-						map.put("errMsg", "source_id已存在");//source_id已存在 
-					}else{
-						user=new User(username,password,phone,email,"","","");
-						String aesPassword="";
-						try {
-							aesPassword=AESUtil.encrypt(password, userserviceDev.getAes_userCenter_key());
-						} catch (Exception e1) {
-							log.info("aes加密出错："+password);
-							e1.printStackTrace();
-						}
-						user.setAesPassword(aesPassword);
-						user.setAppId(app.getId());
-						//sha1 加密
-					/*	PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
-						sha1Password=passwordEncoder.encodePassword(password, null);
-						
-						user.setSha1Password(sha1Password);*/
-						user.cardNo(cardNo);
-						user.setEmailActivation(User.ACTIVATION_NO);
-						user.userState("0");
-						user.setPid(pid);
-						user.setDefaultUser(defaultUser);
-						Boolean f=userService.save(user);
-						if(f){
-						if(null==source_id||"".equals(source_id.trim())){
-							appUser=new AppUser(app.getId(),user.getId(),user.guid());
-						}else{
-							appUser=new AppUser(app.getId(),user.getId(),source_id);
-						}
-						f=appUserService.saveAppUser(appUser);
-						if(f){
-		            		map.put("guid", user.guid());
-		            		if(!nullEmptyBlankJudge(username)&&!nullEmptyBlankJudge(password)&&username.equals(password)){
-		            		  map.put("msg","用户名和密码一致，建议及时更新密码");	
-		            		}
-		            		map.put("guid", user.guid());
-						}
-					}
-					//发送支付平台用户信息
-					Map<String, Object> sendPaymap=new HashMap<String, Object>();
-					sendPaymap.put("userId",user.getId());
-					sendPaymap.put("appId",app.getId());
-					sendPaymap.put("sourceId",source_id);
-					sendPaymap.put("userName", username);
-					sendPaymap.put("type", userserviceDev.getUser_type());
-					
-					sendPaymap.put("messageType", userserviceDev.getMessage_type());
-					
-					String sendMsg=JSONObject.fromObject(sendPaymap).toString();
-				//	KafkaProducer kafkaProducer=KafkaProducer.getKafkaProducer();
-					kafkaProducer.sendMessage(userserviceDev.getKafka_topic(), sendMsg);
-					//	Thread thread = new Thread( new KafkaProducer(sendMsg,userserviceDev));
-				//	thread.run();
-				}
-			}else{
+	            	 Object userInfoObj = redisClient.getObject(RedisConstant.USER_REG_INFO+username);
+	                 if(userInfoObj!=null){
+	                	 map = paraMandaChkAndReturnMap(3, response,"用户名已存在");
+							OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+							writeErrorJson(response,map);
+							return; 
+	                 }else{
+	                	 redisClient.setStringByTime(RedisConstant.USER_REG_INFO+username, username, Integer.parseInt(userserviceDev.getUsername_verify_valid()));
+	     	             String  pid="0";
+	     	             Boolean defaultUser = false;
+	     	            if(!nullEmptyBlankJudge(phone)){
+//	     	            	try {
+//	     	        			desPhone=Help_Encrypt.decrypt(phone);
+//	     	        			log.info("解密后 desPhone："+desPhone);
+//	     	        		} catch (Exception e1) {
+//	     	        			  e1.printStackTrace();
+//	     	        			  map = paraMandaChkAndReturnMap(8, response,"手机号加密失败");
+//	     	        	          OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+//	     	        		}
+	     	            	List<User> userList = userService.findByPhone(phone);
+	     	                if(userList!=null && userList.size()>0){
+	     	                	for(int i=0;i<userList.size();i++){
+	     	                		user=userList.get(i);
+	     	                		AppUser appUser=appUserService.findByCidAUid(app.getId(), user.getId());
+	     	                		if(appUser!=null){
+//	     	                			 String bakDesPhone="";
+//	     		                		   try {
+//	     		                			   bakDesPhone=Help_Encrypt.encrypt(desPhone+"_bak");
+//	     								} catch (Exception e) {
+//	     									// TODO Auto-generated catch block
+//	     									e.printStackTrace();
+//	     								}
+	     			           			userService.updatePhoneById(user.getId(),desPhone+"_bak");
+	     	                		}else{
+	     	                			userService.updateDefaultUserById(user.getId(), true);
+	                    				pid=String.valueOf(user.getId());
+	                    				phone="";
+	                    				defaultUser=true;
+	     	                		}
+	     	                		
+	     	                	}
+	     	                }
+	     	            }
+	     	            if(!nullEmptyBlankJudge(email)){
+	     	            	List<User> userList = userService.findByEmail(email);
+	     	                if(userList!=null && userList.size()>0){
+	     	                	user = userList.get(0);
+	     	                	map = paraMandaChkAndReturnMap(3, response,"邮箱已经绑定");
+	     	    				OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+	     	    				writeErrorJson(response,map);
+	     	    	        	return;
+	     	
+	     	                }
+	     	            }
+	     					//appUser
+	     				   AppUser appUser;
+	     					if(source_id==null || source_id.length()==0){
+	     						appUser=null;
+	     					}else{
+	     						appUser=appUserService.findByCidSid(app.getId(), source_id);
+	     					}
+	     					if(appUser!=null){
+	     						//删除已插入的user
+//	     						userService.deleteUser(user.id());
+	     						map.clear();
+	     						map.put("status","0");
+	     						map.put("error_code", "4");//source_id已存在 
+	     						map.put("errMsg", "source_id已存在");//source_id已存在 
+	     					}else{
+	     						user=new User(username,password,phone,email,"","","");
+	     						String aesPassword="";
+	     						try {
+	     							aesPassword=AESUtil.encrypt(password, userserviceDev.getAes_userCenter_key());
+	     						} catch (Exception e1) {
+	     							log.info("aes加密出错："+password);
+	     							e1.printStackTrace();
+	     						}
+	     						user.setAesPassword(aesPassword);
+	     						user.setAppId(app.getId());
+	     						//sha1 加密
+	     					/*	PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
+	     						sha1Password=passwordEncoder.encodePassword(password, null);
+	     						
+	     						user.setSha1Password(sha1Password);*/
+	     						user.cardNo(cardNo);
+	     						user.setEmailActivation(User.ACTIVATION_YES);
+	     						user.userState("0");
+	     						user.setPid(pid);
+	     						user.setDefaultUser(defaultUser);
+	     						Boolean f=userService.save(user);
+	     						if(f){
+	     						if(null==source_id||"".equals(source_id.trim())){
+	     							appUser=new AppUser(app.getId(),user.getId(),user.guid());
+	     						}else{
+	     							appUser=new AppUser(app.getId(),user.getId(),source_id);
+	     						}
+	     						f=appUserService.saveAppUser(appUser);
+	     						if(f){
+	     		            		map.put("guid", user.guid());
+	     		            		if(!nullEmptyBlankJudge(username)&&!nullEmptyBlankJudge(password)&&username.equals(password)){
+	     		            		  map.put("msg","用户名和密码一致，建议及时更新密码");	
+	     		            		}
+	     		            		map.put("guid", user.guid());
+	     						}
+	     					}
+	     					//发送支付平台用户信息
+	     					Map<String, Object> sendPaymap=new HashMap<String, Object>();
+	     					sendPaymap.put("userId",user.getId());
+	     					sendPaymap.put("appId",app.getId());
+	     					sendPaymap.put("sourceId",source_id);
+	     					sendPaymap.put("userName", username);
+	     					sendPaymap.put("type", userserviceDev.getUser_type());
+	     					
+	     					sendPaymap.put("messageType", userserviceDev.getMessage_type());
+	     					
+	     					String sendMsg=JSONObject.fromObject(sendPaymap).toString();
+	     				//	KafkaProducer kafkaProducer=KafkaProducer.getKafkaProducer();
+	     					kafkaProducer.sendMessage(userserviceDev.getKafka_topic(), sendMsg);
+	     					//	Thread thread = new Thread( new KafkaProducer(sendMsg,userserviceDev));
+	     				//	thread.run();
+	     				}
+	     			
+	                  
+	                 }
+	            }else{
 				map.clear();
 				map.put("status","0");
 				map.put("errMsg","用户名已存在");

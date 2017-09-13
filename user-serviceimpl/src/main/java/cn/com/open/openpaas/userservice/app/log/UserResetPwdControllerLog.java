@@ -25,7 +25,7 @@ public class UserResetPwdControllerLog {
 	 * @param type
 	 * @param user
 	 */
-	public static void log(String type,User user){
+	public static void log(String type,String username){
 		try {
 			Throwable ex = new Throwable();
 			StringBuffer msg = new StringBuffer();
@@ -33,8 +33,8 @@ public class UserResetPwdControllerLog {
 			if (ex.getStackTrace() != null && ex.getStackTrace()[1] != null) {
 				//获取时间
 				msg.append(DateTools.dateToString(new Date(), "yyyyMMddHHmmss")).append("#");
-				if(user!=null){
-					msg.append(user.getUsername()).append("#");
+				if(username!=null){
+					msg.append(username).append("#");
 				}
 				else{
 					msg.append("#");

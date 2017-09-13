@@ -22,8 +22,37 @@ public class UserserviceDev {
 	private String redisExpireTime;
 	private String oes_interface_addr;
 	private String oes_interface_key;
+	private String app_localhost_url;
+	private String email_verify_valid;
+	private String username_verify_valid;
 	
 	
+	
+	
+	public String getUsername_verify_valid() {
+		return username_verify_valid;
+	}
+
+	public void setUsername_verify_valid(String username_verify_valid) {
+		this.username_verify_valid = username_verify_valid;
+	}
+
+	public String getEmail_verify_valid() {
+		return email_verify_valid;
+	}
+
+	public void setEmail_verify_valid(String email_verify_valid) {
+		this.email_verify_valid = email_verify_valid;
+	}
+
+	public String getApp_localhost_url() {
+		return app_localhost_url;
+	}
+
+	public void setApp_localhost_url(String app_localhost_url) {
+		this.app_localhost_url = app_localhost_url;
+	}
+
 	public String getOes_interface_addr() {
 		return oes_interface_addr;
 	}

@@ -18,11 +18,13 @@ import cn.com.open.openpaas.userservice.app.tools.PropertiesTool;
 import cn.com.open.openpaas.userservice.app.tools.SmsTools;
 import cn.com.open.openpaas.userservice.app.tools.StringTool;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
 import cn.com.open.openpaas.userservice.app.user.model.UserDetail;
 import cn.com.open.openpaas.userservice.app.user.model.UserEducation;
 import cn.com.open.openpaas.userservice.app.user.model.UserSocial;
 import cn.com.open.openpaas.userservice.app.user.model.UserWork;
 import cn.com.open.openpaas.userservice.app.user.service.UserActivatedService;
+import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.app.useractivated.model.UserActivated;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
@@ -42,6 +44,8 @@ public class UserLogicServiceImpl implements UserLogicService {
     private SendEmailLogicService sendEmailLogicService;
     @Autowired
 	 private UserserviceDev userserviceDev;
+    @Autowired
+    private UserCacheService userCacheService;
 
     /**
      * 修改用户密码
@@ -72,7 +76,7 @@ public class UserLogicServiceImpl implements UserLogicService {
      * @return
      */
     public int activatedEmail(HttpServletRequest request,String sessionKey,String code){
-    	int validTime = Integer.valueOf(PropertiesTool.getAppPropertieByKey("email.verify.valid"));
+    	int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
     	UserActivated userActivated =  userActivatedService.findByCode(code);
     	if(userActivated != null){
     		if(DateTools.timeDiffCurr(userActivated.getCreateTime()) > validTime*60*1000){
@@ -172,7 +176,7 @@ public class UserLogicServiceImpl implements UserLogicService {
 			List<UserActivated> list=userActivatedService.findByUserActivated(activatedReset);
 			String code=StringTool.getRandomNum(6);
 			//发送短信
-			int validTime = Integer.valueOf(PropertiesTool.getAppPropertieByKey("email.verify.valid"));
+			int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
 			String content = "当前找回密码验证码："+code+"，验证码时效为"+validTime+"分钟,请在规定时间完成验证操作！";
 			String bool = SmsTools.sendSms(phone, content);
 			if(StringUtils.isNotBlank(bool)){
@@ -230,7 +234,7 @@ public class UserLogicServiceImpl implements UserLogicService {
 	public boolean verificationPhoneSecurityCode(String phone,String code){
 		UserActivated userActivated = userActivatedService.findByCode(code);
 		//激活有效数据
-    	int validTime = Integer.valueOf(PropertiesTool.getAppPropertieByKey("email.verify.valid"));
+    	int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
 		if(userActivated != null && userActivated.getPhone().equals(phone) && DateTools.timeDiffCurr(userActivated.getCreateTime()) < validTime*60*1000){
 			userActivatedService.moveUserActivated(userActivated);
 			return true;
@@ -403,7 +407,12 @@ public class UserLogicServiceImpl implements UserLogicService {
 							newUser.buildPasswordSalt();
 							newUser.setPlanPassword(newPwd);
 							newUser.setUpdatePwdTime(new Date());
+							newUser.setAesPassword(aesPassword);
 							userService.updateUser(newUser);
+							//更新子类
+							user.setAesPassword(aesPassword);
+							newUser.setUpdatePwdTime(new Date());
+							userService.updateUser(user);
 							
 						}
 						else{
@@ -411,6 +420,7 @@ public class UserLogicServiceImpl implements UserLogicService {
 							newUser.buildPasswordSalt();
 							newUser.setPlanPassword(newPwd);
 							newUser.setUpdatePwdTime(new Date());
+							newUser.setAesPassword(aesPassword);
 							userService.updateUser(newUser);
 							parentUserlist=userService.findByPid(String.valueOf(newUser.getId()));
 							User parentUser=new User();
@@ -419,6 +429,7 @@ public class UserLogicServiceImpl implements UserLogicService {
 								parentUser.buildPasswordSalt();
 								parentUser.setPlanPassword(newPwd);
 								parentUser.setUpdatePwdTime(new Date());
+								parentUser.setAesPassword(aesPassword);
 								userService.updateUser(parentUser);
 							}
 						}
@@ -450,6 +461,7 @@ public class UserLogicServiceImpl implements UserLogicService {
 			for(int i=0;i<userList.size();i++){
 				User newUser=userList.get(i);
 				try {
+					 String	aesPassword=AESUtil.encrypt(newPwd, userserviceDev.getAes_userCenter_key());
 					Boolean isLink;
 					isLink =newUser.defaultUser();
 					List<User> parentUserlist;
@@ -460,6 +472,7 @@ public class UserLogicServiceImpl implements UserLogicService {
 							newUser.buildPasswordSalt();
 							newUser.setPlanPassword(newPwd);
 							newUser.setUpdatePwdTime(new Date());
+							newUser.setAesPassword(aesPassword);
 							userService.updateUser(newUser);
 						}
 						else{
@@ -467,6 +480,7 @@ public class UserLogicServiceImpl implements UserLogicService {
 							newUser.buildPasswordSalt();
 							newUser.setPlanPassword(newPwd);
 							newUser.setUpdatePwdTime(new Date());
+							newUser.setAesPassword(aesPassword);
 							userService.updateUser(newUser);
 							parentUserlist=userService.findByPid(String.valueOf(newUser.getId()));
 							User parentUser=new User();
@@ -475,6 +489,7 @@ public class UserLogicServiceImpl implements UserLogicService {
 								parentUser.buildPasswordSalt();
 								parentUser.setPlanPassword(newPwd);
 								parentUser.setUpdatePwdTime(new Date());
+								parentUser.setAesPassword(aesPassword);
 								userService.updateUser(parentUser);
 							}
 						}
@@ -483,6 +498,7 @@ public class UserLogicServiceImpl implements UserLogicService {
 						newUser.buildPasswordSalt();
 						newUser.setPlanPassword(newPwd);
 						newUser.setUpdatePwdTime(new Date());
+						newUser.setAesPassword(aesPassword);
 						userService.updateUser(newUser);
 					}
 					return true;
@@ -525,6 +541,124 @@ public class UserLogicServiceImpl implements UserLogicService {
 			return false;
 		
 		}
+
+		@Override
+		public Boolean userResetPwdByEmail(UserCache userCache, String password) {
+			List<UserCache> userList=userCacheService.findByEmail(userCache.email());
+			for(int i=0;i<userList.size();i++){
+				
+				UserCache newUser=userList.get(i);
+				try {
+					 String	aesPassword=AESUtil.encrypt(password, userserviceDev.getAes_userCenter_key());
+					Boolean isLink;
+					isLink =newUser.defaultUser();
+					List<UserCache> parentUserlist;
+					if(isLink){
+						//存在Pid则证明该User为子账号
+						if(StringUtils.isNotBlank(userCache.pid()) && !userCache.pid().equals("0")){
+							//刷新盐值，重新加密
+							newUser.buildPasswordSalt();
+							newUser.setPlanPassword(password);
+							newUser.setUpdatePwdTime(new Date());
+							newUser.setAesPassword(aesPassword);
+							userCacheService.updateUserCache(newUser);
+						}
+						else{
+							//刷新盐值，重新加密
+							newUser.buildPasswordSalt();
+							newUser.setPlanPassword(password);
+							newUser.setUpdatePwdTime(new Date());
+							newUser.setAesPassword(aesPassword);
+							userCacheService.updateUserCache(newUser);
+							parentUserlist=userCacheService.findByPid(String.valueOf(newUser.id()));
+							UserCache parentUser=new UserCache();
+							for(int j=0;j<parentUserlist.size();j++){
+								parentUser=parentUserlist.get(j);
+								parentUser.buildPasswordSalt();
+								parentUser.setPlanPassword(password);
+								parentUser.setUpdatePwdTime(new Date());
+								parentUser.setAesPassword(aesPassword);
+								userCacheService.updateUserCache(parentUser);
+							}
+						}
+					}else{
+						//刷新盐值，重新加密
+						newUser.buildPasswordSalt();
+						newUser.setPlanPassword(password);
+						newUser.setUpdatePwdTime(new Date());
+						newUser.setAesPassword(aesPassword);
+						userCacheService.updateUserCache(newUser);
+					}
+					return true;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public Boolean userResetPwdByPhone(UserCache userCache, String newPwd) {
+			List<UserCache> userList=userCacheService.findByPhone(userCache.phone());
+			 if(userList!=null&&userList.size()>0){
+			for(int i=0;i<userList.size();i++){
+				UserCache newUser=userList.get(i);
+				try {
+				 String	aesPassword=AESUtil.encrypt(newPwd, userserviceDev.getAes_userCenter_key());
+					Boolean isLink;
+					isLink =newUser.defaultUser();
+					List<UserCache> parentUserlist;
+					if(isLink){
+						//存在Pid则证明该User为子账号
+						if(StringUtils.isNotBlank(userCache.pid()) && !userCache.pid().equals("0")){
+							//刷新盐值，重新加密
+							newUser.buildPasswordSalt();
+							newUser.setPlanPassword(newPwd);
+							newUser.setUpdatePwdTime(new Date());
+							newUser.setAesPassword(aesPassword);
+							userCacheService.updateUserCache(newUser);
+							//更新子类
+							userCache.setAesPassword(aesPassword);
+							newUser.setUpdatePwdTime(new Date());
+							userCacheService.updateUserCache(userCache);
+							
+						}
+						else{
+							//刷新盐值，重新加密
+							newUser.buildPasswordSalt();
+							newUser.setPlanPassword(newPwd);
+							newUser.setUpdatePwdTime(new Date());
+							newUser.setAesPassword(aesPassword);
+							userCacheService.updateUserCache(newUser);
+							parentUserlist=userCacheService.findByPid(String.valueOf(newUser.id()));
+							UserCache parentUser=new UserCache();
+							for(int j=0;j<parentUserlist.size();j++){
+								parentUser=parentUserlist.get(j);
+								parentUser.buildPasswordSalt();
+								parentUser.setPlanPassword(newPwd);
+								parentUser.setUpdatePwdTime(new Date());
+								parentUser.setAesPassword(aesPassword);
+								userCacheService.updateUserCache(parentUser);
+							}
+						}
+					}else{
+						//刷新盐值，重新加密
+						
+						newUser.buildPasswordSalt();
+						newUser.setPlanPassword(newPwd);
+						newUser.setUpdatePwdTime(new Date());
+						newUser.setAesPassword(aesPassword);
+						userCacheService.updateUserCache(newUser);
+					}
+					return true;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			 }
+			 }
+			return false;
+		}
+
 		
 		
 }

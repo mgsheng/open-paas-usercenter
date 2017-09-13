@@ -57,8 +57,6 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	 final static String  SEPARATOR = "&";
 	 @Autowired
 	 private UserserviceDev userserviceDev;
-	 @Value("#{properties['app.localhost.url']}")
-	 private String serverHost;
 	    /**
 	     * 用户登录接口(通过用户名-密码)
 	     * @return Json
@@ -459,9 +457,9 @@ public class UserCenterLoginController extends BaseControllerUtil {
 				}
 			}
 	    	if(map.get("status")=="0"){
+	    		Map<String ,Object> validateLoginMap=new HashMap<String,Object>();	
 	    		if(!nullEmptyBlankJudge(validateInfo)){
 	    			JSONObject  validateJson=JSONObject.parseObject(validateInfo);
-	    			Map<String ,Object> validateLoginMap=new HashMap<String,Object>();	
 	    			validateLoginMap.put("appId",validateJson.get("appId"));
 	    			validateLoginMap.put("userName", validateJson.get("userName"));
 	    			validateLoginMap.put("firstLoginTime", validateJson.get("firstLoginTime"));
@@ -495,7 +493,6 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    			}
 	    		}else{
 	    			//创建登录失败信息
-	    			Map<String ,Object> validateLoginMap=new HashMap<String,Object>();	
 	    			validateLoginMap.put("appId", app.getId());
 	    			validateLoginMap.put("userName", username);
 	    			validateLoginMap.put("firstLoginTime", DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
@@ -552,7 +549,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 		}
 		if(app1!=null){
 //    		map.put("callbackUrl", app1.getWebServerRedirectUri());
-			map.put("callbackUrl", appService.findCallbackUrl(app1, au,serverHost,platform));
+			map.put("callbackUrl", appService.findCallbackUrl(app1, au,userserviceDev.getApp_localhost_url(),platform));
 			map.put("name", app1.getName());
 			map.put("icon", app1.getIcon());
 			
