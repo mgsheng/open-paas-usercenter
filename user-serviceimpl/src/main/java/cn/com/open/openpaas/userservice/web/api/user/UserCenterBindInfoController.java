@@ -128,9 +128,9 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
 	     			           			userService.updatePhoneById(userPhone.getId(),phone+"_bak");
 	     			           			//更新查询出的手机号为输入的手机号
 	     			           		    userService.updatePhoneById(user.getId(),phone);
-	     	                		}else{
+	     	                		}else if(user.getId()!=userPhone.getId()){
 	     	                			userService.updateDefaultUserById(userPhone.getId(), true);
-	                    				pid=String.valueOf(user.getId());
+	                    				pid=String.valueOf(userPhone.getId());
 	                    				user.setPid(pid);
 	                    				user.setPhone("");
 	                    				user.setDefaultUser(true);
@@ -154,7 +154,7 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
 	     			           			userService.updateEmailById(userEmail.getId(),email+"_bak");
 	     			           			//更新查询出的手机号为输入的手机号
 	     			           		    userService.updateEmailById(user.getId(),email);
-	     	                		}else{
+	     	                		}else if(user.getId()!=userEmail.getId()){
 	     	                			userService.updateDefaultUserById(userEmail.getId(), true);
 	                    				pid=String.valueOf(userEmail.getId());
 	                    				user.setPid(pid);
@@ -169,6 +169,7 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
 						}
 						returnGuid=user.guid();
 					}else if(userCache!=null){
+						appUser=new AppUser(app.getId(),userCache.id(),source_id);
 						if(!nullEmptyBlankJudge(card_no)){
 							userCacheService.updateUserCardNoById(userCache.id(),card_no);
 						}
@@ -184,9 +185,9 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
 	     	                			userCacheService.updatePhoneById(userPhone.id(),phone+"_bak");
 	     			           			//更新查询出的手机号为输入的手机号
 	     	                			userCacheService.updatePhoneById(userCache.id(),phone);
-	     	                		}else{
+	     	                		}else if(userPhone.id()!=userCache.id()){
 	     	                			userCacheService.updateDefaultUserById(userPhone.id(), true);
-	                    				pid=String.valueOf(userCache.id());
+	                    				pid=String.valueOf(userPhone.id());
 	                    				userCache.pid(pid);
 	                    				userCache.phone("");
 	                    				userCache.setDefaultUser(true);
@@ -210,7 +211,8 @@ public class UserCenterBindInfoController extends BaseControllerUtil{
 	     	                			userCacheService.updateEmailById(userEmail.id(),email+"_bak");
 	     			           			//更新查询出的手机号为输入的手机号
 	     	                			userCacheService.updateEmailById(userCache.id(),email);
-	     	                		}else{
+	     	                		}else if(userEmail.id()!=userCache.id()){
+	     	                			
 	     	                			userCacheService.updateDefaultUserById(userEmail.id(), true);
 	                    				pid=String.valueOf(userEmail.id());
 	                    				userCache.pid(pid);

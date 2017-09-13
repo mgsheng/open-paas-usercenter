@@ -25,7 +25,7 @@ public class UserCacheServiceImpl implements UserCacheService {
 	@Override
 	public List<UserCache> findByEmail(String account) {
 		// TODO Auto-generated method stub
-		return null;
+		return userCacheRepository.findByEmail(account);
 	}
 
 	@Override

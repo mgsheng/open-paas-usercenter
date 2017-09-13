@@ -107,17 +107,18 @@ public class SynInfoController extends BaseControllerUtil{
             	     			           			userService.updatePhoneById(userPhone.getId(),userCenterReg.getPhone()+"_bak");
             	     			           			//更新查询出的手机号为输入的手机号
             	     			           		    userService.updatePhoneById(user.getId(),userCenterReg.getPhone());
-            	     	                		}else{
+            	     	                		}else if(user.getId()!=userPhone.getId()){
             	     	                			userService.updateDefaultUserById(userPhone.getId(), true);
-            	                    				pid=String.valueOf(user.getId());
+            	                    				pid=String.valueOf(userPhone.getId());
             	                    				user.setPid(pid);
             	                    				user.setPhone("");
             	                    				user.setDefaultUser(true);
             	                    				userService.updateUser(user);
             	     	                		}
             	     	                	}
+            	     	                }else{
+            	     	                	userService.updatePhoneById(user.getId(),userCenterReg.getPhone());
             	     	                }
-            	     	               user.phone(userCenterReg.getPhone());	
                             		}if("1".equals(userCenterReg.getWhetherBind())){
 
 
@@ -132,7 +133,7 @@ public class SynInfoController extends BaseControllerUtil{
             	     			           			userService.updateEmailById(userEmail.getId(),userCenterReg.getEmail()+"_bak");
             	     			           			//更新查询出的手机号为输入的手机号
             	     			           		    userService.updateEmailById(user.getId(),userCenterReg.getEmail());
-            	     	                		}else{
+            	     	                		}else if (user.getId()!=userEmail.getId()){
             	     	                			userService.updateDefaultUserById(userEmail.getId(), true);
             	                    				pid=String.valueOf(userEmail.getId());
             	                    				user.setPid(pid);
@@ -141,6 +142,8 @@ public class SynInfoController extends BaseControllerUtil{
             	                    				userService.updateUser(user);
             	     	                		}
             	     	                	}
+            	     	                }else{
+            	     	                	userService.updateEmailById(user.getId(),userCenterReg.getEmail());
             	     	                }
                             			//user.email(userCenterReg.getEmail());	
                            		     }
@@ -165,15 +168,17 @@ public class SynInfoController extends BaseControllerUtil{
             	     	                			userCacheService.updatePhoneById(userPhone.id(),userCenterReg.getPhone()+"_bak");
             	     			           			//更新查询出的手机号为输入的手机号
             	     	                			userCacheService.updatePhoneById(userCache.id(),userCenterReg.getPhone());
-            	     	                		}else{
+            	     	                		}else if(userPhone.id()!=userCache.id()){
             	     	                			userCacheService.updateDefaultUserById(userPhone.id(), true);
-            	                    				pid=String.valueOf(userCache.id());
+            	                    				pid=String.valueOf(userPhone.id());
             	                    				userCache.pid(pid);
             	                    				userCache.phone("");
             	                    				userCache.setDefaultUser(true);
             	                    				userCacheService.updateUserCache(userCache);
             	     	                		}
             	     	                	}
+            	     	                }else{
+            	     	                	userCacheService.updatePhoneById(userCache.id(),userCenterReg.getPhone());
             	     	                }
             	     	            
                             			//userCache.phone(userCenterReg.getPhone());	
@@ -191,7 +196,7 @@ public class SynInfoController extends BaseControllerUtil{
             	     	                			userCacheService.updateEmailById(userEmail.id(),userCenterReg.getEmail()+"_bak");
             	     			           			//更新查询出的手机号为输入的手机号
             	     	                			userCacheService.updateEmailById(userCache.id(),userCenterReg.getEmail());
-            	     	                		}else{
+            	     	                		}else if(userEmail.id()!=userCache.id()){
             	     	                			userCacheService.updateDefaultUserById(userEmail.id(), true);
             	                    				pid=String.valueOf(userEmail.id());
             	                    				userCache.pid(pid);
@@ -200,6 +205,8 @@ public class SynInfoController extends BaseControllerUtil{
             	                    				userCacheService.updateUserCache(userCache);
             	     	                		}
             	     	                	}
+            	     	                }else{
+            	     	                	userCacheService.updateEmailById(userCache.id(),userCenterReg.getEmail());
             	     	                }
                             			//userCache.email(userCenterReg.getEmail());	
                            		     }

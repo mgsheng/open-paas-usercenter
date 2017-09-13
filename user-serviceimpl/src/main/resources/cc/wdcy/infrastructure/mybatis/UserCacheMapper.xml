@@ -295,4 +295,9 @@
          from user_cache
          where pid = #{pid}
 	</select>
+	 <update id="updateDefaultUserById">
+        update user_cache set
+        default_user = #{defaultUser}
+        where id = #{id}
+    </update>
 </mapper>
