@@ -51,10 +51,10 @@ public class UserCenterSmsVerifyController extends BaseControllerUtil {
 	 private RedisClientTemplate redisClient;
 	 @Autowired
 	 private DefaultTokenServices tokenServices;
-	 @Value("#{properties['email.verify.valid']}")
-	 private String emailVerifyValid;
 	 @Autowired
 	 private UserActivatedService userActivatedService;
+	 @Autowired
+	 private UserserviceDev userserviceDev;
   /**
     * 用户短信码验证接口
 	* @return Json
@@ -88,7 +88,7 @@ public class UserCenterSmsVerifyController extends BaseControllerUtil {
 	        map=checkClientIdOrToken(client_id,access_token,app,tokenServices);
 			if(map.get("status").equals("1")){
 		        	//激活有效数据
-		        	int validTime = Integer.valueOf(emailVerifyValid);
+		        	int validTime = Integer.valueOf(userserviceDev.getEmail_verify_valid());
 		        	try {
 		    			UserActivated userActivated = new UserActivated();
 		    	    	userActivated.setCode(code);

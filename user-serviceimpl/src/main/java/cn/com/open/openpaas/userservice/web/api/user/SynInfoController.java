@@ -101,8 +101,19 @@ public class SynInfoController extends BaseControllerUtil{
             	     	                if(userList!=null && userList.size()>0){
             	     	                	for(int i=0;i<userList.size();i++){
             	     	                		User userPhone=userList.get(i);
-            	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userPhone.getId());
-            	     	                		if(appUsernew!=null){
+            	     	                		
+            	     	                		boolean isbind=false;
+            	     	                		List<AppUser> list=appUserService.findByUserId(userPhone.getId());
+            	     	                		if(list!=null&&list.size()>0){
+            	     	                			for(int j=0;j<list.size();j++){
+            	     	                				AppUser appUsernew=appUserService.findByCidAUid(list.get(j).appId(), user.getId());
+            	     	                				if(appUsernew!=null){
+            	     	                					isbind=true;
+            	     	                					break;
+            	     	                				}
+            	     	                			} 
+            	     	                		}
+            	     	                		if(isbind){
             	     	                			//更新原有手机号为phone+"_bak"
             	     			           			userService.updatePhoneById(userPhone.getId(),userCenterReg.getPhone()+"_bak");
             	     			           			//更新查询出的手机号为输入的手机号
@@ -127,8 +138,19 @@ public class SynInfoController extends BaseControllerUtil{
             	     	                if(userList!=null && userList.size()>0){
             	     	                	for(int i=0;i<userList.size();i++){
             	     	                		User userEmail=userList.get(i);
-            	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userEmail.getId());
-            	     	                		if(appUsernew!=null){
+            	     	                		boolean isbind=false;
+            	     	                		List<AppUser> list=appUserService.findByUserId(userEmail.getId());
+            	     	                		if(list!=null&&list.size()>0){
+            	     	                			for(int j=0;j<list.size();j++){
+            	     	                				AppUser appUsernew=appUserService.findByCidAUid(list.get(j).appId(), user.getId());
+            	     	                				if(appUsernew!=null){
+            	     	                					isbind=true;
+            	     	                					break;
+            	     	                				}
+            	     	                			}
+            	     	                		}
+            	     	                		
+            	     	                		if(isbind){
             	     	                			//更新原有手机号为phone+"_bak"
             	     			           			userService.updateEmailById(userEmail.getId(),userCenterReg.getEmail()+"_bak");
             	     			           			//更新查询出的手机号为输入的手机号
@@ -162,8 +184,18 @@ public class SynInfoController extends BaseControllerUtil{
             	     	                if(userList!=null && userList.size()>0){
             	     	                	for(int i=0;i<userList.size();i++){
             	     	                		UserCache userPhone=userList.get(i);
-            	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userPhone.id());
-            	     	                		if(appUsernew!=null){
+            	     	                		boolean isbind=false;
+            	     	                		List<AppUser> list=appUserService.findByUserId(userPhone.id());
+            	     	                		if(list!=null&&list.size()>0){
+            	     	                			for(int j=0;j<list.size();j++){
+            	     	                				AppUser appUsernew=appUserService.findByCidAUid(list.get(j).appId(), userCache.id());
+            	     	                				if(appUsernew!=null){
+            	     	                					isbind=true;
+            	     	                					break;
+            	     	                				}
+            	     	                			}
+            	     	                		}
+            	     	                		if(isbind){
             	     	                			//更新原有手机号为phone+"_bak"
             	     	                			userCacheService.updatePhoneById(userPhone.id(),userCenterReg.getPhone()+"_bak");
             	     			           			//更新查询出的手机号为输入的手机号
@@ -190,8 +222,18 @@ public class SynInfoController extends BaseControllerUtil{
             	     	                if(userList!=null && userList.size()>0){
             	     	                	for(int i=0;i<userList.size();i++){
             	     	                		UserCache userEmail=userList.get(i);
-            	     	                		AppUser appUsernew=appUserService.findByCidAUid(app.getId(), userEmail.id());
-            	     	                		if(appUsernew!=null){
+            	     	                		boolean isbind=false;
+            	     	                		List<AppUser> list=appUserService.findByUserId(userEmail.id());
+            	     	                		if(list!=null&&list.size()>0){
+            	     	                			for(int j=0;j<list.size();j++){
+            	     	                				AppUser appUsernew=appUserService.findByCidAUid(list.get(j).appId(), userCache.id());
+            	     	                				if(appUsernew!=null){
+            	     	                					isbind=true;
+            	     	                					break;
+            	     	                				}
+            	     	                			}
+            	     	                		}
+            	     	                		if(isbind){
             	     	                			//更新原有手机号为phone+"_bak"
             	     	                			userCacheService.updateEmailById(userEmail.id(),userCenterReg.getEmail()+"_bak");
             	     			           			//更新查询出的手机号为输入的手机号
