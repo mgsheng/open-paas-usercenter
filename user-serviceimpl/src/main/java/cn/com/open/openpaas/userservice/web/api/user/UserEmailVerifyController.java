@@ -31,6 +31,8 @@ import cn.com.open.openpaas.userservice.app.tools.AESUtil;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
 import cn.com.open.openpaas.userservice.app.tools.StringTool;
 import cn.com.open.openpaas.userservice.app.user.model.User;
+import cn.com.open.openpaas.userservice.app.user.model.UserCache;
+import cn.com.open.openpaas.userservice.app.user.service.UserCacheService;
 import cn.com.open.openpaas.userservice.app.user.service.UserService;
 import cn.com.open.openpaas.userservice.dev.UserserviceDev;
 import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHandler;
@@ -54,6 +56,7 @@ public class UserEmailVerifyController extends BaseControllerUtil {
 	 private DefaultTokenServices tokenServices;
 	 @Autowired
 	 private UserserviceDev userserviceDev;
+	 private UserCacheService userCacheService;
      /**
      * 用户注册接口
      * @return Json
@@ -95,10 +98,17 @@ public class UserEmailVerifyController extends BaseControllerUtil {
 						map.put("status", "1");
 						map.put("email",user.getEmail());
 				}else{
-					map.clear();
-					map.put("status","0");
-					map.put("error_code", "6");//source_id已存在 
-					map.put("errMsg", "用户不存在");//单独请求接口时，用户名绑定
+					UserCache userCache=userCacheService.findUserById(appUser.userId());
+					if(userCache!=null){
+						map.clear();
+						map.put("status", "1");
+						map.put("email",userCache.email());
+					}else{
+						map.clear();
+						map.put("status","0");
+						map.put("error_code", "6");//source_id已存在 
+						map.put("errMsg", "用户不存在");//单独请求接口时，用户名绑定
+					}
 				}
 			}else{
 				map.clear();
