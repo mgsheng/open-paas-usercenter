@@ -56,7 +56,7 @@
 							<tr>
 								<td colspan="2">
 									<input type="button" class="btn-len" style="width:120px;" value="返回" onclick="window.location.href='${pageContext.request.contextPath}/findpwd'">
-									<input type="button" class="btn-len" style="width:200px;" value="下一步" onclick="btnSubmit()" />
+									<input type="button" id="submitBut" class="btn-len" style="width:200px;" value="下一步" onclick="btnSubmit()" />
 								</td>
 							</tr>
 						</table>
@@ -74,6 +74,8 @@
 			
 			function btnSubmit(){
 				jQuery('.input-len').removeClass('frm_error');
+				jQuery('#submitBut').attr("disabled", true);
+				jQuery('#submitBut').val("已发送");
 				jQuery('.div_error').html('');
 				if(!Checking.checkbool('#idfCode_error')){
 					return;
@@ -113,8 +115,11 @@
 	   						else if(data.errorCode=='system_error'){
 	   							jQuery('#email_error').html('系统异常');
 	   						}
-	   						Checking.init();
+			   				jQuery('#submitBut').attr("disabled", false);
+					        jQuery('#submitBut').val("下一步");
+			   				Checking.init();
 	   					}
+	   					
 	   				}
    				);
 			}
