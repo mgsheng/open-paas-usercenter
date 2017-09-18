@@ -78,6 +78,8 @@
 				jQuery('#submitBut').val("已发送");
 				jQuery('.div_error').html('');
 				if(!Checking.checkbool('#idfCode_error')){
+				    jQuery('#submitBut').attr("disabled", false);
+				    jQuery('#submitBut').val("下一步");
 					return;
 				}
 				var emailReg = /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/;
@@ -86,6 +88,8 @@
 					jQuery('#email').addClass('frm_error');
 					jQuery('#email_error').html('邮箱格式不正确');
 					Checking.init();
+					jQuery('#submitBut').attr("disabled", false);
+					jQuery('#submitBut').val("下一步");
 					return;
 				}
 				$.post("${pageContext.request.contextPath}/dev/user/send_reset_password_email",
