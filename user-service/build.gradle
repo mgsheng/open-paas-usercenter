@@ -22,5 +22,7 @@ sonarqube {
 
 dependencies {
   	 compile  'javax.servlet.jsp:jsp-api:2.1',
-     	      'javax.servlet:servlet-api:2.4'
+     	      'javax.servlet:servlet-api:2.4',
+              'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
+     compile fileTree(dir:'lib',include:['spring-security-oauth2-1.0.5.RELEASE.jar'])
 }

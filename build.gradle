@@ -51,7 +51,7 @@ configurations.all {
      	     'org.springframework.security:spring-security-acl:3.1.0.RELEASE',
      	     'org.springframework.security:spring-security-crypto:3.1.0.RELEASE',
      	     'org.springframework.security:spring-security-config:3.1.0.RELEASE',
-     	     'org.springframework.security.oauth:spring-security-oauth2:1.0.5.RELEASE',
+     	     //'org.springframework.security.oauth:spring-security-oauth2:1.0.5.RELEASE',
      	     'mysql:mysql-connector-java:5.1.6',
      	     'commons-fileupload:commons-fileupload:1.2.1',
      	     'org.apache.httpcomponents:httpclient:4.3.1',
