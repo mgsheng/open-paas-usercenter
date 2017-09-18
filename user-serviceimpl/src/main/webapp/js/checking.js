@@ -170,6 +170,8 @@ Checking = {
 			$("#baseForm").submit();
 		}else{
 			$("#idfCode_error").text("输入验证码不对，请重新输入");
+			jQuery('#submitBut').attr("disabled", false);
+			jQuery('#submitBut').val("下一步");
 			Checking.init();
 		}
 	},
@@ -182,6 +184,8 @@ Checking = {
 			return true;
 		}else{
 			$(a).text("输入验证码不对，请重新输入");
+			jQuery('#submitBut').attr("disabled", false);
+			jQuery('#submitBut').val("下一步");
 			Checking.init();
 			return false;
 		}
