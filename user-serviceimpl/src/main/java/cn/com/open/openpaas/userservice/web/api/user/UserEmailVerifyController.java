@@ -122,7 +122,7 @@ public class UserEmailVerifyController extends BaseControllerUtil {
     	}else{
     		writeSuccessJson(response,map);
     	}
-    	OauthControllerLog.log(startTime,source_id,"",app,map,userserviceDev);
+    	//OauthControllerLog.log(startTime,source_id,"",app,map,userserviceDev);
         return;
     }
 } 

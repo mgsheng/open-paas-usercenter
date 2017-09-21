@@ -114,7 +114,7 @@ public class ValidateLoginController extends BaseControllerUtil {
      	}else{
      		WebUtils.writeSuccessJson(response,map);
      	}
-     	OauthControllerLog.log(startTime,"","",app,map,userserviceDev);
+     	//OauthControllerLog.log(startTime,"","",app,map,userserviceDev);
          return;
      }
      

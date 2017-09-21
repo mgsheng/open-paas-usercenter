@@ -124,7 +124,7 @@ public class VerifyController extends BaseControllerUtil{
     		  redisClient.setObjectByTime(RedisConstant.USER_NAME_CHECK+account+"_"+accountType, verifyDto, 60);*/
     		  WebUtils.writeSuccessJson(response,map);
     	}
-    	OauthControllerLog.log(startTime,account,"",app,map,userserviceDev);
+    	//OauthControllerLog.log(startTime,account,"",app,map,userserviceDev);
         return;
     }
   

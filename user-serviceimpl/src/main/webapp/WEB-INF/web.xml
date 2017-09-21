@@ -12,7 +12,55 @@
         <param-name>webAppRootKey</param-name>
         <param-value>spring-oauth-server</param-value>
     </context-param>
-
+  
+<!-- 	<filter>
+		<filter-name>logFilter</filter-name>
+		<filter-class>cn.com.open.openpaas.userservice.app.filte.LogFilter</filter-class>
+		<init-param>
+			不过滤uri 
+            <param-name>notFilter</param-name>
+            <param-value>loginVerify,loginOut,js,css,images</param-value>
+        </init-param>
+        <init-param>
+        	项目uri
+            <param-name>serverUri</param-name>
+            <param-value>/spring-oauth-server/</param-value>
+        </init-param>
+           <init-param>
+        	项目uri
+            <param-name>kongLogUri</param-name>
+            <param-value>aaa</param-value>
+        </init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>logFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>  -->
+	
+	<filter>
+        <filter-name>braveFilter</filter-name>
+        <filter-class>
+            org.springframework.web.filter.DelegatingFilterProxy
+        </filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+        	<!--不过滤uri  -->
+         <param-name>notFilter</param-name>
+         <param-value>loginVerify,loginOut,js,css,images</param-value>
+        </init-param>
+        <init-param>
+        	<!-- 项目uri-->
+            <param-name>serverUri</param-name>
+            <param-value>/spring-oauth-server/</param-value>
+        </init-param>
+    </filter>
+	 <filter-mapping>
+	    <filter-name>braveFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
     <!--Encoding filter-->
     <filter>
         <filter-name>encodingFilter</filter-name>
@@ -135,8 +183,9 @@
 	    <servlet-name>WebServiceI</servlet-name>
 	    <url-pattern>/service/sayHi</url-pattern>
 	  </servlet-mapping>
-    
-    
+	
+	
+	   
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>

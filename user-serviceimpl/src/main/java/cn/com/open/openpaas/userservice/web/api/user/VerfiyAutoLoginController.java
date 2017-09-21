@@ -155,7 +155,7 @@ public class VerfiyAutoLoginController extends BaseControllerUtil {
      	}else{
      		WebUtils.writeSuccessJson(response,map);
      	}
-     	OauthControllerLog.log(startTime,guid,"",app,map,userserviceDev);
+     	//OauthControllerLog.log(startTime,guid,"",app,map,userserviceDev);
          return;
          
      }

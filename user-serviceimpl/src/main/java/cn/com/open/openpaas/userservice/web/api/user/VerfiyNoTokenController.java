@@ -114,7 +114,7 @@ public class VerfiyNoTokenController extends BaseControllerUtil {
      	}else{
      		WebUtils.writeSuccessJson(response,map);
      	}
-     	OauthControllerLog.log(startTime,username,"",app,map,userserviceDev);
+     	//OauthControllerLog.log(startTime,username,"",app,map,userserviceDev);
          return;
          
      }

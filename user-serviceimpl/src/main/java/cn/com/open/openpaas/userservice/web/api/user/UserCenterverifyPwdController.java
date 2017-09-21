@@ -120,7 +120,7 @@ public class UserCenterverifyPwdController extends BaseControllerUtil{
 		} else {
 			writeSuccessJson(response, map);
 		}
-		OauthControllerLog.log(startTime,"","",app,map,userserviceDev);
+		//OauthControllerLog.log(startTime,"","",app,map,userserviceDev);
 		return;
 	}
 

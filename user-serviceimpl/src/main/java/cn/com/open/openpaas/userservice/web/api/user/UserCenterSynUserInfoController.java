@@ -140,7 +140,7 @@ public class UserCenterSynUserInfoController extends BaseControllerUtil {
             }else{
                 writeSuccessJson(response,map);
             }
-            OauthControllerLog.log(startTime,userCenterReg.getUsername(),"",app,map,userserviceDev);
+            //OauthControllerLog.log(startTime,userCenterReg.getUsername(),"",app,map,userserviceDev);
         }
         return;
     }

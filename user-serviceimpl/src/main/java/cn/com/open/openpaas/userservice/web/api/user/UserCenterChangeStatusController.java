@@ -114,7 +114,7 @@ public class UserCenterChangeStatusController extends BaseControllerUtil {
     	}else{
     		writeSuccessJson(response,map);
     	}
-    	OauthControllerLog.log(startTime, username, "", app, map,userserviceDev);
+    	//OauthControllerLog.log(startTime, username, "", app, map,userserviceDev);
         return;
     }
 

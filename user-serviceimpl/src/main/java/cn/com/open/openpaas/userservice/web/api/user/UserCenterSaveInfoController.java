@@ -99,7 +99,7 @@ public class UserCenterSaveInfoController extends BaseControllerUtil {
 	                writeSuccessJson(response,map);
 	            }
 	        }
-		     OauthControllerLog.log(startTime,username,userCenterReg.getMethordName(),app,map,userserviceDev);
+		    // OauthControllerLog.log(startTime,username,userCenterReg.getMethordName(),app,map,userserviceDev);
 	        return;
 	    }
 

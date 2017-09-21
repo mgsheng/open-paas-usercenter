@@ -447,7 +447,7 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
     	App app=new App();
     	app.setId(9999);
     	//OauthControllerLog.log(startTime,username,password,app,map);
-    	OauthControllerLog.log(startTime, username, password, app, map,userserviceDev);
+    	//OauthControllerLog.log(startTime, username, password, app, map,userserviceDev);
     }
 
 	private boolean send_oes(String password,List<AppUser> appUserList) {

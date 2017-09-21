@@ -72,31 +72,6 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<skip>${test.skip}</skip>
-					<forkMode>none</forkMode>
-					<includes>
-						<include>**/*Test.java</include>
-					</includes>
-					<systemProperties>
-						<property>
-							<name>jdbc.url</name>
-							<value>${jdbc.url}</value>
-						</property>
-						<property>
-							<name>jdbc.username</name>
-							<value>${jdbc.user}</value>
-						</property>
-						<property>
-							<name>jdbc.password</name>
-							<value>${jdbc.pass}</value>
-						</property>
-					</systemProperties>
-				</configuration>
-			</plugin>
 		</plugins>
 
 		<resources>

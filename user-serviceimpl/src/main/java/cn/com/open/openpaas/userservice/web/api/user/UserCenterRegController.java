@@ -127,25 +127,25 @@ public class UserCenterRegController extends BaseControllerUtil {
 			if(!nullEmptyBlankJudge(isValidate)&&isValidate.equals("1")){
 				if(nullEmptyBlankJudge(password)){
 					map = paraMandaChkAndReturnMap(8, response,"密码不能为空");
-					OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+					//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 					writeErrorJson(response,map);
 					return;
 				}
 		    	if(StringTool.isNumeric(password)){
 		    		map = paraMandaChkAndReturnMap(8, response,"密码不能为纯数字");
-					OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+					//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 					writeErrorJson(response,map);
 		        	return;
 				}if(judgeInputNotNo(password)==1){
 					map = paraMandaChkAndReturnMap(8, response,"密码必须为6-20位字母、数字或英文下划线符号");
-					OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+					//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 					writeErrorJson(response,map);
 		        	return;
 				}	
 			}else{
 				if(judgePwdNo(password)==1){
 					map = paraMandaChkAndReturnMap(8, response,"密码必须为6-20位");
-					OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+					//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 					writeErrorJson(response,map);
 		        	return;
 				}	
@@ -158,17 +158,17 @@ public class UserCenterRegController extends BaseControllerUtil {
 					returnValue=judgeInput(username);
 					if(returnValue==1){
 						map = paraMandaChkAndReturnMap(7, response,"用户名5~50个字符");
-						OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+						//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 						writeErrorJson(response,map);
 						return;
 					}if(returnValue==2){
 						map = paraMandaChkAndReturnMap(7, response,"用户名必须为数字和字母或者下划线的组合");
-						OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+						//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 						writeErrorJson(response,map);
 						return;
 					}if(returnValue==3){
 						map = paraMandaChkAndReturnMap(7, response,"用户名不能为除手机号以外的纯数字");
-						OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+						//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 						writeErrorJson(response,map);
 						return;
 					}
@@ -179,7 +179,7 @@ public class UserCenterRegController extends BaseControllerUtil {
 	            	 Object userInfoObj = redisClient.getObject(RedisConstant.USER_REG_INFO+username);
 	                 if(userInfoObj!=null){
 	                	 map = paraMandaChkAndReturnMap(3, response,"用户名已存在");
-							OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+							//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 							writeErrorJson(response,map);
 							return; 
 	                 }else{
@@ -224,7 +224,7 @@ public class UserCenterRegController extends BaseControllerUtil {
 	     	                if(userList!=null && userList.size()>0){
 	     	                	user = userList.get(0);
 	     	                	map = paraMandaChkAndReturnMap(3, response,"邮箱已经绑定");
-	     	    				OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+	     	    				//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 	     	    				writeErrorJson(response,map);
 	     	    	        	return;
 	     	
@@ -313,7 +313,7 @@ public class UserCenterRegController extends BaseControllerUtil {
     	}else{
     		writeSuccessJson(response,map);
     	}
-    	OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+    	//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
         return;
     }
 } 

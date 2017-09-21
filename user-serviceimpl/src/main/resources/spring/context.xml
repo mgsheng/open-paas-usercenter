@@ -197,7 +197,11 @@
             <property name="app_localhost_url" value="${app_localhost_url}"></property>
             <property name="email_verify_valid" value="${email_verify_valid}"></property>
             <property name="username_verify_valid" value="${username_verify_valid}"></property>
-            
-            
         </bean>
+        <bean id="braveFilter" class="cn.com.open.openpaas.userservice.app.filter.LogFilter">
+        
+        <property name="user_base_request_url" value="${user_base_request_url}"></property>
+        <property name="user_api_log_onOff" value="${user_api_log_onOff}"></property>
+        <property name="kong_log_url" value="${kong-log-url}"></property>
+       </bean>
 </beans>

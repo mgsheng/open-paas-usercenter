@@ -13,37 +13,4 @@
     <!-- <bean class="cc.wdcy.job.InitJob"/> -->
     <bean class="cn.com.open.openpaas.userservice.app.job.InitJob"/>
 	
-	<!-- 定时任务配置开始 -->
-	<!-- <bean id="quartzJob" class="cc.wdcy.job.TimingJob"></bean> --><!-- 定义调用对象和调用对象的方法 -->
-	<bean id="quartzJob" class="cn.com.open.openpaas.userservice.app.job.TimingJob"></bean><!-- 定义调用对象和调用对象的方法 -->
-	
-	<!-- 【解析接口日志】调用类配置-->
-	<bean id="analyticalLogTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"><!-- 调用的类 -->
-		<property name="targetObject">
-			<ref bean="quartzJob" />
-		</property>
-		<property name="targetMethod">
-			<value>analyticalLog</value>
-		</property>
-	</bean>
-    <!-- 【解析接口日志】调用类配置-->
-	<bean id="doAnalyticalLogTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail">
-			<ref bean="analyticalLogTask" />
-		</property>
-		<!-- 每天03:30分执行 更具体时间配置请搜索CronTriggerBean说明  --> 
-		<property name="cronExpression">
-			<value>0 30 3 * * ?</value>
-		</property>
-	</bean>
-	
-	<!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
-	<bean id="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list>
-				<ref bean="doAnalyticalLogTask" />
-			</list>
-		</property>
-	</bean>
-	<!-- 定时任务配置结束 -->
 </beans>

@@ -512,7 +512,7 @@ public class UserCenterLoginController extends BaseControllerUtil {
 	    		}
 	    		writeSuccessJson(response,map);
 	    	}
-	    	OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
+	    	//OauthControllerLog.log(startTime,username,oldPassword,app,map,userserviceDev);
 	        return;
 	    }	
     /**

@@ -280,7 +280,7 @@ public class SynInfoController extends BaseControllerUtil{
             	WebUtils.writeSuccessJson(response,map);
             }
         }
-        OauthControllerLog.log(startTime,username,"",app,map,userserviceDev);
+        //OauthControllerLog.log(startTime,username,"",app,map,userserviceDev);
         return;
     }
 
