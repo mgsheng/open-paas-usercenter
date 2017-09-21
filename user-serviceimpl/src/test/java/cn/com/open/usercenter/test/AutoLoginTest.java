@@ -1,6 +1,7 @@
 package cn.com.open.usercenter.test;
 
 import cn.com.open.openpaas.userservice.app.tools.DES;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,12 +45,13 @@ public class AutoLoginTest {
     public void autoLoginTestTest() {
         try {
             MvcResult result = mockMvc.perform(
-                MockMvcRequestBuilders.get("/user/auto/login")
+                MockMvcRequestBuilders.post("/user/auto/login")
                     .param("app_id", Common.CLIENT_ID)
                     .param("desApp_id", UUID.randomUUID().toString())
                     .param("desAddress", "http://www.baidu.com")
                     .param("secret", DES.encrypt(Common.SOURCE_ID + "#20170330135700#" + Common.CLIENT_ID + "#123456#http://www.baidu.com", Common.CLIENT_SECRET))).andReturn();
-            System.out.println(result.getResponse().getContentAsString());
+            String str = result.getResponse().getRedirectedUrl();
+            Assert.assertNotNull(str);
         } catch (Exception e) {
             e.printStackTrace();
         }

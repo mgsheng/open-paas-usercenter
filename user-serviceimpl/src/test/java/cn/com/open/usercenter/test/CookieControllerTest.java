@@ -1,7 +1,6 @@
 package cn.com.open.usercenter.test;
 
 import com.alibaba.fastjson.JSONObject;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testng.Assert;
 
 import javax.servlet.Filter;
 
@@ -23,7 +23,8 @@ import javax.servlet.Filter;
 @ContextConfiguration({ "classpath*:/spring/appCtx-disconf.xml",
         "classpath*:/spring/context.xml", "classpath*:/spring/job.xml",
         "classpath*:/spring/security.xml", "classpath*:/spring/transaction.xml" })
-public class AccessTokenTest {
+
+public class CookieControllerTest {
 
     private MockHttpServletRequest request;
     @Autowired
@@ -41,18 +42,11 @@ public class AccessTokenTest {
     }
 
     @Test
-    public void accessTokenTest() {
+    public void crossGetCookie() {
         try {
             MvcResult result = mockMvc.perform(
-                    MockMvcRequestBuilders.post("/oauth/token")
-                            .param("grant_type", Common.GRANT_TYPE)
-                            .param("client_id", Common.CLIENT_ID)
-                            .param("client_secret", Common.CLIENT_SECRET)
-                            .param("scope", Common.SCOPE)).andReturn();
-            String str = result.getResponse().getContentAsString();
-            JSONObject jsonObject = JSONObject.parseObject(str);
-            String access_token = jsonObject.getString("access_token");
-            Assert.assertNotNull(access_token);
+                    MockMvcRequestBuilders.post("/cross/getCookie")
+                            .param("username", Common.USERNAME)).andReturn();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,7 +1,6 @@
 package cn.com.open.usercenter.test;
 
 import cn.com.open.openpaas.userservice.app.tools.AESUtil;
-import cn.com.open.openpaas.userservice.app.tools.CommonConstant;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.tools.StringTool;
 import org.junit.Before;
@@ -26,7 +25,7 @@ import java.util.Date;
 @ContextConfiguration({ "classpath*:/spring/appCtx-disconf.xml",
         "classpath*:/spring/context.xml", "classpath*:/spring/job.xml",
         "classpath*:/spring/security.xml", "classpath*:/spring/transaction.xml" })
-public class SaveUserInfoTest {
+public class UserCenterTestRegControllerTest {
 
     private MockHttpServletRequest request;
     @Autowired
@@ -44,32 +43,30 @@ public class SaveUserInfoTest {
     }
 
     @Test
-    public void saveUserInfoTest() {
+    public void UserCenterTestRegTest() {
         try {
-            String username = "guxuyangTestunbind";
+
+            String username = "guxuyangTestunbindaaa";
             String timestamp = DateTools.getSolrDate(new Date());
             String signatureNonce= StringTool.getRandom(100,1);
             String accessToken = Common.getAccessToken(mockMvc);
             String clientId = Common.CLIENT_ID;
             String signature = Common.getSignature(accessToken, timestamp, signatureNonce);
-           MvcResult result = mockMvc.perform(
-                MockMvcRequestBuilders.post("/user/saveUserInfo")
-                    .param("timestamp", timestamp)
-                    .param("signatureNonce", signatureNonce)
-                    .param("access_token", accessToken)
-                    .param("client_id", clientId)
-                    .param("signature", signature)
-                    .param("scope", Common.SCOPE)
-                    .param("grant_type", Common.GRANT_TYPE)
-
-                    .param("methordName", CommonConstant.METHORD_REGISTER_USER)
-                    .param("source_id", "10001")
-                    .param("username", username)
-                    .param("phone", "18666666688")
-                    .param("isValidate", "1")
-                    .param("password", AESUtil.encrypt(Common.PASSWORD, Common.CLIENT_SECRET))
-                    .param("email", "it_gxy1@163.com")
-            ).andReturn();
+            MvcResult result = mockMvc.perform(
+                    MockMvcRequestBuilders.post("/user/test/userCenterReg")
+                            .param("timestamp", timestamp)
+                            .param("signatureNonce", signatureNonce)
+                            .param("access_token", accessToken)
+                            .param("client_id", clientId)
+                            .param("signature", signature)
+                            .param("scope", Common.SCOPE)
+                            .param("grant_type", Common.GRANT_TYPE)
+                            .param("source_id", "10001")
+                            .param("username", username)
+                            .param("phone", "18666666688")
+                            .param("isValidate", "1")
+                            .param("password", AESUtil.encrypt(Common.PASSWORD, Common.CLIENT_SECRET))
+                            .param("email", "it_gxy1@163.com")).andReturn();
             System.out.println(result.getResponse().getContentAsString());
 
             MvcResult result1 = mockMvc.perform(
@@ -84,9 +81,11 @@ public class SaveUserInfoTest {
                             .param("source_id", "10001")
                             .param("username", username)).andReturn();
             System.out.println(result1.getResponse().getContentAsString());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 }

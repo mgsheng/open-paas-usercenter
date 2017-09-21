@@ -1,7 +1,8 @@
 package cn.com.open.usercenter.test;
 
+import cn.com.open.openpaas.userservice.app.tools.DES;
+import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import com.alibaba.fastjson.JSONObject;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,15 +16,18 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testng.Assert;
 
 import javax.servlet.Filter;
+import java.util.Date;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath*:/spring/appCtx-disconf.xml",
         "classpath*:/spring/context.xml", "classpath*:/spring/job.xml",
         "classpath*:/spring/security.xml", "classpath*:/spring/transaction.xml" })
-public class AccessTokenTest {
+
+public class UserCenterPublicLoginControllerTest {
 
     private MockHttpServletRequest request;
     @Autowired
@@ -41,18 +45,23 @@ public class AccessTokenTest {
     }
 
     @Test
-    public void accessTokenTest() {
+    public void userCenterPublicLogin() {
         try {
+
+            JSONObject json = new JSONObject();
+            json.put("sourceId", Common.SOURCE_ID);
+            json.put("time", DateTools.dateToString(new Date(), "yyyyMMddHHmmss"));
+            json.put("appkey", "4194b8dbd6624131bfccbdd6f7140776");
+            json.put("appId", "9999");
+            json.put("platform", "1");
+
+            String clientId = Common.CLIENT_ID;
             MvcResult result = mockMvc.perform(
-                    MockMvcRequestBuilders.post("/oauth/token")
-                            .param("grant_type", Common.GRANT_TYPE)
-                            .param("client_id", Common.CLIENT_ID)
-                            .param("client_secret", Common.CLIENT_SECRET)
-                            .param("scope", Common.SCOPE)).andReturn();
-            String str = result.getResponse().getContentAsString();
-            JSONObject jsonObject = JSONObject.parseObject(str);
-            String access_token = jsonObject.getString("access_token");
-            Assert.assertNotNull(access_token);
+                    MockMvcRequestBuilders.post("/user/userCenterPublicLogin")
+                            .param("secret", DES.encrypt(json.toString(), "1d4d8c77108a4fd2a3c23feba0cfdccc".substring(0,8)))
+            ).andReturn();
+            String str = result.getResponse().getRedirectedUrl();
+            Assert.assertNotNull(str);
         } catch (Exception e) {
             e.printStackTrace();
         }

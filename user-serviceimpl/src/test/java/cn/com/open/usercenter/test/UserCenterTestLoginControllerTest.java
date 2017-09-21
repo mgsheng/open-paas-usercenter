@@ -1,6 +1,5 @@
 package cn.com.open.usercenter.test;
 
-import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +22,8 @@ import javax.servlet.Filter;
 @ContextConfiguration({ "classpath*:/spring/appCtx-disconf.xml",
         "classpath*:/spring/context.xml", "classpath*:/spring/job.xml",
         "classpath*:/spring/security.xml", "classpath*:/spring/transaction.xml" })
-public class AccessTokenTest {
+
+public class UserCenterTestLoginControllerTest {
 
     private MockHttpServletRequest request;
     @Autowired
@@ -41,18 +41,12 @@ public class AccessTokenTest {
     }
 
     @Test
-    public void accessTokenTest() {
+    public void userCenterRetrievePwdTest() {
         try {
             MvcResult result = mockMvc.perform(
-                    MockMvcRequestBuilders.post("/oauth/token")
-                            .param("grant_type", Common.GRANT_TYPE)
-                            .param("client_id", Common.CLIENT_ID)
-                            .param("client_secret", Common.CLIENT_SECRET)
-                            .param("scope", Common.SCOPE)).andReturn();
-            String str = result.getResponse().getContentAsString();
-            JSONObject jsonObject = JSONObject.parseObject(str);
-            String access_token = jsonObject.getString("access_token");
-            Assert.assertNotNull(access_token);
+                    MockMvcRequestBuilders.post("/user/test/userCenterPassword")).andReturn();
+            String str =  result.getResponse().getContentAsString();
+            Assert.assertNotNull(str);
         } catch (Exception e) {
             e.printStackTrace();
         }

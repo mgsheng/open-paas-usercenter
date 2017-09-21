@@ -1,7 +1,6 @@
 package cn.com.open.usercenter.test;
 
 import com.alibaba.fastjson.JSONObject;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testng.Assert;
 
 import javax.servlet.Filter;
 
@@ -23,7 +23,7 @@ import javax.servlet.Filter;
 @ContextConfiguration({ "classpath*:/spring/appCtx-disconf.xml",
         "classpath*:/spring/context.xml", "classpath*:/spring/job.xml",
         "classpath*:/spring/security.xml", "classpath*:/spring/transaction.xml" })
-public class AccessTokenTest {
+public class UserCenterSysUserInfoControllerTest {
 
     private MockHttpServletRequest request;
     @Autowired
@@ -41,21 +41,28 @@ public class AccessTokenTest {
     }
 
     @Test
-    public void accessTokenTest() {
+    public void userCenterSysUserInfoTest() {
         try {
+            String accessToken = Common.getAccessToken(mockMvc);
             MvcResult result = mockMvc.perform(
-                    MockMvcRequestBuilders.post("/oauth/token")
+                    MockMvcRequestBuilders.post("/user/info/synUserInfo")
                             .param("grant_type", Common.GRANT_TYPE)
                             .param("client_id", Common.CLIENT_ID)
-                            .param("client_secret", Common.CLIENT_SECRET)
-                            .param("scope", Common.SCOPE)).andReturn();
+                            .param("access_token", accessToken)
+                            .param("scope", Common.SCOPE)
+                            .param("source_id", Common.SOURCE_ID)
+                            .param("nickname", "extrigger")
+                            .param("read_name", "谷旭阳")
+                            .param("phone", Common.PHONE)
+                            .param("email", Common.EMAIL)).andReturn();
             String str = result.getResponse().getContentAsString();
             JSONObject jsonObject = JSONObject.parseObject(str);
-            String access_token = jsonObject.getString("access_token");
-            Assert.assertNotNull(access_token);
+            String status = jsonObject.getString("status");
+            Assert.assertEquals("1", status);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 }

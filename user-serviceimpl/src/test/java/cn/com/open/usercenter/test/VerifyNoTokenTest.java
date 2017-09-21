@@ -1,7 +1,8 @@
 package cn.com.open.usercenter.test;
 
+import cn.com.open.openpaas.userservice.app.tools.DES;
+import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import com.alibaba.fastjson.JSONObject;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,15 +16,18 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testng.Assert;
 
 import javax.servlet.Filter;
+import java.util.Date;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath*:/spring/appCtx-disconf.xml",
         "classpath*:/spring/context.xml", "classpath*:/spring/job.xml",
         "classpath*:/spring/security.xml", "classpath*:/spring/transaction.xml" })
-public class AccessTokenTest {
+public class VerifyNoTokenTest {
+
 
     private MockHttpServletRequest request;
     @Autowired
@@ -41,18 +45,18 @@ public class AccessTokenTest {
     }
 
     @Test
-    public void accessTokenTest() {
+    public void verifyNoTokenAutoLoginTest() {
         try {
+            String clientId = Common.CLIENT_ID;
             MvcResult result = mockMvc.perform(
-                    MockMvcRequestBuilders.post("/oauth/token")
-                            .param("grant_type", Common.GRANT_TYPE)
-                            .param("client_id", Common.CLIENT_ID)
-                            .param("client_secret", Common.CLIENT_SECRET)
-                            .param("scope", Common.SCOPE)).andReturn();
+                    MockMvcRequestBuilders.post("/user/noToken/autoLogin")
+                            .param("client_id", clientId)
+                            .param("secret", DES.encrypt(Common.GUID + "#" + DateTools.dateToString(new Date(),"yyyyMMddHHmmss") + "#" + Common.CLIENT_ID + "#123456", Common.CLIENT_SECRET))
+            ).andReturn();
             String str = result.getResponse().getContentAsString();
             JSONObject jsonObject = JSONObject.parseObject(str);
-            String access_token = jsonObject.getString("access_token");
-            Assert.assertNotNull(access_token);
+            String status = jsonObject.getString("status");
+            Assert.assertEquals("1", status);
         } catch (Exception e) {
             e.printStackTrace();
         }

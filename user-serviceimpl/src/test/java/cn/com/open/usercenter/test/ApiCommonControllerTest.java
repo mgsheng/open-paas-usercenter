@@ -1,6 +1,6 @@
 package cn.com.open.usercenter.test;
 
-import cn.com.open.openpaas.userservice.app.tools.DES;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,9 +14,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testng.Assert;
 
 import javax.servlet.Filter;
-import java.util.UUID;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -45,7 +45,22 @@ public class ApiCommonControllerTest {
         try {
             MvcResult result = mockMvc.perform(
                     MockMvcRequestBuilders.get("/common/status")).andReturn();
-            System.out.println(result.getResponse().getContentAsString());
+            String str = result.getResponse().getContentAsString();
+            JSONObject jsonObject = JSONObject.parseObject(str);
+            boolean running = jsonObject.getBoolean("running");
+            Assert.assertEquals(true, running);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void dnotdeletMomTest() {
+        try {
+            MvcResult result = mockMvc.perform(
+                    MockMvcRequestBuilders.get("/dnotdelet/mom.html")).andReturn();
+            String str = result.getResponse().getForwardedUrl();
+            Assert.assertEquals("unity/mom", str);
         } catch (Exception e) {
             e.printStackTrace();
         }

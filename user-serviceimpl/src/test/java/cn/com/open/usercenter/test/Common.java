@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class Common {
 
+    static final String APP_ID = "23";
     static final String GRANT_TYPE = "client_credentials";
     static final String CLIENT_ID = "4194b8dbd6624131bfccbdd6f71407760";
     static final String CLIENT_SECRET = "0f8ddd15fa544991b5ec23af210d7091";

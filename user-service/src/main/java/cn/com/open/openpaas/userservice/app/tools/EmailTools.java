@@ -106,7 +106,7 @@ public class EmailTools {
 	 * @return
 	 */
 	public static boolean sendTemplateMail(String toAddress,String title,String templateName, Map<String,String> templateParams){
-		File file = new File(EmailTools.class.getClassLoader().getResource("/emailtemplate/"+templateName+".html").getFile());
+		File file = new File(EmailTools.class.getClassLoader().getResource("emailtemplate/"+templateName+".html").getFile());
 		if(!file.exists() || !file.isFile()){
 			//模版不存在
 			return false;

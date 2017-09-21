@@ -51,7 +51,7 @@ public class UnBindUserTest {
             String accessToken = Common.getAccessToken(mockMvc);
             String clientId = Common.CLIENT_ID;
             String signature = Common.getSignature(accessToken, timestamp, signatureNonce);
-            MvcResult result = mockMvc.perform(
+           MvcResult result = mockMvc.perform(
                     MockMvcRequestBuilders.post("/user/userCenterReg")
                             .param("timestamp", timestamp)
                             .param("signatureNonce", signatureNonce)
