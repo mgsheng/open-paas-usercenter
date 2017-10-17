@@ -30,4 +30,4 @@ endpoints:
       enabled: true
 
 callbackUrl: http://${APP_LOCALHOST_URL}
-  
+ 
