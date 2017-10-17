@@ -56,7 +56,6 @@ public class ModiPwdController extends BaseControllerUtil{
      */
     @RequestMapping("userCenterModiPwd")
     public void userCenterModiPwd(HttpServletRequest request,HttpServletResponse response) {
-    	long startTime = System.currentTimeMillis();
     	String client_id=request.getParameter("client_id");
     	String access_token=request.getParameter("access_token");
     	String account=request.getParameter("account");
@@ -64,7 +63,6 @@ public class ModiPwdController extends BaseControllerUtil{
     	String new_pwd=request.getParameter("new_pwd");
     	String pwdtype=request.getParameter("pwdtype");
     	String  isValidate =request.getParameter("isValidate");
-    	String password = old_pwd;
     	log.info("解密前old_pwd："+old_pwd);
 		log.info("解密前new_pwd："+new_pwd);
 		log.info("client_id："+client_id);

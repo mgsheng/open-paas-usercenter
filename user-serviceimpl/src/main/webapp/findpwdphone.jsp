@@ -18,9 +18,10 @@
 			<div class="w_1200">
 				<div class="getbackpwd">
 					<div class="stepbar">
-						<div class="first"><span class="num">1</span>选择密码找回方式</div>
-						<div class="second curr"><span class="num">2</span>验证身份</div>
-						<div class="third"><span class="num">3</span>修改密码</div>
+						<div class="first"><span class="num">1</span>输入用户名</div>
+						<div class="second  "><span class="num">2</span>选择密码找回方式</div>
+						<div class="four curr"><span class="num">3</span>验证身份</div>
+						<div class="third"><span class="num">4</span>修改密码</div>
 					</div>
 					<div class="main">
 						<table cellpadding="0" cellspacing="0" class="tbl-findpwd">
@@ -31,6 +32,7 @@
 								<td colspan="2">
 									<input type="text" id="phone" class="input-len" value="${showMobileNo}" placeholder="输入手机号" onchange="changeValue()"/>
 									<input type="hidden" id="mobileNo" class="input-len" value="${mobileNo}" />
+									<input type="hidden" id="guid" class="input-len" value="${guid}" />
 									<div class="div_error" id="phone_error"></div>
 								</td>
 							</tr>
@@ -90,6 +92,7 @@
 				var phoneReg = /^1\d{10}$/;
 				var mobileNo =$('#mobileNo').val();
 				var phone=$('#phone').val();
+				var guid=$('#guid').val();
 				if(mobileNo!=""){
 				 phone=mobileNo;
 				}
@@ -101,7 +104,7 @@
 					return;
 				}
 				$.post("${pageContext.request.contextPath}/dev/user/send_reset_password_phone",
-					{phone:phone},
+					{phone:phone,guid:guid},
 	   				function(data){
 	   					if(data.flag){
 	   						alert('验证码已发送到您的手机');

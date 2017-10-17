@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSONObject;
 import cn.com.open.openpaas.userservice.app.common.model.ExceptionEnum;
 import cn.com.open.openpaas.userservice.app.common.model.Result;
 import cn.com.open.openpaas.userservice.app.log.UserLog;
+import cn.com.open.openpaas.userservice.app.thread.UserLogSendThread;
 import cn.com.open.openpaas.userservice.app.tools.DateTools;
 import cn.com.open.openpaas.userservice.app.tools.HttpTools;
 
@@ -96,7 +97,6 @@ public class LogFilter implements Filter {
             }
             long startTime = System.currentTimeMillis(); //请求开始时间
             UserLog userLog=getUserLog(request);
-            System.out.println(userLog.getGrantType());
             HttpServletResponseCopier responseCopier = new HttpServletResponseCopier((HttpServletResponse) response);
 
             filterChain.doFilter(request, responseCopier);
@@ -119,7 +119,14 @@ public class LogFilter implements Filter {
             Map <String,String>logMap=new HashMap<String,String>();
 			logMap.put("tag", "usercenter");
 			logMap.put("logData", JSONObject.toJSONString(userLog));
-			HttpTools.URLPost(kong_log_url, logMap,"UTF-8");
+			
+            //发送用户数据			
+			try {
+				Thread thread = new Thread(new UserLogSendThread(kong_log_url,logMap));
+				thread.run();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else {
 			filterChain.doFilter(request, response);
 		}
@@ -139,41 +146,18 @@ public class LogFilter implements Filter {
      */
     public UserLog getUserLog(ServletRequest request){
     	UserLog userLog=new UserLog();
-    	userLog.setAccessToken(request.getParameter("access_token")==null?"":request.getParameter("access_token"));
-    	userLog.setClientId(request.getParameter("client_id")==null?"":request.getParameter("client_id"));
-    	userLog.setGrantType(request.getParameter("grant_type")==null?"":request.getParameter("grant_type"));
-    	userLog.setClientSecret(request.getParameter("client_secert")==null?"":request.getParameter("client_secert"));
-    	userLog.setScope(request.getParameter("scope")==null?"":request.getParameter("scope"));
-    	userLog.setAccount(request.getParameter("account")==null?"":request.getParameter("account"));
-    	userLog.setAccountType(request.getParameter("account_type")==null?"":request.getParameter("account_type"));
-    	userLog.setAppId(request.getParameter("app_id")==null?"":request.getParameter("app_id"));
-    	userLog.setCardNo(request.getParameter("card_no")==null?"":request.getParameter("card_no"));
-    	userLog.setCode(request.getParameter("code")==null?"":request.getParameter("code"));
-    	userLog.setCreateTime(DateTools.dateToString(new Date(), DateTools.FORMAT_ONE));
-    	userLog.setDesAddress(request.getParameter("desAddress")==null?"":request.getParameter("desAddress"));
-    	userLog.setDesAppId(request.getParameter("desApp_id")==null?"":request.getParameter("desApp_id"));
+    	userLog.setCliendId(request.getParameter("client_id")==null?"":request.getParameter("client_id"));
     	userLog.setEmail(request.getParameter("email")==null?"":request.getParameter("email"));
     	userLog.setGuid(request.getParameter("guid")==null?"":request.getParameter("guid"));
     	userLog.setIp(request.getParameter("ip")==null?"":request.getParameter("ip"));
-    	userLog.setIsValidate(request.getParameter("isValidate")==null?"":request.getParameter("isValidate "));
-    	userLog.setJsessionId(request.getParameter("jsessionId")==null?"":request.getParameter("jsessionId"));
     	userLog.setName(((HttpServletRequest) request).getRequestURI().replaceFirst(user_base_request_url, ""));
-    	userLog.setNewPwd(request.getParameter("new_pwd")==null?"":request.getParameter("new_pwd"));
-    	userLog.setOldPwd(request.getParameter("old_pwd")==null?"":request.getParameter("old_pwd"));
     	userLog.setPassword(request.getParameter("password")==null?"":request.getParameter("password"));
     	userLog.setPhone(request.getParameter("phone")==null?"":request.getParameter("phone"));
-    	userLog.setPwdType(request.getParameter("pwdtype")==null?"":request.getParameter("pwdtype"));
-    	userLog.setRedisKey(request.getParameter("redis_key")==null?"":request.getParameter("redis_key"));
-    	userLog.setRedisValue(request.getParameter("redis_value")==null?"":request.getParameter("redis_value"));
-    	userLog.setRefreshToken(request.getParameter("refresh_token")==null?"":request.getParameter("refresh_token"));
-    	userLog.setSecret(request.getParameter("secert")==null?"":request.getParameter("secert"));
     	userLog.setSignature(request.getParameter("signature")==null?"":request.getParameter("signature"));
     	userLog.setSignatureNonce(request.getParameter("signatureNonce")==null?"":request.getParameter("signatureNonce"));
     	userLog.setSourceId(request.getParameter("source_id")==null?"":request.getParameter("source_id"));
     	userLog.setTimestamp(request.getParameter("timestamp")==null?"":request.getParameter("timestamp"));
-    	userLog.setType(request.getParameter("type")==null?"":request.getParameter("type"));
     	userLog.setUsername(request.getParameter("username")==null?"":request.getParameter("username"));
-    	userLog.setWhetherBind(request.getParameter("whetherBind")==null?"":request.getParameter("whetherBind"));
     	return userLog;
     	
     }

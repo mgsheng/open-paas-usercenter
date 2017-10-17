@@ -1,5 +1,5 @@
 /* CSS Document */
-body {background: #fff;color:#505050;font-family: Microsoft YaHei,微软雅黑;font-size:14px;}
+body {background: #fff;color:#505050;font-family: Microsoft YaHei,寰蒋闆呴粦;font-size:14px;}
 body,p,ul,li{margin:0;padding:0; list-style:none;}
 h1,h2,h3,h4,h5,h6{margin:0;padding:0;font-size:14px;font-weight:normal;}
 img{border:none;}
@@ -15,7 +15,7 @@ img{border:none;}
 .iconbg{background: url(../images/icon1.png) no-repeat 0px 0px;display:inline-block; vertical-align:middle}
 .w_1200{width:1200px;margin:0 auto;overflow: hidden;}
 
-/*顶部样式*/
+/*椤堕儴鏍峰紡*/
 .top_banner{height:80px;line-height:80px;color:#fff;background:#13b5b1;}
 .top_banner a{color:#fff; text-decoration:none;}
 .bg_f6{background:#f6f6f6;}
@@ -31,7 +31,7 @@ img{border:none;}
 .loginbar span{padding:0;}
 .useravatar{width:24px;height:24px;background-position:0px -17px;margin-right:10px;}
 
-/*个人信息*/
+/*涓汉淇℃伅*/
 .userinfo_safety{width:176px;height:300px;background:#cdefee;color:#7d7d7d;padding:0 22px;}
 .userface{width:100px;margin:26px auto 10px;text-align:center;}
 .userface .avatar{width:100px;height:100px;}
@@ -39,13 +39,13 @@ img{border:none;}
 .usertext li{line-height:26px;}
 .safety_title{border-bottom:1px solid #bbcccb;margin:0 4px 10px;line-height:55px;text-align:center;font-size:14px;}
 
-/*焦点图*/
+/*鐒︾偣鍥�*/
 .focus{width:700px;margin:0 20px;height:300px;}
 
-/*安全级别*/
+/*瀹夊叏绾у埆*/
 .safety{width:27px;height:27px;background-position:0px -43px;margin-right:10px;}
 
-/*我的应用*/
+/*鎴戠殑搴旂敤*/
 .page-title{width:1200px;font-size:20px;color:#13b5b1;line-height:45px;}
 .bg_e6f7f6{background: #e6f7f6;}
 .applist{min-height:215px;padding:54px 0;border-bottom:1px solid #c8c8c8;margin-bottom: -1px;}
@@ -59,9 +59,9 @@ img{border:none;}
 .goplatforms{width:122px;height:36px;background:#13b5b1;font-size:18px;color:#fff;text-align: center;line-height:34px;display: inline-block;border-radius:18px;text-decoration: none;}
 .goplatforms:hover{background:#189b97;}
 
-/* 找回密码开始 */
+/* 鎵惧洖瀵嗙爜寮�濮� */
 .getbackpwd {
-    width:910px;
+    width:1165px;
     margin:60px auto 0;
     min-height:390px;
 }
@@ -69,7 +69,8 @@ img{border:none;}
     width:100%;height:55px;overflow:hidden
     }
 .stepbar .first,
-.stepbar .second, 
+.stepbar .second,
+.stepbar .four, 
 .stepbar .third {
     width:301px;height:55px;background:url(../images/icon1.png) no-repeat;float:left;display:inline;
     line-height: 55px;
@@ -95,6 +96,12 @@ background-position:left -83px;
 background-position:left -248px;
 }
 .stepbar .second.curr {
+background-position:left -193px;
+}
+.stepbar .four {
+background-position:left -248px;
+}
+.stepbar .four.curr {
 background-position:left -193px;
 }
 .stepbar .third {
@@ -165,9 +172,9 @@ height:20px;border-collapse:collapse
 .verification td {
 border:1px solid #ddd;height:18px;border-collapse:collapse;padding:8px 10px;
 }
-/* 找回密码结束 */
+/* 鎵惧洖瀵嗙爜缁撴潫 */
 
-/*底部*/
+/*搴曢儴*/
 .foot{width:1200px;margin:0 auto;background:#e6f7f6;height:68px;color:#9d9d9d;line-height: 68px;}
 .foot a{color:#9d9d9d;text-decoration: none;}
 .foot a:visited{color:#9d9d9d;text-decoration: none;}
@@ -186,7 +193,7 @@ border:1px solid #ddd;height:18px;border-collapse:collapse;padding:8px 10px;
 .basic_info_pic{width:100%;float:left;padding:10px 0;}
 .basic_info_pic img{vertical-align:middle;}
 
-/* 手机自适应iphone6/6plus */
+/* 鎵嬫満鑷�傚簲iphone6/6plus */
 @media screen and (max-width:414px){
     .loginbar {
 display:none
@@ -220,7 +227,7 @@ display:none
     font-size:14px;
 }
 
-   .stepbar .first, .stepbar .second, .stepbar .third {
+   .stepbar .first, .stepbar .second, .stepbar .third,.stepbar .four {
     width: 33%;
     height: 29px;
     background: url(../images/icon1.png) no-repeat;
@@ -248,6 +255,15 @@ display:none
     margin-left: -2px;
 }
     .stepbar .second.curr {
+    background-position: left -104px;
+}
+
+    .stepbar .four {
+    background-position: left -133px;
+    background-size: 119% 529px;
+    margin-left: -2px;
+}
+    .stepbar .four.curr {
     background-position: left -104px;
 }
     .stepbar .third {
@@ -332,7 +348,7 @@ display:none
 }
 }
 
-/* 手机自适应iphone5 */
+/* 鎵嬫満鑷�傚簲iphone5 */
 @media screen and (max-width:320px) {
      .btn-len {
     width: 100%;

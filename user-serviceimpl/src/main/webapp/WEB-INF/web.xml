@@ -13,30 +13,7 @@
         <param-value>spring-oauth-server</param-value>
     </context-param>
   
-<!-- 	<filter>
-		<filter-name>logFilter</filter-name>
-		<filter-class>cn.com.open.openpaas.userservice.app.filte.LogFilter</filter-class>
-		<init-param>
-			不过滤uri 
-            <param-name>notFilter</param-name>
-            <param-value>loginVerify,loginOut,js,css,images</param-value>
-        </init-param>
-        <init-param>
-        	项目uri
-            <param-name>serverUri</param-name>
-            <param-value>/spring-oauth-server/</param-value>
-        </init-param>
-           <init-param>
-        	项目uri
-            <param-name>kongLogUri</param-name>
-            <param-value>aaa</param-value>
-        </init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>logFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>  -->
-	
+ 	
 	<filter>
         <filter-name>braveFilter</filter-name>
         <filter-class>
@@ -47,12 +24,10 @@
             <param-value>true</param-value>
         </init-param>
         <init-param>
-        	<!--不过滤uri  -->
          <param-name>notFilter</param-name>
-         <param-value>loginVerify,loginOut,js,css,images</param-value>
+         <param-value>loginVerify,loginOut,js,css,images,findpwd,findpwdemail,activated,findpwdphone,findpwdproblem</param-value>
         </init-param>
         <init-param>
-        	<!-- 项目uri-->
             <param-name>serverUri</param-name>
             <param-value>/spring-oauth-server/</param-value>
         </init-param>

@@ -27,13 +27,10 @@ import cn.com.open.openpaas.userservice.web.api.oauth.OauthSignatureValidateHand
 @Controller
 @RequestMapping("/user/")
 public class CheckTokenController {
-	private static final Logger log = LoggerFactory.getLogger(CheckTokenController.class);
 	 @Autowired
 	 private AppService appService; 
 	 @Autowired
 	 private DefaultTokenServices tokenServices;
-	 @Autowired
-	 private UserserviceDev userserviceDev;
     /**
       *  检验access_token
      */
@@ -41,7 +38,6 @@ public class CheckTokenController {
     public void userInfo(HttpServletRequest request,HttpServletResponse response) throws Exception {
       String token=	request.getParameter("access_token");
       String clientId=request.getParameter("client_id");
-      long startTime = System.currentTimeMillis();
       Map<String, Object> map=new HashMap<String,Object>();
 
       if(!WebUtils.paraMandatoryCheck(Arrays.asList(clientId,token))){

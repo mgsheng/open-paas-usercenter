@@ -1,6 +1,8 @@
 package cn.com.open.openpaas.userservice.app.filter;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -24,5 +26,17 @@ public class ServletOutputStreamCopier extends ServletOutputStream {
     public byte[] getCopy() {
         return copy.toByteArray();
     }
+
+	@Override
+	public boolean isReady() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setWriteListener(WriteListener arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

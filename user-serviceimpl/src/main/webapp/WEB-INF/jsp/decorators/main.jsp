@@ -21,7 +21,7 @@
     <decorator:head/>
 
 </head>
-<body class="container">
+<body >
 <div>
     <div>
         <decorator:body/>

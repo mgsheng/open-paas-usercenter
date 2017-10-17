@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -54,11 +53,18 @@ public class DevUserResetPwdController extends BaseDevUserController {
         return "../../findpwd";
     }
     @RequestMapping("/findpwdemail")
-    public String findpwdemail(HttpServletRequest request,HttpServletResponse response,Map<String,Object> model) {
+    public String findpwdemail(HttpServletRequest request,HttpServletResponse response,Map<String,Object> model,String guid) {
+    	model.put("guid", guid);
         return "../../findpwdemail";
     }
+    
+    @RequestMapping("/activated")
+    public String activated(HttpServletRequest request,HttpServletResponse response,Map<String,Object> model) {
+        return "../../activated";
+    }
     @RequestMapping("/findpwdphone")
-    public String findpwdphone(HttpServletRequest request,HttpServletResponse response,Map<String,Object> model) {
+    public String findpwdphone(HttpServletRequest request,HttpServletResponse response,Map<String,Object> model,String guid) {
+    	model.put("guid", guid);
         return "../../findpwdphone";
     }
     @RequestMapping("/findpwdproblem")
@@ -104,6 +110,11 @@ public class DevUserResetPwdController extends BaseDevUserController {
     	return "../../findpwd";
     }
     
+    @RequestMapping("/activated.html")
+    public String activated1(HttpServletRequest request,HttpServletResponse response,Map<String,Object> model,String guid) {
+    	model.put("guid", guid);
+        return "../../activated";
+    } 
     /**
      * 验证用户找回密码 手机验证码有效性，验证通过则进入重置密码页面
      * @param request

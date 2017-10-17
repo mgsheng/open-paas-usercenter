@@ -21,8 +21,6 @@ import cn.com.open.openpaas.userservice.app.app.service.AppService;
 import cn.com.open.openpaas.userservice.app.appuser.model.AppUser;
 import cn.com.open.openpaas.userservice.app.appuser.service.AppUserService;
 import cn.com.open.openpaas.userservice.app.domain.model.UserCenterRegDto;
-import cn.com.open.openpaas.userservice.app.kafka.KafkaProducer;
-import cn.com.open.openpaas.userservice.app.log.OauthControllerLog;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisClientTemplate;
 import cn.com.open.openpaas.userservice.app.redis.service.RedisConstant;
 import cn.com.open.openpaas.userservice.app.tools.BaseControllerUtil;
@@ -55,7 +53,6 @@ public class UserCenterSynUserInfoController extends BaseControllerUtil {
      */
     @RequestMapping("synUserInfo")
     public void userSynUserInfo(HttpServletRequest request,HttpServletResponse response,UserCenterRegDto userCenterReg) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-    	long startTime = System.currentTimeMillis();
     	if(null!=userCenterReg){
             if(!paraMandatoryCheck(Arrays.asList(userCenterReg.getGrant_type(),userCenterReg.getClient_id(),
                     userCenterReg.getAccess_token(),userCenterReg.getScope(),userCenterReg.getSource_id()))){
@@ -131,7 +128,7 @@ public class UserCenterSynUserInfoController extends BaseControllerUtil {
                     }else {
                         map.clear();
                         map.put("status", "0");
-                        map.put("errMsg","source_id不存在");
+                        map.put("errMsg","原业务系统用户不存在");
                         map.put("error_code", "4");//source_id不存在
                     }
             }

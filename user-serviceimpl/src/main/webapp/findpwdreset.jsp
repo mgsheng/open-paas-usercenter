@@ -21,9 +21,10 @@
 			<div class="w_1200">
 				<div class="getbackpwd">
 					<div class="stepbar">
-						<div class="first"><span class="num">1</span>选择密码找回方式</div>
-						<div class="second"><span class="num">2</span>验证身份</div>
-						<div class="third  curr"><span class="num">3</span>修改密码</div>
+						<div class="first"><span class="num">1</span>输入用户名</div>
+						<div class="second  "><span class="num">2</span>选择密码找回方式</div>
+						<div class="four "><span class="num">3</span>验证身份</div>
+						<div class="third curr"><span class="num">4</span>修改密码</div>
 					</div>
 					<div class="main">
 						<table id="main_table" cellpadding="0" cellspacing="0" class="tbl-findpwd">

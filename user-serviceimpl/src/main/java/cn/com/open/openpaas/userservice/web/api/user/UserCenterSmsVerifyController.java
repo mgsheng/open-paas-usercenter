@@ -55,6 +55,8 @@ public class UserCenterSmsVerifyController extends BaseControllerUtil {
 	 private UserActivatedService userActivatedService;
 	 @Autowired
 	 private UserserviceDev userserviceDev;
+	 @Autowired
+	 private UserCacheService userCacheService;
   /**
     * 用户短信码验证接口
 	* @return Json
@@ -107,17 +109,26 @@ public class UserCenterSmsVerifyController extends BaseControllerUtil {
 		    						if(type.equals("1")||type.equals("3")){
 		    							//找回密码
 		    							User user = userService.findUserById(userActivated.getUserId());
-			    						if(null != user && phone.equals(userActivated.getPhone())){
+			    						if(null != user && user.getPhone().equals(userActivated.getPhone())){
 			    							map.clear();
 			    							map.put("status", "1");
 				    						map.put("error_code", "");
 				    						map.put("errMsg", "");
 				    						map.put("guid", user.guid());
 			    						}else{
-			    						map.clear();
-		    							map.put("status", "0");
-			    						map.put("error_code", "6");
-			    						map.put("errMsg", "手机号不对应");
+			    						UserCache userCache=userCacheService.findUserById(userActivated.getUserId());
+			    						if(userCache!=null&&userCache.phone().equals(userActivated.getPhone())){
+			    							map.clear();
+			    							map.put("status", "1");
+				    						map.put("error_code", "");
+				    						map.put("errMsg", "");
+				    						map.put("guid", userCache.guid());
+			    						}else{
+			    							map.clear();
+			    							map.put("status", "0");
+				    						map.put("error_code", "6");
+				    						map.put("errMsg", "手机号不对应");	
+			    						}
 			    					   }	
 		    						}else{
 		    							map.clear();

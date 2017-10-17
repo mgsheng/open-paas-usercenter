@@ -132,27 +132,22 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
      */
     @RequestMapping(value = "/dev/user/send_reset_password_phone", method = RequestMethod.POST)
 	public void reset_pass_phone(HttpServletRequest request,HttpServletResponse response,
-			String phone) {
+			String phone,String guid) {
     	boolean flag = false;
     	String errorCode = "";
     	if(StringUtils.isBlank(phone)){
     		errorCode = "invalid_phone";
     	}
     	else{
-    		User user = userService.findByUsername(phone);
-    		if(user == null){
-    			//String desPhone=Help_Encrypt.encrypt(phone);
-    			List<User> userList = userService.findByPhone(phone);
-    			if(userList != null&&userList.size()>0){
-            		user = userList.get(0);
-    			}
-    		}
+    		User user = userService.findByGuid(guid);
     		if(user != null){
     			if(user.userState().equals("2")){
     				errorCode = "invalid_stat";
     			}else if(!user.userState().equals("2")&&(user.username()==null||"".equals(user.username()))){
     				errorCode = "invalid_name";
-    			}else{
+    			}else if(!nullEmptyBlankJudge(user.getPhone())&&!user.getPhone().equals(phone)){
+    				errorCode = "phone_error";
+    			}else if(user.getPhone().equals(phone)){
     				//发送短信找回密码验证码
         			flag = userLogicService.sendResetPassWordPhone(user.getId(),phone,UserActivated.USERTYPE_USER);
     				if(!flag){
@@ -161,20 +156,15 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
     			}
 				
     		}else{//不存在
-    			UserCache usercache = userCacheService.findByUsername(phone);
-        		if(usercache == null){
-        			//String desPhone=Help_Encrypt.encrypt(phone);
-        			List<UserCache> userCacheList = userCacheService.findByPhone(phone);
-        			if(userCacheList != null&&userCacheList.size()>0){
-        				usercache = userCacheList.get(0);
-        			}
-        		}
+    			UserCache usercache = userCacheService.findByGuid(guid);
         		if(usercache != null){
         			if(usercache.userState().equals("2")){
         				errorCode = "invalid_stat";
         			}else if(!usercache.userState().equals("2")&&(usercache.username()==null||"".equals(usercache.username()))){
         				errorCode = "invalid_name";
-        			}else{
+        			}else if(!nullEmptyBlankJudge(usercache.phone())&&!usercache.phone().equals(phone)){
+        				errorCode = "phone_error";
+        			}else if(usercache.phone().equals(phone)){
         				//发送短信找回密码验证码
             			flag = userLogicService.sendResetPassWordPhone(usercache.id(),phone,UserActivated.USERTYPE_USER);
         				if(!flag){
@@ -251,6 +241,44 @@ public class JsonDevUserResetPwdController extends BaseDevUserController {
     	map.put("errorCode",errorCode);
 		WebUtils.writeJsonToMap(response, map);
     }
+    
+    /**
+     * 验证用户找回密码手机验证码有效性
+     * @param request
+     * @param model
+     * @param bool
+     * @return
+     */
+    @RequestMapping(value = "/dev/user/activated_loginUserName")
+	public void activated_loginUserName(HttpServletRequest request,HttpServletResponse response,String loginUserName) {
+    	boolean flag = false;
+    	String errorCode = "";
+    	Map<String, Object> map = new LinkedHashMap<String, Object>();
+    	if(StringUtils.isBlank(loginUserName) ){
+    		errorCode = "invalid_data";
+    	}
+    	else{
+        	try {
+        		User user=userService.findByUsername(loginUserName);
+        		if(user!=null){
+        			flag = true;
+        			map.put("guid",user.guid());
+        		}else{
+        			errorCode = "invalid_username";
+        		}
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    			flag = false;
+    			errorCode = "system_error";
+    		}
+    	}
+    	map.put("flag",flag);
+    	map.put("errorCode",errorCode);
+		WebUtils.writeJsonToMap(response, map);
+    }
+    
+    
+    
     private boolean nullEmptyBlankJudge(String str){
         return null==str||str.isEmpty()||"".equals(str.trim());
     }
